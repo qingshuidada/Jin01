@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.personnel.dao.LeaveRecordDao">
+
+	<!-- 插入请假记录 -->
+	<insert id="insertLeaveRecord" parameterType="com.mdoa.personnel.bo.LeaveRecordForm">
+		INSERT INTO personnel_leave_record
+		(
+			leave_record_id,
+			user_id,
+			user_name,
+			process_record_id,
+			reason,
+			leave_type,
+			start_time,
+			end_time,
+			create_time
+		)
+		VALUE
+		(
+			UUID(),
+			#{userId},
+			#{userName},
+			#{processRecordId},
+			#{reason},
+			#{leaveType},
+			#{startTime},
+			#{endTime},
+			NOW()
+		)
+	</insert>
+	
+	<!-- 查询请假记录 -->
+	<select id="selectLeaveRecord" parameterType="com.mdoa.personnel.bo.LeaveRecordForm" resultType="com.mdoa.personnel.model.LeaveRecord">
+		SELECT
+			leave_record_id AS leaveRecordId,
+			process_record_id AS processRecordId,
+			user_id AS userId,
+			user_name AS userName,
+			reason  AS reason,
+			leave_type AS leaveType,
+			start_time AS startTime,
+			end_time AS endTime,
+			create_time AS createTime,
+			timestampdiff(MINUTE,start_time,end_time) / 60 AS lastHours
+		FROM
+			personnel_leave_record
+		<where>
+			<if test="leaveRecordId != null and leaveRecordId != ''">
+			AND leave_record_id = #{leaveRecordId}
+			</if>
+			<if test="userId != null and userId != ''">
+			AND user_id = #{userId}
+			</if>
+			<if test="userName != null and userName != ''">
+			AND user_name LIKE ${userName}
+			</if>
+			<if test="leaveType != null and leaveType != ''">
+			AND leave_type = #{leaveType}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

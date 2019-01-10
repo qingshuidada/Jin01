@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.LogDao" >
+
+	<!-- 添加日志 -->
+	<insert id="addLog" parameterType="com.mdoa.work.bo.LogForm">
+		INSERT INTO work_office_log(
+			work_office_log_id,
+			title_name,
+			text,
+			user_id,
+			log_time,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{titleName},
+			#{text},
+			#{createUserId},
+			#{logTime},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 查询个人日志 -->
+	<select id="queryYourselfLog" parameterType="com.mdoa.work.bo.LogForm" resultType="com.mdoa.work.bo.LogForm">
+		SELECT
+			a.work_office_log_id AS workOfficeLogId,
+			a.title_name AS titleName,
+			a.text,
+			a.user_id AS userId,
+			DATE_FORMAT(a.log_time,'%Y-%m-%d') AS logTimeStr,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag,
+			b.user_name AS userName
+		FROM
+			work_office_log a LEFT JOIN(
+					SELECT
+						user_id,
+						user_name
+					FROM
+						user_info
+					WHERE
+						alive_flag = '1'
+			) b ON (a.user_id = b.user_id)
+		WHERE
+			alive_flag = '1'
+			<if test="yourSelfFlag != null and yourSelfFlag == 1">
+				AND a.user_id = #{createUserId}
+			</if>
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.log_time &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.log_time &lt;= #{endTimeStr}
+			</if>
+			<if test="workOfficeLogId != null and workOfficeLogId != ''">
+				AND a.work_office_log_id = #{workOfficeLogId}
+			</if>
+		ORDER BY
+			a.create_time DESC
+		<!-- SELECT
+			a.work_office_log_id AS workOfficeLogId,
+			a.title_name AS titleName,
+			a.text,
+			a.user_id AS userId,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d') AS logTimeStr,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag,
+			b.user_name AS userName
+		FROM
+			work_office_log a,
+			user_info b
+		WHERE
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND a.user_id = b.user_id
+			<if test="yourSelfFlag == 1">
+				AND a.user_id = #{createUserId}
+			</if>
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.log_time &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.log_time &lt;= #{endTimeStr}
+			</if>
+			<if test="workOfficeLogId != null and workOfficeLogId != ''">
+				AND a.work_office_log_id = #{workOfficeLogId}
+			</if> -->
+	</select>
+	<!-- 修改日志 -->
+	<update id="updateYourselfLog" parameterType="com.mdoa.work.bo.LogForm">
+		UPDATE
+			work_office_log
+		SET
+			<if test="logTimeStr != null and logTimeStr != ''">
+				log_time = STR_TO_DATE(#{logTimeStr},'%Y-%m-%d'),
+			</if>
+			<if test="text != null and text != ''">
+				text = #{text},
+			</if>
+			<if test="titleName != null and titleName != ''">
+				title_name = #{titleName},
+			</if>
+			<if test="aliveFlag != null and aliveFlag != ''">
+				alive_flag = #{aliveFlag},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND work_office_log_id = #{workOfficeLogId}
+	</update>
+	<!-- 查询下级日志 -->
+	<select id="querySubLog" parameterType="com.mdoa.work.bo.LogForm" resultType="com.mdoa.work.bo.LogForm">
+		SELECT
+			b.user_name AS userName,
+			a.title_name AS titleName,
+			a.log_time AS logTimeStr,
+			a.text,
+			a.work_office_log_id AS workOfficeLogId
+		FROM 
+			work_office_log a LEFT JOIN(
+					SELECT
+						user_id,
+						user_name
+					FROM
+						user_info
+					WHERE
+						alive_flag = '1'
+			) b ON (a.user_id = b.user_id)
+		WHERE
+			a.alive_flag = '1'
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.log_time &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.log_time &lt;= #{endTimeStr}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND b.user_name LIKE #{userName}
+			</if>
+			AND a.user_id IN (
+				SELECT
+					user_id
+				FROM
+					framework_user_lead
+				WHERE
+					alive_flag = '1'
+					AND	lead_id = #{leadId}
+				) 
+			ORDER BY
+				a.create_time DESC
+		<!-- SELECT
+			b.user_name AS userName,
+			a.title_name AS titleName,
+			a.log_time AS logTimeStr,
+			a.text,
+			a.work_office_log_id AS workOfficeLogId
+		FROM 
+			work_office_log a,
+			user_info b
+		WHERE
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND a.user_id = b.user_id
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.log_time &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.log_time &lt;= #{endTimeStr}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND b.user_name LIKE #{userName}
+			</if>
+			AND a.user_id IN (
+				SELECT
+					user_id
+				FROM
+					framework_user_lead
+				WHERE
+					alive_flag = '1'
+					AND	lead_id = #{leadId}
+		) -->
+	</select>
+	<!-- 查询自己和下级日志 -->
+	<select id="queryOneselfAndSubLog" parameterType="com.mdoa.work.bo.LogForm" resultType="com.mdoa.work.bo.LogForm">
+		SELECT
+				b.user_name AS userName,
+				a.title_name AS titleName,
+				a.log_time AS logTimeStr,
+				a.text,
+				a.work_office_log_id AS workOfficeLogId
+			FROM 
+				work_office_log a LEFT JOIN(
+						SELECT
+							user_id,
+							user_name
+						FROM
+							user_info
+						WHERE
+							alive_flag = '1'
+				) b ON (a.user_id = b.user_id)
+			WHERE
+				a.alive_flag = '1'
+				<if test="startTimeStr != null and startTimeStr != ''">
+					AND a.log_time &gt;= #{startTimeStr}
+				</if>
+				<if test="endTimeStr != null and endTimeStr != ''">
+					AND a.log_time &lt;= #{endTimeStr}
+				</if>
+				<if test="userName != null and userName != ''">
+					AND b.user_name LIKE #{userName}
+				</if>
+				AND (a.user_id IN (
+					SELECT
+						user_id
+					FROM
+						framework_user_lead
+					WHERE
+						alive_flag = '1'
+						AND	lead_id = #{leadId}
+					) OR a.user_id = #{leadId} )
+				ORDER BY
+					a.create_time DESC
+	</select>
+</mapper>

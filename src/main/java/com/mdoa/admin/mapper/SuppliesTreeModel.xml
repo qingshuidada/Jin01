@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.admin.dao.SuppliesTreeDao">
+	<!-- 获取UUID -->
+	 <select id="getuuid" resultType="java.lang.String">
+	 	select uuid() as uuid
+	 </select>
+	 <!-- 办公用品类型下是否有用品 -->
+	<select id="isSuppliesBelowType" parameterType="com.mdoa.admin.model.OfficeSuppliesType" resultType="com.mdoa.admin.model.OfficeSuppliesType">
+		SELECT
+			a.supplies_id AS suppliesId
+		FROM
+			admin_office_supplies a,
+			admin_office_supplies_type b
+		WHERE
+			a.alive_flag = '1'
+		AND b.alive_flag = '1'
+		AND b.supplies_type_id = a.supplies_type_id
+		AND b.supplies_type_id = #{suppliesTypeId}
+	</select>
+	<!-- 查询符合条件的记录 -->
+	<select id="list" parameterType="java.lang.String" resultType="com.mdoa.admin.model.SuppliesModel">
+		SELECT
+			supplies_type_id AS thisId,
+			supplies_type_url AS id,
+			supplies_type_name AS text
+		FROM
+			admin_office_supplies_type
+		WHERE
+			 parent_type_id = #{pid}
+	 	 AND alive_flag = '1'
+	</select>
+	  <!-- 添加资产类型 -->
+	<insert id="addSuppliesType" parameterType="com.mdoa.admin.model.OfficeSuppliesType">
+	 	INSERT INTO admin_office_supplies_type(
+	 		supplies_type_id,
+			supplies_type_name,
+			supplies_type_url,
+			parent_type_id,
+			alive_flag
+	 	)VALUES(
+	 		#{suppliesTypeId},
+	 		#{suppliesTypeName},
+	 		#{suppliesTypeUrl},
+	 		#{parentTypeId},
+	 		'1'
+	 	)
+	</insert>
+ 	<!-- 根据选择的ID查询其url -->
+	 <select id="selectUrlByparentTypeId" parameterType="java.lang.String" resultType="com.mdoa.admin.model.OfficeSuppliesType">
+	 	SELECT 
+	 		supplies_type_url AS suppliesTypeUrl,
+	 		parent_type_id AS parentTypeId
+	 	FROM
+	 		admin_office_supplies_type
+	 	WHERE
+	 		supplies_type_id = #{parentTypeId}
+	 		AND alive_flag = '1'
+	 </select>
+	 <select id="selectUrlBySuppliesTypeId" parameterType="java.lang.String" resultType="com.mdoa.admin.model.OfficeSuppliesType">
+	 	SELECT 
+	 		supplies_type_url AS suppliesTypeUrl,
+	 		parent_type_id AS parentTypeId
+	 	FROM
+	 		admin_office_supplies_type
+	 	WHERE
+	 		supplies_type_id = #{suppliesTypeId}
+	 		AND alive_flag = '1'
+	 </select>
+ 	<!-- 根据父ID删除该ID以及下面的所有办公类 -->
+	 <update id="removeSuppliesType" parameterType="com.mdoa.admin.model.OfficeSuppliesType">
+	 	UPDATE admin_office_supplies_type
+	 	SET
+	 		alive_flag = '0'
+	 	WHERE
+	 		supplies_type_url LIKE (${suppliesTypeUrl})
+	 </update>
+	 <!-- 根据ID修改相应的办公类Name -->
+	 <update id="editSuppliesType" parameterType="com.mdoa.admin.model.OfficeSuppliesType">
+	 	UPDATE admin_office_supplies_type
+	 	SET
+	 		supplies_type_name = '${suppliesTypeName}'
+	 	WHERE
+	 		supplies_type_id = '${suppliesTypeId}'
+	 </update>
+	  <!-- 根据ID修改Url(append) -->
+	 <update id="updateDragSourceSuppliesUrl" parameterType="com.mdoa.admin.model.SuppliesModel">
+	 	UPDATE admin_office_supplies_type
+	 	SET
+	 		supplies_type_url = #{sourceUrlo},
+	 		parent_type_id = #{targetId}
+	 	WHERE
+	 		supplies_type_id = #{sourceId}
+	 </update>
+ 	<!-- 根据ID修改Url(bottom,top) -->
+ <update id="updateDragSourceSuppliesUrlBt" parameterType="com.mdoa.admin.model.SuppliesModel">
+ 	UPDATE admin_office_supplies_type
+ 	SET
+ 		supplies_type_url = #{sourceUrlo},
+ 		parent_type_id = #{targetParentId}
+ 	WHERE
+ 		supplies_type_id = #{sourceId}
+ </update>
+  <!-- 拖动的时候下面的办公用品类url全部更改 -->
+ <update id="updateDragLaterUrl" parameterType="com.mdoa.admin.model.SuppliesModel">
+ 	UPDATE admin_office_supplies_type
+ 	SET
+ 		supplies_type_url = REPLACE(supplies_type_url,${previousUrl},${replaceUrl})
+ 	WHERE
+ 		supplies_type_url LIKE (${queryUrl})
+ </update>
+ <!-- 根据办公用品ID查询办公用品信息 -->
+ <select id="selectSuppliesInformationById" parameterType="java.lang.String" resultType="com.mdoa.admin.model.OfficeSuppliesType">
+ 	SELECT 
+		supplies_type_name AS suppliesTypeName,
+		supplies_type_url AS suppliesTypeUrl,
+		parent_type_id AS parentTypeId,
+		alive_flag AS aliveFlag
+ 	FROM
+ 		admin_office_supplies_type
+ 	WHERE
+ 		supplies_type_id = #{sourceId}
+ </select>
+</mapper>

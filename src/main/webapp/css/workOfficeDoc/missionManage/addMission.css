@@ -1,0 +1,55 @@
+#addMission{
+	padding-right:5.1%;
+	overflow:hidden;
+}
+#addMission .marginTop{
+	margin-top:28px;
+	overflow:hidden;
+}
+#addMission .missionLabel{
+	width:125px;
+	text-align:right;
+	height:28px;
+	line-height:28px;
+	font-weight:900;
+	padding-right:17px;
+	float:left;
+	margin-left: 50px;
+}
+#addMission .missionClass{
+	line-height:28px;
+}
+#addMission .missionClass>input{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 400px
+}
+#addMission .missionUeditor{
+	float:left;
+}
+#addMission .selArea{
+	line-height:28px;
+}
+#addMission .selArea>input[type=text]{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 350px
+}
+#addMission .selArea>input[type=button]{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 50px
+}
+#addMission .btnArea{
+	height:50px;
+	line-height:50px;
+	margin-left: 200px;
+}
+#addMission .btnArea input{
+	width:120px;
+	height:20px;
+	margin-left: 370px;
+}

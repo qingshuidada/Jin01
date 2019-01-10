@@ -1,0 +1,63 @@
+#sortManage .maintop .back{
+	display: none;
+}
+#sortManage .editAppCompony{	
+	overflow: auto;
+	display: none;
+}
+#sortManage .editAppFirm{	
+	overflow: auto;
+	display: none;
+}
+#sortManage .editAppCompony ul.editArea{
+	min-width:1063px;
+	margin-top:40px;
+	padding:0 50px;
+}
+#sortManage .editAppFirm ul.editArea{
+	min-width:1063px;
+	margin-top:40px;
+	padding:0 50px;
+}
+#sortManage ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#sortManage ul.editArea li span,
+#sortManage ul.editArea li i,
+#sortManage ul.editArea li input,
+#sortManage ul.editArea li #appComponyAbstract{
+	float:left;
+}
+#sortManage ul.editArea li #appFirmAbstract{
+	float:left;
+} 
+#sortManage ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#sortManage ul.editArea li span{
+	margin-right:15px;
+}
+#sortManage ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#sortManage ul.editArea li input.shortInput{
+	width:410px;
+}
+#sortManage ul.editArea li input.fileName{
+	width:700px;
+}
+#sortManage ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#sortManage .editAppCompony > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}
+#sortManage .editAppFirm > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}

@@ -1,0 +1,54 @@
+/*reset*/
+input {
+	vertical-align: middle;
+}
+select, a:focus, a:link {
+	outline: none;
+}
+img {
+	display: block;
+}
+body{
+	font-size:12px;
+}
+/* style */
+table{
+	width:100%;
+	background-color:#999;
+	text-align:center;
+}
+table th,table td{
+	max-width:300px;
+	line-height:25px;
+	padding:0 10px;
+	background-color:#fff;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+/* 分页 */
+.page{
+	float:right;
+	height:25px;
+	margin-top:20px;
+}
+.page ul{
+	overflow:hidden;
+}
+.page ul li{
+	float:left;
+	margin-left:10px;
+	line-height:25px;
+}
+.page ul li input[type=text]{
+	float:left;
+	width:25px;
+	height:15px;
+	margin-top:4px;
+	line-height:15px;
+	padding-left:5px;
+	border:1px solid #999;
+}
+
+
+

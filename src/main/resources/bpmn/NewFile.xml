@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 流程的xml样式的初步设计的模板 -->
+<processes>
+	<process id="001">
+		<name>请假</name>
+		<iconUrl>../../img/icon/img1.jpg</iconUrl>
+		<formUrl>../../html/form/请假form.html</formUrl>
+		<params>
+			<param name="请假时间" id="qingjiashijian" type="Date" must="false"/>
+			<param name="开始时间" id="startTime" type="String" must="true"/>
+			<param name="请假签到" id="address" type="Address" must="true"/>
+		</params>
+		<transactions>
+			<transaction name="添加请假信息" classId="com.mdoa.personnel.dao.LeaveOutDao"
+				method="insertLeaveOut" paramType="java.lang.String">
+			</transaction>
+		</transactions>
+	</process>
+</processes>

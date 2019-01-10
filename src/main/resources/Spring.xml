@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx.xsd
+	   http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+	
+	<!-- 扫描package方便注解依赖注入-->
+	<context:component-scan base-package="com.mdoa" />
+    
+    <!-- 配置mybatis 连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${MysqlDriverClass}" />
+        <property name="url" value="${MySqlJdbcUrl}" />
+        <property name="username" value="${MySqlUser}" />
+        <property name="password" value="${MySqlPassword}" />
+        <property name="initialSize" value="${initialSize}" />
+        <property name="maxActive" value="${maxActive}" />
+        <property name="maxWait" value="${maxWait}" />
+        <property name="maxIdle" value="${maxIdle}" />
+        <property name="minIdle" value="${minIdle}" />
+        <property name="testWhileIdle" value="true"/>
+        <property name="validationQuery" value="select uuid()"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="removeAbandonedTimeout" value="120"/>
+        <property name="timeBetweenEvictionRunsMillis" value="1800000"/>
+        <property name="numTestsPerEvictionRun" value="${maxIdle}"/>
+        <property name="minEvictableIdleTimeMillis" value="10800000"/>
+    </bean>
+    
+    <!-- 导入mybatis配置文件-->
+    <import resource="Mybatis.xml"/> 
+    
+    <!-- 导入mybatis配置文件-->
+    <import resource="erp/ErpDataSource.xml"/> 
+    
+    <!-- 导入process配置文件 -->
+    <import resource="process/ProcessConfig.xml"/>
+    
+    <!-- 导入activiti配置文件 
+    <import resource="activiti.cfg.xml"/>-->
+   
+</beans>
+
+
+
+

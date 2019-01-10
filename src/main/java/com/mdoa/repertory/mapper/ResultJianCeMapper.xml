@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.repertory.dao.ResultJianCeDao">
+
+<!-- <select id="selectResultJianCe" parameterType="com.mdoa.reportory.model.ResultJianCe" resultSetType="com.mdoa.reportory.model.ResultJianCe">
+	SELECT
+		result_maozhi AS resultMaozhi,
+		result_hot AS hot,
+		result_wet AS wet,
+		result_mianzhi AS resultMianzhi,
+		result_id AS resultID
+	FROM
+		result_jiance
+	<where>
+		alive_flag='1'
+		<if test="resultMaozhi != null and resultMaozhi != '' ">
+		AND result_maozhi = #{resultMaozhi}
+		<if test="hot != null and hot != '' ">
+		AND result_hot = #{hot}
+		<if test="wet != null and wet != '' ">
+		AND result_wet = #{wet}
+		<if test="resultMianzhi != null and resultMianzhi != '' ">
+		AND result_mianzhi = #{resultMianzhi}
+		<if test="resultID != null and resultID != '' ">
+		AND result_id = #{resultID}
+		</if>
+	</where>
+</select> -->
+
+</mapper>

@@ -1,0 +1,101 @@
+#startProcess{
+	overflow:hidden;
+}
+#startProcess .submit-button{
+	border-radius: 3px;
+	border: 1px gray solid;
+	background-color:  #EEEEEE;
+	width: 150px;
+	height: 29px;
+	cursor: pointer;
+}
+#startProcess .desktopArea{
+	overflow-y:auto;
+}
+#startProcess .leftDesktop{
+	padding:10px 0 10px 10px;
+	width:50%;
+	float:left;
+}
+#startProcess .rightDesktop{
+	padding:10px;
+	width:50%;
+	float:left;
+}
+#startProcess .desktopMoudleBox{
+	border:1px solid #99bbe8;
+	border-radius:6px;
+	background: #e0edff;
+	margin-bottom:10px;
+	position:relative;
+}
+#startProcess .desktopEmpty{
+	border:2px dashed #99bbe8;
+	margin-bottom:10px;
+	background:#fff;
+}
+#startProcess .desktopMoveBox{
+	position:absolute;
+	opacity: 0.8;
+	filter:alpha(opacity=80);
+	left:-1000px;
+	top:-1000px;
+}
+#startProcess .desktopBottom{
+	height: 0px;
+}
+#startProcess .desktopMoudleBox .desktopTop{
+	margin:0px 10px;
+	padding: 5px 0px;
+	font-size: 15px;
+	font-weight: 600;
+	height: 30px;
+}
+#startProcess .desktopMoudleBox .desktopBarArea{
+	position:absolute;
+	top:1px;
+	right:6px;
+}
+#startProcess .desktopMoudleBox .desktopMore{
+	height:20px;
+	line-height:20px;
+	text-align:right;
+	padding-right:6px;
+}
+#startProcess .desktopMoudleBox .barblock{
+	display: inline-block;
+    vertical-align: middle;
+    width: 30px;
+    height: 18px;
+    margin-top:4px;
+    margin-left:3px;
+    float:right;
+    font-size:14px;
+    cursor: pointer;
+    color:blue;
+    border-bottom: 1px blue solid;
+}
+#startProcess .desktopMoudleBox .fold{
+	background: url(../../../img/index/tool-sprites.gif) no-repeat 0px -60px;
+}
+#startProcess .desktopMoudleBox  .refreshDesktop{
+	background: url(../../../img/index/tool-sprites.gif) no-repeat 0px -225px;
+}
+#startProcess .desktopMoudleBox .closeDesktop{
+    background: url(../../../img/index/tool-sprites.gif) no-repeat 0px 0px;
+}
+#startProcess .desktopMoudleBox .fold:hover{
+	background: url(../../../img/index/tool-sprites.gif) no-repeat -15px -60px;
+}
+#startProcess .desktopMoudleBox  .refreshDesktop:hover{
+	background: url(../../../img/index/tool-sprites.gif) no-repeat -15px -225px;
+}
+#startProcess .desktopMoudleBox .closeDesktop:hover{
+    background: url(../../../img/index/tool-sprites.gif) no-repeat -15px 0px;
+}
+#startProcess .desktopMoudleBox .fold1{
+	background: url(../../../img/index/tool-sprites.gif) no-repeat 0px -75px;
+}
+#startProcess .desktopMoudleBox .fold1:hover{
+	background: url(../../../img/index/tool-sprites.gif) no-repeat -15px -75px;
+}

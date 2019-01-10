@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx.xsd
+	   http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+	
+	<bean id="processEngine" class="com.zhou.myProcess.process.ProcessEngine">
+		<constructor-arg name="config">
+			<bean class="com.zhou.myProcess.process.ProcessConfig">
+				<property name="dataSource" ref="dataSource"/>
+				<property name="processXmlPath" value="process/Processes.xml"/>
+				<property name="transactionSessionFactory">
+					<bean class="com.zhou.myProcess.transaction.TransactionMybatisSessionFactory">
+						<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+					</bean>
+				</property>
+				<property name="sendMessage">
+					<list>
+						<bean class="com.mdoa.system.service.MessageService"/>
+						<bean class="com.mdoa.qywx.controller.QywxController"/> 
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>		
+	</bean>
+    
+</beans>

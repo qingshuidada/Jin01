@@ -1,0 +1,39 @@
+<div id="clientCodeReset">
+	<div class="maintop">
+	</div>
+	<div class="invitetop">
+		客户名称：<input type="text"  class="customerName"/>
+		<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空">
+	</div>
+	<div>
+		<table id="clientCodeResetdg"></table>
+	</div>
+	<div class="popup codeReset">
+		<h3>修改密码</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table>
+				<tr>
+					<td>客户名称：</td>
+					<td><input type="text" class="customerName" disabled/></td>
+				</tr>
+				<tr>
+					<td>输入密码：</td>
+					<td><input type="password" class="password" /></td>
+				</tr>
+				<tr>
+					<td>再次输入：</td>
+					<td><input type="password" class="passwordNext" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" style="display:none;color:red" class="prompt">请输入一致的密码</td>
+				</tr>
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="保存"/>
+			<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+		</div>
+	</div>
+</div>

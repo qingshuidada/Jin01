@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.processManage.dao.ProcessManageDao">
+	<select id="getGroupList" parameterType="com.mdoa.processManage.po.GroupForm" 
+		resultType="com.zhou.myProcess.instance.GroupModel">
+		SELECT
+			a.group_id AS groupId,
+			a.group_name AS groupName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %h:%i:%s') AS createTime,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %h:%i:%s') AS updateTime,
+			c.user_name AS createUserName,
+			d.user_name AS updateUserName
+		FROM
+			process_group a
+		<if test="userId != null and userId != ''">
+			INNER JOIN
+				process_group_user b
+			ON(a.group_id = b.group_id AND b.user_id = #{userId})
+		</if>
+		LEFT JOIN
+			user_info c
+		ON(c.user_id = a.create_user_id)
+		LEFT JOIN
+			user_info = d
+		ON(d.user_id = a.update_user_id)
+		WHERE
+			a.alive_flag = '1'
+			<if test="groupName != null and groupName != ''">
+				AND a.group_name LIKE(${groupName})
+			</if>
+	</select>
+
+	<update id="updateGroupName" parameterType="com.zhou.myProcess.instance.GroupModel">
+		UPDATE
+			process_group
+		SET
+			group_name = #{groupName},
+			update_user_id = #{updateUserId}
+		WHERE
+			group_id = #{groupId}
+	</update>
+	
+	<insert id="addGroup" parameterType="com.zhou.myProcess.instance.GroupModel">
+		INSERT INTO
+			process_group
+		(
+			group_id,
+			group_name,
+			create_time,
+			create_user_id,
+			alive_flag
+		)VALUES(
+			UUID(),
+			#{groupName},
+			NOW(),
+			#{createUserId},
+			'1'
+		)
+	</insert>
+	
+	<update id="deleteGroup" parameterType="com.zhou.myProcess.instance.GroupModel">
+		UPDATE
+			process_group
+		SET
+			alive_flag = '0',
+			update_user_id = #{updateUserId}
+		WHERE
+			group_id = #{groupId}
+	</update>
+	
+	<insert id="addAllMustUser" parameterType="com.mdoa.user.model.UserInfo">
+		INSERT INTO
+			process_group_user
+		(
+			user_group_id, 
+			group_id, 
+			user_id
+		)
+		SELECT
+			UUID() AS id,
+			'${groupId}' AS groupId,
+			user_id AS userId
+		FROM
+			user_info
+		WHERE
+			alive_flag = '1'
+			AND (invite_flag = '1' OR invite_flag = '4' OR invite_flag = '5')
+			AND retire_flag = '1'
+			<if test="departmentUrl != null and departmentUrl != ''">
+				AND department_url LIKE (${departmentUrl})
+			</if>
+			<if test="postId != null and postId != ''">
+			 	AND post_id = #{postId}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND user_name LIKE(${userName})
+			</if>
+			<if test="workTimeStartStr != null and workTimeStartStr != ''">
+				AND work_time &gt; STR_TO_DATE(#{workTimeStartStr},'%Y-%m-%d')
+			</if>
+			<if test="workTimeEndStr != null and workTimeEndStr != ''">
+				AND work_time &lt; STR_TO_DATE(#{workTimeEndStr},'%Y-%m-%d')
+			</if>
+	</insert>
+	
+	<insert id="addMustUser" parameterType="java.util.Map">
+		INSERT INTO
+			process_group_user
+		(
+			user_group_id, 
+			group_id, 
+			user_id
+		)
+		VALUE(
+			uuid(),
+			#{groupId},
+			#{userId}
+		)
+	</insert>
+	
+	<select id="getGroupUserList" resultType="com.mdoa.user.model.UserInfo" parameterType="com.mdoa.user.model.UserInfo">
+		SELECT
+			b.user_id AS userId,
+			b.department_name AS departmentName,
+			b.post_name AS postName,
+			b.sex AS sex,
+			b.user_name AS userName,
+			DATE_FORMAT(b.work_time,'%Y-%m-%d %h:%m:%s') AS workTimeStr
+		FROM
+			process_group_user a
+		INNER JOIN
+			user_info b
+		ON(a.user_id = b.user_id)
+		WHERE
+			a.group_id = #{groupId}
+			AND b.alive_flag = '1'
+			AND (b.invite_flag = '1' OR b.invite_flag = '4' OR b.invite_flag = '5')
+			AND b.retire_flag = '1'
+		<if test="departmentUrl != null and departmentUrl != ''">
+			AND b.department_url LIKE (${departmentUrl})
+		</if>
+		<if test="postId != null and postId != ''">
+		 	AND b.post_id = #{postId}
+		</if>
+		<if test="userName != null and userName != ''">
+			AND b.user_name LIKE(${userName})
+		</if>
+		<if test="workTimeStartStr != null and workTimeStartStr != ''">
+			AND b.work_time &gt; STR_TO_DATE(#{workTimeStartStr},'%Y-%m-%d')
+		</if>
+		<if test="workTimeEndStr != null and workTimeEndStr != ''">
+			AND b.work_time &lt; STR_TO_DATE(#{workTimeEndStr},'%Y-%m-%d')
+		</if>
+	</select>
+	
+	<delete id="deleteRepetitionGroupUser">
+		DELETE a
+		FROM
+			process_group_user a,
+			(
+				SELECT
+					user_group_id
+				FROM
+					process_group_user
+				GROUP BY
+					user_id, group_id
+				HAVING
+					count(user_group_id) > 1
+			) b
+		WHERE
+			a.user_group_id = b.user_group_id
+	</delete>
+	
+	<select id="getProcessMustTask" parameterType="java.util.Map" 
+		resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			c.task_id AS taskId,
+			c.task_type AS taskType,
+			c.executor_id As executorId,
+			c.executor_name AS executorName,
+			c.group_id AS groupId,
+			c.process_type_id AS procesTypeId,
+			DATE_FORMAT(c.create_time,'%Y-%m-%d %h:%i:%s') AS createTime
+		FROM
+			process_group_task c
+		WHERE
+			c.process_type_id = #{processTypeId}
+			AND c.group_id = #{groupId}
+			AND c.task_type = '1'
+		ORDER BY c.group_id , c.order_number
+	</select>
+	
+	<select id="getProcessMustCopyToTask" parameterType="java.util.Map" 
+		resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			c.task_id AS taskId,
+			c.task_type AS taskType,
+			c.executor_id As executorId,
+			c.executor_name AS executorName,
+			c.group_id AS groupId,
+			c.process_type_id AS procesTypeId,
+			DATE_FORMAT(c.create_time,'%Y-%m-%d %h:%i:%s') AS createTime
+		FROM
+			process_group_task c
+		WHERE
+			c.process_type_id = #{processTypeId}
+			AND c.group_id = #{groupId}
+			AND c.task_type = '2'
+		ORDER BY c.group_id , c.order_number
+	</select>
+</mapper>

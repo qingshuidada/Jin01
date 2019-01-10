@@ -1,0 +1,62 @@
+<div id="know">
+	<div class="main">
+		<input class="departmentUrl" type="hidden">
+		<div class="leftNav">
+			<h3>部门选择</h3>
+			<div>
+				<ul id="knowD" data-options="region:'center',border: true"  
+		         class="easyui-tree">  
+		    	</ul>  
+			</div>
+		</div>
+		<div class="rightArea">
+			<div class="invitetop">
+				知识标题：<input type="text" class="titleName"/>
+				<input type="hidden" class="secondCategoryId">
+				<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+			</div>
+			<div>
+				<table id="knowdg">
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="knowEdit">
+		<div class="knowClass marginTop">
+			<div class="knowLabel">
+				标题：
+			</div>
+				<input type="text" class="titleName" />
+			<div class="knowLabel">
+			部门：
+			</div>
+			<input type="text" name="departmentName" style="width: 200px" disabled="disabled">
+			<input type="hidden" name="departmentUrl">
+			<input type="button" class="button departmentChooseObj" value="选择"/>
+		</div>
+		<div class="knowClass marginTop">
+			<div class="knowLabel">
+				一级类别：
+			</div>
+			<select class="firstCategoryId">
+			</select>
+			<div class="knowLabel">
+				二级类别：
+			</div>
+			<select class="secondCategoryId">
+			</select>
+		</div>
+		<div class="knowContent marginTop">
+			<div class="knowLabel">
+				正文：
+			</div>
+			<div class="knowUeditor">
+				<script type="text/plain" id="knowText"></script>	
+			</div>
+		</div>
+		<div class="editBtn">
+			<input type="button" class="button confirm" value="确定"/>
+			<input type="button" class="button cannel" value="取消" style="margin-left: 10%;"/>
+		</div>
+	</div>
+</div>

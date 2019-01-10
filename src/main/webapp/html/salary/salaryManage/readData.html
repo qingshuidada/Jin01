@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>订单查询</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/index/index.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/salary/readData.css">
+	<link rel="stylesheet" type="text/css" href="../../../themes/default/easyui.css">
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../../js/index/index.js"></script>
+	<script type="text/javascript" src="../../../js/salary/salaryManage/readData.js"></script>
+	<script type="text/javascript" src="../../../js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../../js/plugin/upload.js"></script>
+	<script type="text/javascript" src="../../../js/plugin/excel-plugin.js"></script>
+</head>
+<body>
+	<div id="readData">
+		<div class="salaryTop">
+			<div class="w920 salaryHeader">
+				<div class="logo">
+					<img src="../../../img/salary/logo.png" >
+				</div>
+				<div class="logoText">
+					<h1>杭州航民达美染整有限公司</h1>
+				</div>
+				<div class="right">
+					<div class="debris">
+						<div  class="welcome">
+							<span class="userAccount">欢迎您，管理员</span>
+							<input type="button" name="exit" value="退出登录" />
+						</div>
+					</div>
+					<div class="QRCode">
+						<img src="../../../img/salary/QRCode.jpg">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tabHeader">
+			<input type="button" name="readFromExcel" value="从excel导入">
+			<input type="button" name="writeToExcel" value="导出至excel">
+			<input type="button" name="ensureData" value="确认工资信息">
+			<input type="button" name="deleteNotSureData" value="删除未确认信息">
+			<form class="printSalaryInfo" style="display:inline" action="../../../salary/printSalaryInfo.salary?" method="post" target="_blank">
+				<input type ="hidden" name="cptName" value="salaryInfo">
+				<input type="button" class="print" name="printSalaryInfo" value="打印查询结果" />
+			</form>
+			
+		</div>
+		<div class="dataArea">
+			<div class="dataTop">
+				<ul>
+					<li>
+						<span>日期：</span>
+						<select name="monthDate">
+							<option value=""></option>
+						</select>
+					</li>
+					<li>
+						<span>姓名：</span>
+						<input type="text" name="peopleName"/>
+					</li>
+					<li>
+						<span>账号：</span>
+						<input type="text" name="userAccount"/>
+					</li>
+					<li>
+						<span>确认：</span>
+						<select name="ensureFlag">
+							<option value=""></option>
+							<option value="0">未确认</option>
+							<option value="1">已确认</option>
+						</select>
+					</li>
+					<li name="btnArea">
+						<input type="button" name="querySalary" value="查询">
+						<input type="button" name="cleanSalary" value="清空">
+						<input type="button" name="errorQuery" value="校验查询">
+						<input type="button" name="totalQuery" value="统计查询">
+					</li>
+					<li>
+						<span>年份：</span>
+						<input type="text" name="yearDate"/>
+					</li>
+					<li>
+						<span>部门：</span>
+						<input type="text" name="departmentName"/>
+					</li>
+				</ul>
+			</div>
+			<table id="salaryDg" style="overflow:auto;height:700px">
+			
+			</table>
+			
+			<div class="popups" style="text-align: left;">
+				<div class="popup readSalaryFromExcel" style="height: 210px;width: 280px;left:786px;top:352px;">
+					<h3>从excel读取工资信息</h3>
+					<span class="turnoff"></span>
+					<div class="popuparea" style="padding: 10px 36px; height:150px; width:240px">
+						<div style="margin-top:60px">
+							<input type="file" style="width:220px;" class="excelFile"/>
+						</div>
+					</div>
+					<div class="btnarea" style="text-align: center">
+						<input type="button" class="button confirm" value="确定导入"/>
+						<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+					</div>
+				</div>
+				
+				<div class="popup updateSalaryInfo" style="height: 265px;width: 300px;left:786px;top:352px;">
+					<h3>修改工资信息</h3>
+					<span class="turnoff"></span>
+					<div class="popuparea" style="padding: 10px 36px; height:200px; width:270px">
+						<div style="margin-top:5px">
+							<ul>
+								<li name="info">
+									<span>姓名：</span>
+									<input type="text" name="peopleName" disabled="disabled"/>
+									<input type="text" name="salaryInfoId" style="display:none"/>
+								<li>
+								<li>
+									<span>*****以下各项请选填至少一项*****</span>
+								</li>
+								<li>
+									<span>实发金额：</span>
+									<input type="text" name="finalPayAmount"/>
+								</li>
+								<li>
+									<span>应发工资：</span>
+									<input type="text" name="totalPayAmount"/>
+								</li>
+								<li>
+									<span>夜班费：</span>
+									<input type="text" name="nightShiftAmount"/>
+								</li>
+								<li>
+									<span>实发工资：</span>
+									<input type="text" name="actualPayAmount"/>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="btnarea" style="text-align: center">
+						<input type="button" class="button confirm" value="确定修改"/>
+						<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+					</div>
+				</div>
+				<!-- 导出数据到Excel -->
+				<div class="popup writetoexcel" style="height: 300px;width: 415px;">
+					<h3>导出数据到Excel表格</h3>
+					<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+					</div>
+					<div class="btnarea">
+						<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+						<input type="button" name="reset" class="button" value="重置">
+						<input type="button" name="cancel" class="button" value="取消">
+					</div>
+				</div>
+			</div>	
+		</div>
+		
+		<p class="salaryBottom" style="text-align:center;margin-bottom:30px;width:100%;">版权所有 ©1997-2017</p>
+	</div>
+</body>
+</html>

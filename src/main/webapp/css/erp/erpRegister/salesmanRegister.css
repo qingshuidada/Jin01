@@ -1,0 +1,9 @@
+#salesmanRegister .popup .popuparea{
+	padding:10px 20px;
+}
+#salesmanRegister .popup .popuparea .button{
+	width:40px;
+}
+#salesmanRegister .popup .popuparea .salesmanName{
+	width:96px;
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.SeventhPageDao">
+	<select id="selectComponyMessage" resultType="com.mdoa.app.model.AppCompony">
+		SELECT
+			compony_address AS componyAddress,
+			compony_phone AS componyPhone,
+			compony_fax AS componyFax,
+			compony_email AS componyEmail,
+			qr_code_url AS qrCodeUrl,
+			coordinate AS coordinate
+		FROM
+			app_compony
+	</select>
+	
+	<select id="selectContacts" resultType="com.mdoa.app.model.AppContact">
+		SELECT
+			contact_id AS contactId,
+			user_name AS userName,
+			cellphone AS cellphone,
+			fax AS fax,
+			telephone AS telephone,
+			department AS department
+		FROM
+			app_contact				
+	</select>
+	<insert id="addOnlineMessage" parameterType="com.mdoa.app.model.AppOnlineMessage">
+		INSERT INTO app_online_message(
+			message_id,
+			user_name,
+			telephone,
+			address,
+			email,
+			message
+		)VALUES(
+			UUID(),
+			#{userName},
+			#{telephone},
+			#{address},
+			#{email},
+			#{message}
+		)
+	</insert>
+	<update id="updateContact" parameterType="com.mdoa.app.model.AppContact">
+		UPDATE app_contact
+		SET
+		<if test="userName != null and userName != ''">
+			user_name = #{userName},
+		</if>
+		<if test="department != null and department != ''">
+			department = #{department},
+		</if>
+		<if test="cellphone != null and cellphone != ''">
+			cellphone = #{cellphone},
+		</if>
+		<if test="telephone != null and telephone != ''">
+			telephone = #{telephone},
+		</if>
+		<if test="fax != null and fax != ''">
+			fax = #{fax},
+		</if>
+		contact_id = #{contactId}
+		WHERE
+			contact_id = #{contactId}
+	</update>
+</mapper>

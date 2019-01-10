@@ -1,0 +1,47 @@
+<div id="noInvoiceCollect">
+	<div class="maintop">
+		<div class="operate">
+			<input type="button" value="导出" class="button write" />
+			<form class="printNoInvoiceCollect" style="display:inline" action="../../invoice/printNoInvoiceCollect.do?" method="post" target="_blank">
+				<input type = "hidden" name="cptName" value="noInvoiceCollect">
+				<input type="submit" class="button print" value="打印查询结果" />
+			</form>	
+		</div>
+	</div>
+	<div class="invitetop">
+		查询条件：		
+		供应商：
+			<input type="text" style="width:120px;" name="providerName" readonly="readonly" />
+			<input type="button" class="button chooseProvider" value="选择" style="width:35px;font-size:12px;"/>
+			<input style="display:none" name="providerCode"/>
+		选择时间段：
+			<input type="text" class="jqdate startTimeStr" readonly="readonly" style="width: 100px" onclick="YMD(this);"/>	
+		~
+			<input type="text" class="jqdate endTimeStr" readonly="readonly" style="width: 100px" onclick="YMD(this);"/>
+		<input class="selectGroup" type="button" value="查询" /> 
+		<!-- <input class="advancedQueryBtn" type="button" value="高级查询" />
+		<input type="button" class="clean-query" value="清空" /> -->
+	</div>
+	<div>
+		<table id="noInvoiceCollectdg"></table>
+	</div>
+	<!-- 汇总 -->
+	<div class="sumBar">
+	</div>
+	<input type="button" class="button controlSumBar" value="隐藏"/>
+	<div class="popups">
+		<!-- 导出数据到Excel -->
+		<div class="popup writetoexcel" style="height: 300px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	</div>
+	
+</div>

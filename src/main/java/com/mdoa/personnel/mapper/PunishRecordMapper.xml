@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.personnel.dao.PunishRecordDao">
+	<!-- 添加惩罚记录 -->
+	<insert id="addPunishRecord" parameterType="com.mdoa.personnel.model.PunishRecord">
+		INSERT INTO personnel_punish_record (
+			punish_record_id,
+			date,
+			type,
+			user_name,
+			department_name,
+			invoice_number,
+			reason,
+			amount,
+			text,
+			executor_name,
+			alive_flag
+
+		)
+		VALUES
+			(
+				UUID(),
+				#{date},
+				#{type},
+				#{userName},
+				#{departmentName},
+				#{invoiceNumber},
+				#{reason},
+				#{amount},
+				#{text},
+				#{executorName},
+				'1'
+			)
+	</insert>
+	<!-- 查询惩罚记录 -->
+	<select id="selectPunishRecord" parameterType="com.mdoa.personnel.model.PunishRecord" resultType="com.mdoa.personnel.model.PunishRecord">
+		SELECT
+			punish_record_id AS punishRecordId,
+			date AS date,
+			DATE_FORMAT(date,'%Y-%m-%d') AS dateStr,
+			type AS type,
+			invoice_number AS invoiceNumber,
+			reason AS reason,
+			amount AS amount,
+			text AS text,
+			executor_name AS executorName,
+			department_name AS departmentName,
+			user_name AS userName
+		FROM
+			personnel_punish_record 
+		<where>
+			alive_flag = '1'
+			<if test="punishRecordId != null and punishRecordId != ''">
+			AND punish_record_id = #{punishRecordId}</if>
+			<if test="userName != null and userName != ''">
+			AND user_name LIKE (${userName})</if>
+			<if test="invoiceNumber != null and invoiceNumber != ''">
+			AND invoice_number LIKE (${invoiceNumber})</if>
+			<if test="departmentName != null and departmentName != ''">
+			AND department_name LIKE (${departmentName})</if>
+			<if test="dateStr != null and dateStr !=''">
+			AND DATE_FORMAT(date,'%Y-%m-%d') >= #{dateStr}</if>
+			<if test="endTimeStr != null and endTimeStr !=''">
+			AND DATE_FORMAT(date,'%Y-%m-%d') &lt;= #{endTimeStr}</if>
+			<if test="executorName != null and executorName !=''">
+			AND executor_name LIKE '${executorName}%'</if>
+			<if test="reason != null and reason !=''">
+			AND reason LIKE '%${reason}%'</if>
+			<if test="type != null and type != ''">
+			AND type = #{type}</if>
+		</where>
+	
+	</select>
+	
+	<!-- 导出excel查询惩罚记录 -->
+	<select id="selectPunishRecordForExcel" parameterType="com.mdoa.personnel.model.PunishRecord" resultType="com.mdoa.personnel.model.PunishRecord">
+		SELECT
+			punish_record_id AS punishRecordId,
+			date AS date,
+			DATE_FORMAT(date,'%Y-%m-%d') AS dateStr,
+			type AS type,
+			invoice_number AS invoiceNumber,
+			reason AS reason,
+			amount AS amount,
+			text AS text,
+			executor_name AS executorName,
+			IF(type = '1',department_name,'外来人员') AS departmentName,
+			IF(type = '1',user_name,invoice_number) AS userName
+		FROM
+			personnel_punish_record 
+		<where>
+			alive_flag = '1'
+			<if test="userName != null and userName != ''">
+			AND user_name LIKE ('${userName}%')</if>
+			<if test="invoiceNumber != null and invoiceNumber != ''">
+			AND invoice_number LIKE ('${invoiceNumber}%')</if>
+			<if test="departmentName != null and departmentName != ''">
+			AND department_name LIKE ('${departmentName}%')</if>
+			<if test="dateStr != null and dateStr !=''">
+			AND DATE_FORMAT(date,'%Y-%m-%d') >= #{dateStr}</if>
+			<if test="endTimeStr != null and endTimeStr !=''"> 
+			AND DATE_FORMAT(date,'%Y-%m-%d') &lt;= #{endTimeStr}</if>
+			<if test="type != null and type != ''">
+			AND type = #{type}</if>
+		</where>
+	
+	</select>
+	
+	<!-- 删除和修改惩罚记录 -->
+	<update id="updatePunishRecord" parameterType="com.mdoa.personnel.model.PunishRecord">
+		UPDATE 
+			personnel_punish_record
+		SET
+			<if test="aliveFlag != null and aliveFlag != ''">
+			alive_flag = '0'</if>
+			<if test="amount != null and amount != ''">
+			amount = #{amount},</if>
+			<if test="dateStr != null and dateStr != ''">
+			date = #{dateStr},</if>
+			<if test="invoiceNumber != null and invoiceNumber != ''">
+			invoice_number = #{invoiceNumber},</if>
+			<if test="reason != null and reason != ''">
+			reason = #{reason},</if>
+			<if test="text != null and text != ''">
+			text = #{text},</if>
+			<if test="departmentName != null and departmentName != ''">
+			department_name = #{departmentName},</if>
+			<if test="userName != null and userName != ''">
+			user_name = #{userName},</if>
+			<if test="executorName != null and executorName != ''">
+			executor_name = #{executorName}</if>
+			
+		WHERE
+			punish_record_id = #{punishRecordId}
+	</update>
+</mapper>

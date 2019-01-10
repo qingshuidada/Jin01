@@ -1,0 +1,258 @@
+#checkInfoQuery .startMonthBalance .popuparea{
+	padding:10px 36px;
+}
+#checkInfoQuery .startMonthBalance .confirm{
+	margin-left:102px;
+}
+#checkInfoQuery .startMonthBalance .cannel{
+	margin-left:8px;
+}
+
+#checkInfoQuery .imgBox{
+	width:16px;
+    margin: 0 auto;
+}
+#checkInfoQuery{
+	overflow-y:auto;
+}
+#checkInfoQuery .listForm{
+	width:100%;
+}
+/***********查看员工考勤信息样式**************/
+/************时间控件样式start************/
+#checkInfoQuery #oneBodyCheckInfo .Calendar{
+	float:left;
+	width:70%;
+	display: block;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .calendarTitle{
+	position: relative;
+	width: 100%;
+	height:50px;
+	line-height:50px;
+	border-bottom: 1px solid #95B8E7;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .calendarTitle .yearsSelect{
+	float:left;
+	width:80px;
+	height:23px;
+	margin:10px 10px 0 15px;
+	border:1px solid #999;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .calendarTitle .monthsSelect{
+	float:left;
+  	width:60px;
+	height:23px;
+	margin-top:10px;
+	border:1px solid #999;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .calendarTop dl dt,
+#checkInfoQuery #oneBodyCheckInfo .Calendar .calendarTop dl dd{
+	float:left;
+	margin-left:10px;
+	line-height:45px;
+}
+/**
+ * 设置按钮图标
+ */
+#checkInfoQuery #oneBodyCheckInfo .Calendar .prevMonth,#checkInfoQuery #oneBodyCheckInfo .Calendar .nextMonth{
+	float:left;
+	width:15px;
+	height:21px;
+	line-height:21px;
+	border:1px solid #999;
+	font-size:16px;
+	cursor: pointer;
+	margin-top:10px;
+	text-align:center;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .back{
+	float:left;
+	margin:10px 0 0 10px;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .prevMonth{
+	border-right:0px;
+}
+#checkInfoQuery #oneBodyCheckInfo .Calendar .nextMonth{
+	border-left:0px;
+}
+/* 设置日历表格样式 */
+#checkInfoQuery #oneBodyCheckInfo .calendarTable{
+	width: 100%;
+	border-collapse: collapse;
+	text-align:center;
+}
+/* 表格行高 */
+#checkInfoQuery #oneBodyCheckInfo .calendarTable tr{
+	font-size:14px;
+	height:50px;
+	line-height:50px;
+}
+#checkInfoQuery #oneBodyCheckInfo .calendarTable tr th{
+	height:50px;
+	line-height:50px;
+}
+#checkInfoQuery #oneBodyCheckInfo .calendarTable tr td{
+	border:1px solid #ccc;
+	width: 14%;
+}
+/* 当前天 颜色特殊显示 */
+#checkInfoQuery #oneBodyCheckInfo .calendarTable .currentDay {
+	background-color:#eee;
+	font-weight:bold;
+}
+#checkInfoQuery #oneBodyCheckInfo .calendarTable .dateNember{
+	display:inline-block;
+	width:30px;
+	height:20px;
+	line-height:12px;
+	overflow:hidden;	
+}
+#checkInfoQuery #oneBodyCheckInfo .calendarTable .prevDateNember{
+	color:#fff;	
+	background:#7edafc;
+}
+/* 本月 文字颜色 */
+#checkInfoQuery #oneBodyCheckInfo .calendarTable .currentMonth {
+	color:#666;
+	font-weight:bold;
+}
+#checkInfoQuery #oneBodyCheckInfo .calendarTable td ul li{
+	font-size:12px;
+	line-height:25px;
+	font-weight:normal;
+	border-top:1px solid #ddd;
+}
+/* 其他月颜色 */
+#checkInfoQuery #oneBodyCheckInfo .calendarTable .otherMonth{
+	color: #ccc;
+	border:0px;
+	visibility:hidden;
+}
+#checkInfoQuery #oneBodyCheckInfo .calendarTable td{
+	cursor:pointer;
+}
+#checkInfoQuery #oneBodyCheckInfo td .workStatus{
+	margin-top:-22px;
+}
+#checkInfoQuery #oneBodyCheckInfo td .workStatus li span{
+	display:inline-block;
+	width:50%;
+	height:25px;
+}
+#checkInfoQuery #oneBodyCheckInfo td .workStatus li span:first-child{
+	border-right:1px solid #ddd;
+	box-sizing: border-box;
+}
+#checkInfoQuery #oneBodyCheckInfo td .workStatus li span.warn{
+	color:red;
+}
+#checkInfoQuery #oneBodyCheckInfo td .workStatus li span.normal{
+	color:#049cfd;
+}
+/***************时间控件样式end*********************/
+
+
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail{
+	float:right;
+	width:30%;
+	height:100%;	
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail dl dd{
+	float:left;
+	line-height:50px;
+	margin-left:20px;
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail .title{
+	clear:both;
+	width:100%;
+	height:50px;
+	line-height:50px;
+	font-size:18px;
+	padding-left:20px;
+}
+
+#checkInfoQuery #oneBodyCheckInfo .monthCheckInfoDetail{
+	float:left;
+	width:70%;
+	overflow:hidden;
+}
+#checkInfoQuery #oneBodyCheckInfo .monthCheckInfoDetail h2{
+	height:30px;
+	line-height:30px;
+	margin:5px 0 5px 10px;
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail .currentDayCheck{
+	font-size:14px;
+	height:30px;
+	line-height:30px;
+	margin-left:10px;
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail ul{
+	display:none;
+	padding-left:10px;	
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail ul li{
+	line-height:30px;
+	height:30px;
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail ul li span{
+	float:left;	
+	margin-left:20px;
+}
+#checkInfoQuery #oneBodyCheckInfo .myCheckInfoDetail ul li p{
+	float:left;
+}
+
+#checkInfoQuery #oneBodyCheckInfo .monthCheckInfoDetail ul{
+	overflow:hidden;
+}
+#checkInfoQuery #oneBodyCheckInfo .monthCheckInfoDetail ul li{
+	float:left;
+	font-size:14px;
+	line-height:25px;
+	height:25px;
+	width:25%;
+}
+#checkInfoQuery #oneBodyCheckInfo .monthCheckInfoDetail ul li span{
+	float:left;	
+	margin-left:30px;
+}
+#checkInfoQuery #oneBodyCheckInfo .monthCheckInfoDetail ul li p{
+	float:left;
+}
+
+#checkInfoQuery .popups .writetoexcel table select{
+	border:1px #A9A9A9 solid;
+	width:138px;
+	text-align:center;
+}
+
+#checkInfoQuery .popups .writetoexcel table input[type="text"]{
+	border:1px #A9A9A9 solid;
+	width:144px;
+}
+#checkInfoQuery .popups .writetoexcel table input[type="checkbox"]{
+	width:13px;
+}
+#checkInfoQuery .popups .writetoexcel table input[type="button"]{
+	width:42px;
+	height:26px;
+	color:#444444;
+	background-color:#4DFFFF;
+	border-color:#4DFFFF;
+	border-radius:6px;
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-left:15px;
+	margin-right:15px;
+	text-align:center;
+}
+#checkInfoQuery .popups .writetoexcel .hidden{
+	display:none;
+	width:0px;
+}
+#checkInfoQuery .popups .writetoexcel .btnarea .button{
+	margin-left:8px;
+}
+

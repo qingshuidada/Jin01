@@ -1,0 +1,30 @@
+<div id="salesmanRegister">
+	<div class="maintop">
+		<!-- <input type="button" class="button addSalesman" value="添加"/> -->
+	</div>
+	<div class="invitetop">
+		业务员名称：<input type="text"  class="salesmanName"/>
+		<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空">
+	</div>
+	<div>
+		<table id="salesmanRegisterdg"></table>
+	</div>
+	<div class="popup newSalesman">
+		<h3>新增业务员</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table>
+				<tr>
+					<td>选择员工：</td>
+					<td><input type="text" class="salesmanName" disabled/></td>
+					<td><input type="button" class="button" value="选择" /></td>
+				</tr>
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="保存"/>
+			<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+		</div>
+	</div>
+</div>

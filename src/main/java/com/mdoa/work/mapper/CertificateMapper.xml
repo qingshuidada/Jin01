@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.CertificateDao" >
+
+	<!-- 添加证书 -->
+	<insert id="addCertificate" parameterType="com.mdoa.work.model.WorkOfficeCertificate">
+		INSERT INTO work_office_certificate(
+			certificate_id,
+			certificate_name,
+			certificate_describe,
+			option_key,
+			effective_time,
+			release_time,
+			certificate_message,
+			attachment_file_name,
+			attachment_file_url,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{certificateName},
+			#{certificateDescribe},
+			#{optionKey},
+			STR_TO_DATE(#{effectiveTime},'%Y-%m-%d'),
+			STR_TO_DATE(#{releaseTime},'%Y-%m-%d'),
+			#{certificateMessage},
+			#{attachmentFileName},
+			#{attachmentFileUrl},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	
+	</insert>
+	<!-- 查看证书 -->
+	<select id="queryCertificate" parameterType="com.mdoa.work.model.WorkOfficeCertificate" resultType="com.mdoa.work.model.WorkOfficeCertificate">
+		SELECT
+			certificate_id AS certificateId,
+			certificate_name AS certificateName,
+			certificate_describe AS certificateDescribe,
+			option_key AS optionKey,
+			DATE_FORMAT(effective_time,'%Y-%m-%d') AS effectiveTime,
+			DATE_FORMAT(release_time,'%Y-%m-%d') AS releaseTime,
+			certificate_message AS certificateMessage,
+			attachment_file_name AS attachmentFileName,
+			attachment_file_url AS attachmentFileUrl,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			work_office_certificate
+		WHERE
+			alive_flag = '1'
+			<if test="certificateId != null and certificateId != ''">
+				AND certificate_id = #{certificateId}
+			</if>
+			<if test="certificateName != null and certificateName != ''">
+				AND certificate_name LIKE #{certificateName}
+			</if>
+			<if test="effectiveStartTime != null and effectiveStartTime != ''">
+				AND effective_time &gt;= #{effectiveStartTime}
+			</if>
+			<if test="effectiveEndTime != null and effectiveEndTime != ''">
+				AND effective_time &lt;= #{effectiveEndTime}
+			</if>
+			<if test="releaseStartTime != null and releaseStartTime != ''">
+				AND release_time &gt;= #{releaseStartTime}
+			</if>
+			<if test="releaseEndTime != null and releaseEndTime != ''">
+				AND release_time &lt;= #{releaseEndTime}
+			</if>
+			<if test="optionKey != null and optionKey != ''">
+				AND option_key = #{optionKey}
+			</if>
+		ORDER BY
+			create_time DESC
+	</select>
+	<!-- 修改证书 -->
+	<update id="updateCertificate" parameterType="com.mdoa.work.model.WorkOfficeCertificate">
+		UPDATE
+			work_office_certificate
+		SET
+			<if test="certificateName != null and certificateName != ''">
+				certificate_name = #{certificateName},
+			</if>
+			<if test="certificateDescribe != null and certificateDescribe != ''">
+				certificate_describe = #{certificateDescribe},
+			</if>
+			<if test="optionKey != null and optionKey != ''">
+				option_key = #{optionKey},
+			</if>
+			<if test="effectiveTime != null and effectiveTime != ''">
+				effective_time = STR_TO_DATE(#{effectiveTime},'%Y-%m-%d'),
+			</if>
+			<if test="releaseTime != null and releaseTime != ''">
+				release_time = STR_TO_DATE(#{releaseTime},'%Y-%m-%d'),
+			</if>
+			<if test="certificateMessage != null and certificateMessage != ''">
+				certificate_message = #{certificateMessage},
+			</if>
+			<if test="attachmentFileName != null and attachmentFileName != ''">
+				attachment_file_name = #{attachmentFileName},
+			</if>
+			<if test="attachmentFileUrl != null and attachmentFileUrl != ''">
+				attachment_file_url = #{attachmentFileUrl},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND certificate_id = #{certificateId}
+	</update>
+	<!-- 删除证书 -->
+	<update id="deleteCertificate" parameterType="com.mdoa.work.model.WorkOfficeCertificate">
+		UPDATE
+			work_office_certificate
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE	
+			alive_flag = '1'
+			AND certificate_id = #{certificateId}
+	</update>
+</mapper>

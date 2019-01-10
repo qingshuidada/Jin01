@@ -1,0 +1,55 @@
+<div id="shopManage" title="车间管理">
+	<div class="maintop">
+		<!-- <input type="button" class="button addshop" value="添加车间"/> -->
+	</div>
+	<div class="invitetop">
+		车间名称：
+			<input type="text" class="workshopName" style="width:100px;"> 
+		<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空"/>
+	</div>
+	<div>
+		<table id="shopManagedg"></table>	
+	</div>
+	<div class="popup updataShop">
+		<h3>修改车间</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table style="padding:10px;line-height: 25px;">
+				<tr>
+					<td>车间名称：</td>
+					<td><input type="text" class="shopName" /></td>
+				</tr>
+				<tr>
+					<td>是否计入产值汇总：</td>
+					<td>
+						<select class="countFlag">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="保存"/>
+			<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+		</div>
+	</div>
+	<div class="popup addShop">
+		<h3>添加车间</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table style="padding:10px;line-height: 25px;">
+				<tr>
+					<td>车间名称：</td>
+					<td><input type="text" class="shopName" /></td>
+				</tr>				
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="保存"/>
+			<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+		</div>
+	</div>
+</div>

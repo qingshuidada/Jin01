@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>生产报表</title>
+	<link rel="stylesheet" type="text/css" href="../../css/erp/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../../css/qywx/qywxReport.css">
+	<link rel="stylesheet" type="text/css" href="../../css/plug/mobiscroll.custom-3.0.0-beta6.min.css"/>
+	<script type="text/javascript" src="../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../js/erp/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../js/jquery/mobiscroll.custom-3.0.0-beta6.min.js"></script>
+</head>
+<body>
+	<div class="filtCondition">
+		<ul>
+			<li>
+				<span>选择日期:</span>
+				<input type="text" name="reportFormsDate" readonly="readonly">
+			</li>
+		</ul>
+		<input type="button" class="query" value="查询"/>
+		<span style="display:none;" class="currentDate"></span>
+	</div>
+	<div class="leftColumn" >
+		<table class="leftList" >
+			<thead>
+				<tr>
+					<td colspan="2">经济指标</td>
+				</tr>
+				<tr>
+					<td colspan="2">类别</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="2">进仓</td>
+				</tr>
+				<tr>
+					<td colspan="2">出仓</td>
+				</tr>
+				<tr>
+					<td colspan="2">产值</td>
+				</tr>
+				<tr>
+					<td rowspan="2">染料</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td rowspan="2">助剂</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td rowspan="2">蒸汽</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td rowspan="2">电</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td rowspan="2">煤</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td rowspan="2">排污费</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td rowspan="2">合计</td>
+					<td>数值</td>
+				</tr>
+				<tr>
+					<td>比率</td>
+				</tr>
+				<tr>
+					<td colspan="2">备注(万)</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="box">
+		<table border="0" cellspacing="0" cellpadding="0" class="list" id="currentReportList"></table>
+	</div>
+	<script type="text/javascript" src="../../js/qywx/qywxReport.js"></script>
+</body>
+</html>

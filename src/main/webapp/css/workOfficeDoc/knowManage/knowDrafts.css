@@ -1,0 +1,49 @@
+#knowDrafts .publish{
+	background:url(../../../img/index/publish.png) no-repeat;
+}
+#knowDrafts .knowEdit{
+	padding-right:5.1%;
+	overflow:hidden;
+}
+#knowDrafts .knowEdit .marginTop{
+	margin-top:28px;
+	overflow:hidden;
+}
+#knowDrafts .knowEdit .knowLabel{
+	width:125px;
+	text-align:right;
+	height:28px;
+	line-height:28px;
+	font-weight:900;
+	padding-right:17px;
+	float:left;
+}
+#knowDrafts .knowEdit .KnowTitleName{
+	text-align:center;
+	float:left;
+	line-height:28px;
+}
+#knowDrafts .knowEdit .KnowTitleName input{
+	text-align:left;
+	vertical-align: middle;
+}
+#knowDrafts .knowEdit .knowClass{
+	line-height:28px;
+}
+#knowDrafts .knowEdit .knowClass>select{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+}
+#knowDrafts .knowEdit .knowUeditor{
+	float:left;
+}
+#knowDrafts .knowEdit .editBtn{
+	height:50px;
+	line-height:50px;
+	text-align:center;
+}
+#knowDrafts .knowEdit .editBtn input{
+	width:120px;
+	height:20px;
+}

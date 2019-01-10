@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>柱形图(投票)</title>
+<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../css/reset.css">
+<link rel="stylesheet" type="text/css" href="../../css/personnel/invite.css">
+<link rel="stylesheet" type="text/css" href="../../css/personnel/inviteflow.css">
+<link rel="stylesheet" type="text/css" href="../../css/index/index.css">
+<link rel="stylesheet" type="text/css" href="../../css/plug/jedate.css">
+<script type="text/javascript" src="../../js/jquery/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="../../js/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/jquery/jquery.jedate.min.js"></script>
+<script type="text/javascript" src="../../js/index/index.js"></script>
+<script type="text/javascript" src="../../js/plugin/upload.js"></script>
+<script type="text/javascript" src="../../js/plugin/highcharts.js"></script>
+</head>
+<body id="zhuxing">
+	<div id = "container" style="min-width:400px;height:400px"></div>
+	<script>
+	$.ajax({
+		data:{voteId:'4457f8b1-5554-11e7-abeb-1c1b0d45c5cd'},
+		url:'../../vote/queryVoteDetail.do',
+		success:function(data){
+			var obj = $.parseJSON(data);
+			var categoriesz = [];
+			var seriesz = [];
+			for(var i=0;i<obj.list.length;i++){
+				categoriesz.push(obj.list[i].voteItemName);
+				seriesz.push(obj.list[i].voteItemNumber);
+			}
+			 $('#container').highcharts({
+			        chart: {
+			            type: 'column'
+			        },
+			        title: {
+			            text: '投票统计柱形图'
+			        },
+			        xAxis: {
+			            categories: categoriesz,
+			            crosshair: true
+			        },
+			        yAxis: {
+			            min: 0,
+			            title: {
+			                text: '人口 (百万)'
+			            },
+			            allowDecimals:false
+			        },
+			        legend: {
+			            enabled: false
+			        },
+			        tooltip: {
+			            pointFormat: '票数: <b>{point.y:1f} 张</b>'
+			        },
+			        series: [{
+			            name: '总票数',
+			            data: seriesz
+			        }]
+			    });
+		}
+	})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.ErpAuthorityDao">
+	
+	<!-- 添加erp查询权限 -->
+	<insert id="insertAuthority" parameterType="com.mdoa.erp.bo.ErpAuthorityForm">
+		INSERT INTO erp_authority(
+			authority_id,
+			user_id,
+			data_source_key,
+			data_source_name
+		)VALUES(
+			UUID(),
+			#{userId},
+			#{dataSourceKey},
+			#{dataSourceName}
+		)
+	</insert>
+	
+	<!-- 删除erp查询权限 -->
+	<delete id="deleteAuthority" parameterType="com.mdoa.erp.bo.ErpAuthorityForm">
+		DELETE
+		
+		FROM
+			erp_authority
+		WHERE
+			user_id = #{userId}
+	</delete>
+	
+	<!-- 查询erp查询权限人员 -->
+	<select id="queryAuthorityPerson" parameterType="com.mdoa.erp.bo.ErpAuthorityForm" resultType="com.mdoa.erp.bo.ErpAuthorityForm">
+		SELECT
+			a.authority_id AS authorityId,
+			a.user_id AS userId,
+			a.data_source_key AS dataSourceKey,
+			a.data_source_name AS dataSourceName,
+			b.user_name AS userName,
+			b.department_name AS departmentName
+		FROM
+			erp_authority a
+		LEFT JOIN user_info b ON(a.user_id = b.user_id)
+		<where>
+			<if test="userId != null and userId != ''">
+				a.user_id = #{userId},
+			</if>
+		</where>
+		GROUP BY 
+			a.user_id
+	</select>
+	
+	<!-- 查询erp查询权限 -->
+	<select id="queryAuthorityByUser" parameterType="com.mdoa.erp.bo.ErpAuthorityForm" resultType="com.mdoa.erp.bo.ErpAuthorityForm">
+		SELECT
+			a.authority_id AS authorityId,
+			a.user_id AS userId,
+			a.data_source_key AS dataSourceKey,
+			a.data_source_name AS dataSourceName,
+			b.user_name AS userName,
+			b.department_name AS departmentName
+		FROM
+			erp_authority a
+		LEFT JOIN user_info b ON(a.user_id = b.user_id)
+		WHERE
+			a.user_id = #{userId}
+	</select>
+	
+</mapper>

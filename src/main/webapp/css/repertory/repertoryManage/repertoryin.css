@@ -1,0 +1,29 @@
+#repertoryin .update .confirm{
+	margin-left:218px;
+}
+#repertoryin .update .cannel{
+	margin-left:40px;
+}
+#repertoryin .popups .popuparea table[name!=writetoexcel]{
+	padding:20px 30px;
+}
+#repertoryin .popups .del .confirm{
+	margin-left:92px;
+}
+#repertoryin .popups .del .cannel{
+	margin-left:8px;
+}
+#repertoryin .materialsForm{
+	float:left;
+}
+#repertoryin .materialsForm .toolbar {
+    height: 30px;
+    background-color: #66CCCC;
+    padding-top: 4px;
+    padding-left: 10px;
+}
+#repertoryin .materialsForm .queryForm {
+    padding-left: 10px;
+    padding-top: 2px;
+    line-height: 30px;
+}

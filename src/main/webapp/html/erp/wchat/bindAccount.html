@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>账号绑定</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/erp/bootstrap.min.css">
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../../js/erp/bootstrap.min.js"></script>
+	
+</head>
+<body>
+
+	<div style="width:80%;margin:100px 10%;">
+	    <form class="bs-example bs-example-form" role="form">
+	        <div class="input-group">
+	            <span class="input-group-addon">账号</span>
+	            <input type="text" class="form-control" id="userAccount" />
+	        </div>
+	        <br>
+	        <div class="input-group">
+	            <span class="input-group-addon">密码</span>
+	            <input type="password" class="form-control" id="password" />
+	        </div>
+	        <br>
+	    </form>
+	    <button type="button" class="btn btn-primary btn-block" id="submit">确 认 绑 定</button>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			var url = window.location.href;
+			url = decodeURI(decodeURI(url));
+			var obj = new parseQueryString(url);
+			$('#submit').click(function(){		
+				var user = $('#userAccount').val();
+				var password = $('#password').val();
+				var url = null;
+				var surl = null;
+				var typeFlag = null;
+				var data = {
+					openId:obj.openId,
+					nickName:obj.nickName
+				};
+				var dataTwo = {
+					flag:1
+				};
+				if(obj.type == 'customer'){
+					//账号为手机号校验
+					if(!(/^1[34578]\d{9}$/.test(user))){
+						alert('请正确输入手机号！');
+						return false;
+					};
+					url = '../../../weixin/customerBindo.wx';
+					surl = '../../../ErpLogin/customerLogin.erp';
+					typeFlag = 0;
+				    data.phoneNumber = user;
+				    dataTwo.phoneNumber = user;
+				}else if(obj.type == 'salesman'){
+					if(!user){
+						alert('请输入账号！');
+						return false;
+					};
+					url = '../../../weixin/salesmanBindo.wx';
+					surl = '../../../ErpLogin/salesmanLogin.erp';
+					typeFlag = 1; 
+					data.userAccount = user;
+					dataTwo.userAccount = user;
+				};
+				if(!password){
+					alert('请输入密码！');
+					return false;
+				};
+				data.password = password;
+				dataTwo.password = password;
+				$.ajax({
+				    url: url,
+				    data:data,
+				    type:"post",
+				    dataType:"json",
+				    success:function(data){
+				       //成功回调
+				       if(data.success){
+				    	   $.ajax({
+							    url: surl,
+							    data:dataTwo,
+							    type:"post",
+							    dataType:"json",
+							    success:function(data){
+							    	var data = data[0];
+							    	var a = data.customerName || data.salesmanName;
+                            		var account = encodeURI(encodeURI(a));
+                            		//绑定登录成功5秒后跳转
+                            		alert("绑定登录成功,点击确定后自动跳转");
+                            		setTimeout(function(){					                            			
+                            			window.location.href='../erpWX/index.html?user='+account+'&flag='+ typeFlag;
+                            		},500);
+								}
+							}) 
+				       } else{
+				    	   alert(data.message);
+				       }						
+				    }
+				
+				})
+			})
+			
+			
+		})
+		//获取地址栏的构造函数
+		function parseQueryString(url){
+			var str = url.split("?")[1],items = str.split("&");
+			var arr,name,value;
+			
+			for(var i=0; i<items.length; i++){
+				arr = items[i].split("=");
+				name = arr[0];
+				value = arr[1];
+				this[name] = value;
+			}
+		}
+
+		
+	</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<div id="officeGoodsApply">
+	<div class="maintop">
+		<div class="operate">
+			<input type="button" value="添加申请单" class="button addApply"/>
+		</div>
+	</div>
+	<div class="invitetop">
+		查询条件：		
+		商品名称：
+			<input type="text" style="width:120px;" class="suppliesName" />
+		申请号：
+			<input type="text" style="width:120px;" class="applyNo" />
+		申请人：
+			<input type="text" style="width:120px;" class="proposer" />
+		<input class="select" type="button" value="查询" /> 
+		<input type="button" class="clean-query" value="清空" />
+	</div>
+	<div>
+		<table id="officeApplydg"></table>
+	</div>
+	
+	<div class="popups" style="text-align:left;">
+		<!-- 添加申请单 -->
+		<div class="popup addApply" style="height:230px;width:465px;">
+			<h3>添加申请单</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width:425px;height:165px;margin:0 auto;">
+				<table style="height: 150px;padding: 8px;text-align:right;">
+					<tr>
+						<td>申请号:</td>
+						<td>
+							<input name="applyNo" style="width:60%;float:left" type="text" readonly="readonly"/>
+							<input type="text" name="generateApplyNo" class="button" value="生成" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>商品名称:</td>
+						<td>
+							<input name="suppliesName" style="width:60%;float:left" type="text" readonly="readonly"/>
+							<input type="text" name="selectSupplies" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>申请日期:</td>
+						<td>
+							<input name="applyDate" style="width:100%" type="text" onclick="testShow(this)" readonly="readonly"/>
+						</td>
+					</tr>
+					<tr>
+						<td>申请数量:</td>
+						<td>
+							<input name="useCounts" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>申请人:</td>
+						<td>
+							<input type="text" name="proposer" style="width:60%;float:left" readonly="readonly"/>
+							<input type="text" name="selectProposer" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td>
+							<input type="text" name="notes" style="width:100%" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button comfirm" value="确定">
+				<input type="button" class="button cannel" value="取消">
+			</div>
+			
+		</div>
+	</div>
+</div>

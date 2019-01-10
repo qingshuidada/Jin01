@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.FifthPageDao">
+	<select id="selectNewsBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppNews">
+		SELECT
+			news_id AS newsId,
+			news_name AS newsName,
+			news_time AS newsTime,
+			news_describe AS newsDescribe,
+			news_image_url AS newsImageUrl,
+			sort_id AS sortId
+		FROM
+			app_news
+		WHERE
+			sort_id = #{sortId}			
+	</select>
+	<select id="selectNewsById" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppNews">
+		SELECT
+			news_id AS newsId,
+			news_name AS newsName,
+			news_time AS newsTime,
+			news_describe AS newsDescribe,
+			news_image_url AS newsImageUrl,
+			sort_id AS sortId
+		FROM
+			app_news
+		WHERE
+			news_id = #{newsId}			
+	</select>
+	
+	<select id="selectJobsBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppJobs">
+		SELECT
+			jobs_id AS jobsId,
+			jobs_post AS jobsPost,
+			jobs_department AS jobsDepartment,
+			jobs_age AS jobsAge,
+			work_place AS  workPlace,
+			salary_package AS salaryPackage,
+			release_time AS releaseTimeStr,
+			work_year AS workYear,
+			education AS education,
+			jobs_number AS jobsNumber,
+			jobs_request AS jobsRequest,
+			post_request AS postRequest,
+			sort_id AS sortId
+		FROM
+			app_jobs
+		WHERE
+			sort_id = #{sortId}
+		
+	</select>
+	<insert id="addPosition" parameterType="com.mdoa.app.model.AppPosition">
+		INSERT INTO app_position(
+			position_id,
+			name,
+			sex,
+			marriage,
+			email,
+			nation,
+			age,
+			political,
+			native_place,
+			education,
+			school,
+			domain,
+			graduation_time,
+			language_level,
+			job,
+			telephone,
+			resume
+		)VALUE(
+			UUID(),
+			#{name},
+			#{sex},
+			#{marriage},
+			#{email},
+			#{nation},
+			#{age},
+			#{political},
+			#{nativePlace},
+			#{education},
+			#{school},
+			#{domain},
+			#{graduationTime},
+			#{languageLevel},
+			#{job},
+			#{telephone},
+			#{resume}
+		)
+	</insert>
+</mapper>

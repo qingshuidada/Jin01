@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.processManage.dao.ProcessDao">
+	<select id="queryUserList" resultType="com.mdoa.user.model.UserInfo" parameterType="com.mdoa.user.model.UserInfo">
+		SELECT
+			user_name AS userName,
+			user_id AS userId,
+			department_name AS departmentName,
+			department_url AS departmentUrl,
+			post_name AS postName,
+			post_id AS postId,
+			sex AS sex,
+			DATE_FORMAT(work_time,'%Y-%m-%d') AS workTimeStr
+		FROM
+			user_info
+		WHERE
+			alive_flag = '1'
+			AND (invite_flag = '1' OR invite_flag = '4' OR invite_flag = '5')
+			AND retire_flag = '1'
+			<if test="departmentUrl != null and departmentUrl != ''">
+				AND department_url LIKE (${departmentUrl})
+			</if>
+			<if test="postId != null and postId != ''">
+			 	AND post_id = #{postId}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND user_name LIKE(${userName})
+			</if>
+			<if test="workTimeStartStr != null and workTimeStartStr != ''">
+				AND work_time &gt; STR_TO_DATE(#{workTimeStartStr},'%Y-%m-%d')
+			</if>
+			<if test="workTimeEndStr != null and workTimeEndStr != ''">
+				AND work_time &lt; STR_TO_DATE(#{workTimeEndStr},'%Y-%m-%d')
+			</if>
+	</select>
+	
+	<insert id="addAllUser" parameterType="com.mdoa.user.model.UserInfo">
+		INSERT INTO
+			process_resource_user
+		(id, group_id, user_id)
+		SELECT
+			UUID() AS id,
+			'${groupId}' AS groupId,
+			user_id AS userId
+		FROM
+			user_info
+		WHERE
+			alive_flag = '1'
+			AND (invite_flag = '1' OR invite_flag = '4' OR invite_flag = '5')
+			AND retire_flag = '1'
+			<if test="departmentUrl != null and departmentUrl != ''">
+				AND department_url LIKE (${departmentUrl})
+			</if>
+			<if test="postId != null and postId != ''">
+			 	AND post_id = #{postId}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND user_name LIKE(${userName})
+			</if>
+			<if test="workTimeStartStr != null and workTimeStartStr != ''">
+				AND work_time &gt; STR_TO_DATE(#{workTimeStartStr},'%Y-%m-%d')
+			</if>
+			<if test="workTimeEndStr != null and workTimeEndStr != ''">
+				AND work_time &lt; STR_TO_DATE(#{workTimeEndStr},'%Y-%m-%d')
+			</if>
+	</insert>
+	
+	<insert id="addUser" parameterType="java.util.Map">
+		INSERT INTO
+			process_resource_user
+		(id, group_id, user_id)
+		VALUE(
+			uuid(),
+			#{groupId},
+			#{userId}
+		)
+	</insert>
+	
+	<delete id="deleteUser" parameterType="java.util.Map">
+		DELETE
+		FROM
+			process_resource_user
+		WHERE
+			user_id = #{userId}
+	</delete>
+	
+	<select id="getSelectedUserList" resultType="com.mdoa.user.model.UserInfo" parameterType="com.mdoa.user.model.UserInfo">
+		SELECT
+			b.user_id AS userId,
+			b.department_name AS departmentName,
+			b.post_name AS postName,
+			b.sex AS sex,
+			b.user_name AS userName,
+			DATE_FORMAT(b.work_time,'%Y-%m-%d %h:%m:%s') AS workTimeStr
+		FROM
+			process_resource_user a
+		INNER JOIN
+			user_info b
+		ON(a.user_id = b.user_id)
+		WHERE
+			a.group_id = #{groupId}
+			AND b.alive_flag = '1'
+			AND (b.invite_flag = '1' OR b.invite_flag = '4' OR b.invite_flag = '5')
+			AND b.retire_flag = '1'
+		<if test="departmentUrl != null and departmentUrl != ''">
+			AND b.department_url LIKE (${departmentUrl})
+		</if>
+		<if test="postId != null and postId != ''">
+		 	AND b.post_id = #{postId}
+		</if>
+		<if test="userName != null and userName != ''">
+			AND b.user_name LIKE(${userName})
+		</if>
+		<if test="workTimeStartStr != null and workTimeStartStr != ''">
+			AND b.work_time &gt; STR_TO_DATE(#{workTimeStartStr},'%Y-%m-%d')
+		</if>
+		<if test="workTimeEndStr != null and workTimeEndStr != ''">
+			AND b.work_time &lt; STR_TO_DATE(#{workTimeEndStr},'%Y-%m-%d')
+		</if>
+	</select>
+	
+	<delete id="deleteRepetitionUser">
+		DELETE a
+		FROM
+			process_resource_user a,
+			(
+				SELECT
+					id
+				FROM
+					process_resource_user
+				GROUP BY
+					user_id, group_id
+				HAVING
+					count(id) > 1
+			) b
+		WHERE
+			a.id = b.id
+	</delete>
+	
+	<select id="getDirc" resultType="com.mdoa.dictionary.model.Dictionary" parameterType="java.lang.String">
+		SELECT
+			option_value AS optionValue,
+			option_key AS optionKey,
+			is_default AS isDefault,
+			select_name AS selectName
+		FROM
+			dictionary
+		WHERE
+			select_key = #{selectKey}
+	</select>
+</mapper>

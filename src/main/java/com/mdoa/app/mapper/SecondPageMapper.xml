@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.SecondPageDao">
+
+
+	<select id="selectComponyBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppCompony">
+		SELECT
+			company_id AS companyId,
+			company_title AS companyTitle,
+			company_english_title AS companyEnglishTitle,
+			company_image_title AS companyImageTitle,
+			compony_image_url AS componyImageUrl,
+			compony_abstract AS componyAbstract,
+			organization_image_url AS organizationImageUrl,
+			compony_address AS componyAddress,
+			compony_phone AS componyPhone,
+			compony_fax AS componyFax,
+			compony_email AS componyEmail,
+			coordinate AS coordinate,
+			qr_code_url AS qrCodeUrl,
+			sort_id AS sortId
+		FROM
+			app_compony
+		WHERE
+			sort_id = #{sortId}
+	</select>
+	<select id="selectManagerBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppManager">
+		SELECT
+			manager_id AS managerId,
+			manager_title AS managerTitle,
+			manager_english_title AS managerEnglish_title,
+			manager_subtitle AS managerSubtitle,
+			manager_abstract AS managerAbstract,
+			manager_image_url AS managerImageUrl,
+			sort_id AS sortId
+		FROM
+			app_manager
+		WHERE
+			sort_id = #{sortId}
+	</select>
+	<select id="selectComponyCultureBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.ComponyCulture">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId}
+	
+	</select>
+	<select id="selectComponyFrameworkBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.ComponyFramework">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId}
+	
+	</select>
+	<select id="selectComponyStyleBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.ComponyStyle">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId}
+	
+	</select>
+	<select id="selectSecondComponyHonorBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.SecondComponyHonor">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl,
+			image_type AS imageType
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId} AND
+			image_type = '2'
+	
+	</select>
+	<select id="selectFirstComponyHonorBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.FirstComponyHonor">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl,
+			image_type AS imageType
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId} AND
+			image_type = '1'
+	
+	</select>
+	<update id="updateComponyById" parameterType="com.mdoa.app.model.AppCompony">
+		UPDATE 
+			app_compony
+		SET
+		<if test="companyTitle != null and companyTitle != ''">
+			company_title = #{companyTitle},
+		</if>
+		<if test="companyEnglishTitle != null and companyEnglishTitle != ''">
+			company_english_title = #{companyEnglishTitle},
+		</if>
+		<if test="companyImageTitle != null and companyImageTitle != ''">
+			company_image_title = #{companyImageTitle},
+		</if>
+		<if test="componyImageUrl != null and componyImageUrl != ''">
+			compony_image_url = #{componyImageUrl},
+		</if>
+		<if test="componyAbstract != null and componyAbstract != ''">
+			compony_abstract = #{componyAbstract},
+		</if>
+		<if test="componyAddress != null and componyAddress != ''">
+			compony_address = #{componyAddress},
+		</if>
+		<if test="componyPhone != null and componyPhone != ''">
+			compony_phone = #{componyPhone},
+		</if>
+		<if test="componyFax != null and componyFax != ''">
+			compony_fax = #{componyFax},
+		</if>
+		<if test="componyEmail != null and componyEmail != ''">
+			compony_email = #{componyEmail},
+		</if>
+		<if test="qrCodeUrl != null and qrCodeUrl != ''">
+			qr_code_url = #{qrCodeUrl},
+		</if>
+		<if test="coordinate != null and coordinate != ''">
+			coordinate = #{coordinate},
+		</if>
+		company_id = #{companyId}
+		WHERE
+			company_id = #{companyId}
+	</update>
+	<update id="updateImage" parameterType="com.mdoa.app.model.AppImage">
+		UPDATE 
+			app_image
+		SET
+			image_url = #{imageUrl}
+		WHERE
+			sort_id = #{sortId}
+	</update>
+	
+</mapper>

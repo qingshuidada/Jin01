@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.MessageFileDao" >
+
+	<!-- 添加文件或者文件夹 -->
+	<insert id="addFileFolder" parameterType="com.mdoa.work.bo.WorkOfficeMessageFileForm">
+	
+		INSERT INTO work_office_message_file(
+			file_folder_id,
+			file_folder_name,
+			department_id,
+			url,
+			type_flag,
+			previous_file_folder_id,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			#{fileFolderId},
+			#{fileFolderName},
+			#{departmentId},
+			#{url},
+			#{typeFlag},
+			#{previousFileFolderId},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 查询文件夹或者文件 -->
+	<select id="queryFileFolder" parameterType="com.mdoa.work.bo.WorkOfficeMessageFileForm" resultType="com.mdoa.work.bo.WorkOfficeMessageFileForm">
+		SELECT
+			file_folder_id AS fileFolderId,
+			file_folder_name AS fileFolderName,
+			department_id AS departmentId,
+			url AS url,
+			type_flag AS typeFlag,
+			previous_file_folder_id AS previousFileFolderId,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			work_office_message_file
+		WHERE
+			alive_flag = '1'
+			<if test="previousFileFolderId != null and previousFileFolderId != ''">
+				AND previous_file_folder_id = #{previousFileFolderId}
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				AND department_id = #{departmentId}
+			</if>
+			<if test="url != null and url != ''">
+				AND url LIKE #{url}
+			</if>
+	</select>
+	<!-- 删除文件或者文件夹 -->
+	<update id="deleteFileFolder" parameterType="com.mdoa.work.bo.WorkOfficeMessageFileForm">
+		UPDATE
+			work_office_message_file
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			<if test="fileFolderId != null and fileFolderId != ''">
+				AND file_folder_id = #{fileFolderId}
+			</if>
+			<if test="url != null and url != ''">
+				AND url LIKE #{url}
+			</if>
+	</update>
+	<!-- 修改文件或者文件夹 -->
+	<update id="updateFileFolder" parameterType="com.mdoa.work.bo.WorkOfficeMessageFileForm">
+		UPDATE 
+			work_office_message_file
+		SET
+			<if test="fileFolderName != null and fileFolderName != ''">
+				file_folder_name = #{fileFolderName},
+			</if>
+			<if test="previousFileFolderId != null and previousFileFolderId != ''">
+				previous_file_folder_id = #{previousFileFolderId},
+			</if>
+			<if test="departmentId != null and departmentId != ''">
+				department_id = #{departmentId},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			<if test="fileFolderId != null and fileFolderId != ''">
+				AND file_folder_id = #{fileFolderId}
+			</if>
+	</update>
+	<!--查询 -->
+	<select id="queryFileUrlName" parameterType="com.mdoa.work.bo.WorkOfficeMessageFileForm" resultType="com.mdoa.work.bo.WorkOfficeMessageFileForm">
+		SELECT
+			file_folder_id AS fileFolderId,
+			file_folder_name AS fileFolderName,
+			url
+		FROM
+			work_office_message_file
+		WHERE
+			alive_flag = '1'
+			AND file_folder_id IN
+			<foreach collection="fileFolderIds" index="index" item="fileFolderIds" open="(" separator="," close=")">  
+		        #{fileFolderIds}  
+		    </foreach> 
+	</select>
+</mapper>

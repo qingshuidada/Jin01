@@ -1,0 +1,61 @@
+<!-- 物品动态报表 -->
+<div id="goodsVariationForm">
+	<input class="goodsTypeUrl" type="hidden" style="display:none;">
+	<div class="treearea">
+		<h3>选择物品类别</h3>
+		<ul id="goodsVariationFormtg" data-options="region:'center',border: true"  
+         class="easyui-tree">  
+     	</ul>
+	</div>
+	<div class="listForm">
+		<div class="toolbar" >
+			<input type="button" class="button write" value="导出到Excel" />
+			<form class="printGoodsVariationForm" style="display:inline" action="../../reportForms/printGoodsVariationForm.do?" method="post" target="_blank">
+				<input type = "hidden" name="cptName" value="goodsVariationForm">
+				<input type = "hidden" name="startTime">
+				<input type = "hidden" name="endTime">
+				<input type = "hidden" name="goodsTypeUrls">
+				<input type = "hidden" name="goodsName">
+				<input type = "hidden" name="goodsSize">
+				<input type="button" class="button print" value="打印查询结果" />
+			</form>
+		</div>
+		<div class="queryForm">
+			物品名称：<input type="text" name="goodsName"/>
+			物品规格：<input type="text" name="goodsSize"/>
+			结算时间：<input  class="jqdate" name="balanceStartTime" onblur="testDate(this)" onclick="testShow(this);">
+		~ <input  class="jqdate" name="balanceEndTime" onblur="testDate(this)" onclick="testShow(this);">
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		</div>
+		<div>
+			<table id="goodsVariationFormdg">
+			</table>
+		</div>
+		<!-- 汇总 -->
+		<div class="sumBar">
+		</div>
+		<input type="button" class="button controlSumBar" value="隐藏"/>
+	</div>
+	<div class="chartArea" style="display: none">
+		<div class="toolbar" >
+			<input type="button" class="button goback" value="返回" />
+		</div>
+		<div id="goodsVariation" style="margin:0 auto;width:80%;height:80%;"></div>
+	</div>
+	
+	<div class="popups">
+		<!-- 导出数据到Excel -->
+		<div class="popup writetoexcel" style="height: 300px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	</div>
+
+</div>

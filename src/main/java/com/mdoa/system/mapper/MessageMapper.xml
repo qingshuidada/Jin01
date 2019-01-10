@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.system.dao.MessageDao">
+
+	<!-- 插入一条催办消息 -->
+	<insert id="insertUrgeProcessMessage" parameterType="com.mdoa.system.bo.UrgeProcessForm">
+		INSERT INTO user_system_message(
+			message_id,
+			message,
+			user_id,
+			url,
+			send_user_id,
+			send_user_name,
+			send_time,
+			read_flag,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{message},
+			#{userId},
+			#{url},
+			#{sendUserId},
+			#{sendUserName},
+			NOW(),
+			'0',
+			'1'
+		)	
+	</insert>
+	
+	<!-- 增加一条系统消息 -->
+	<insert id="addSystemMessage" parameterType="com.mdoa.system.model.UserSystemMessage">
+		INSERT INTO user_system_message(
+			message_id,
+			user_id,
+			message,
+			url,
+			send_user_id,
+			send_user_name,
+			send_time,
+			read_flag,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{userId},
+			#{message},
+			#{url},
+			#{sendUserId},
+			#{sendUserName},
+			NOW(),
+			'0',
+			'1'
+		)	
+	</insert>
+	<!-- 更改消息为已读 -->
+	<update id="updateMessageRead" parameterType="com.mdoa.system.model.UserSystemMessage">
+		UPDATE user_system_message
+		SET
+			read_time = NOW(),
+			read_flag = '1'
+		WHERE	
+			message_id = #{messageId}
+	</update>
+	<!-- 删除一条消息 -->
+	<update id="deleteMessage" parameterType="com.mdoa.system.model.UserSystemMessage">
+		UPDATE user_system_message
+		SET
+			alive_flag = '0'
+		WHERE
+			message_id = #{messageId}
+	</update>
+	<!-- 查询消息 -->
+	<select id="selectMessageByUser" parameterType="com.mdoa.system.model.UserSystemMessage" resultType="com.mdoa.system.model.UserSystemMessage">
+		SELECT 
+			message_id AS messageId,
+			user_id AS userId,
+			message AS message,
+			url AS url,
+			send_user_id AS sendUserId,
+			send_user_name AS senduserName,
+			DATE_FORMAT(read_time,'%Y-%m-%d') AS readTime,
+			DATE_FORMAT(send_time,'%Y-%m-%d') AS sendTime,
+			read_flag AS readFlag
+		FROM
+			user_system_message
+		<where>
+			alive_flag = '1'
+			<if test="userId != null and userId != '' ">
+			AND user_id = #{userId}</if>
+			<if test="sendUserName != null and sendUserName != ''">
+			AND send_user_name LIKE ('${sendUserName}')</if>
+			<if test="readFlag != null and readFlag != ''">
+			AND read_flag = #{readFlag}</if>
+			<if test="messageId != null and messageId != ''">
+			AND message_id = #{messageId}</if>
+		</where>
+		ORDER BY
+			send_time DESC		
+	</select>
+	<!-- 查询有权限的人员 -->
+	<select id="selectpermissionUser" parameterType="java.lang.String" resultType="com.mdoa.system.model.UserSystemMessage">
+		SELECT
+				a.user_id AS userId
+		FROM
+			framework_user_role a,
+		(
+			SELECT
+			 role_id
+			FROM
+			framework_role_power
+			WHERE
+			SUBSTRING(#{power},1,CHAR_LENGTH(power)) = power
+			GROUP BY
+			role_id
+		) b
+		WHERE
+			a.role_id = b.role_id
+			AND a.alive_flag = '1'
+	</select>
+	<!-- 根据processRecordId查询抄送人信息 -->
+	<select id="queryCopyMessage" parameterType="java.lang.String" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			task_id AS taskId,
+			process_id AS processId,
+			executor_id AS executorId,
+			executor_name AS executorName,
+			task_type AS taskType,
+			next_task_id AS nextTaskId,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime
+		FROM
+			process_task
+		WHERE
+			process_id = #{processId}
+			AND task_type = '2'
+	</select>
+	<!-- 获取第一个审核任务 -->
+	<select id="getFirstTaskId" parameterType="java.lang.String" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			task_id AS taskId,
+			process_record_id AS processId,
+			examine_status AS examineStatus,
+			executor_id AS executorId,
+			executor_name AS executorName,
+			task_type AS taskType,
+			next_task_id AS nextTaskId,
+			executor_time AS executorTime,
+			create_time AS createTime
+		FROM process_task_record
+		WHERE
+			task_id = #{taskId}
+		AND	task_type = '1'
+		AND examine_status = '1'
+	</select>
+	<!-- 获取URL -->
+	<select id="getFormUrl" parameterType="java.lang.String" resultType="com.zhou.myProcess.instance.ProcessModel">
+		SELECT
+			process_record_id AS processRecordId,
+			process_id AS processId,
+			title,
+			form_url AS formUrl,
+			json_data AS jsonData,
+			user_id AS userId,
+			process_type_id AS processTypeId,
+			execute_status AS executeStatus,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTime
+		FROM
+			process_record
+		WHERE
+			process_record_id = #{processRecordId}
+	</select>
+</mapper>

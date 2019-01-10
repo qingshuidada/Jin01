@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.dingding.dao.DDDao">
+	<!-- 批量插入部门 -->
+	<insert id="inserDepartmentBatch" parameterType="java.util.List">
+		INSERT INTO dd_department
+		(
+			id,
+			name,
+			parent_id
+		)VALUES
+		<foreach collection="list" separator="," item="ddDepartment">
+		(
+			#{ddDepartment.id},
+			#{ddDepartment.name},
+			#{ddDepartment.parentid}
+		)
+		</foreach>
+		
+	</insert>
+	<!-- 根据副部门id查询部门列表 -->
+	<select id="getDepartmentByParentId" parameterType="com.mdoa.framework.model.DepartmentTree" 
+		resultType="com.mdoa.framework.model.DepartmentTree">
+		SELECT
+			id AS thisId,
+			name AS text,		
+			id AS id
+		FROM
+			dd_department
+		WHERE
+			parent_id = #{thisId,jdbcType=CHAR}
+	</select>
+</mapper>

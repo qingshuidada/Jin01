@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/aop
+	   http://www.springframework.org/schema/aop/spring-aop.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd
+	   http://www.springframework.org/schema/tx
+	   http://www.springframework.org/schema/tx/spring-tx.xsd
+	   http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<bean class="com.mdoa.constant.SqlSessionMap">
+		<property name="sqlSessionFactoryMap">
+			<map>
+				<entry key="kaoQinDataSource">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${MysqlDriverClass}" />
+						        <property name="url" value="jdbc:mysql://localhost:3306/oabase2018"/>
+						        <property name="username" value="root" />
+						        <property name="password" value="123456" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource1">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.23.11:1433;DatabaseName=datcpin" />
+						        <property name="username" value="sa" />
+						        <property name="password" value="" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource2">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.22.10:1433;DatabaseName=datcpin" />
+						        <property name="username" value="sa" />
+						        <property name="password" value="dm000" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource3">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.25.11:1433;DatabaseName=datcpin" />
+						        <property name="username" value="sa" />
+						        <property name="password" value="" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource4">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.26.11:1433;DatabaseName=datcpin" />
+						        <property name="username" value="sa" />
+						        <property name="password" value="" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource5">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.21.11:1433;DatabaseName=datcpin" />
+						        <property name="username" value="sa" />
+						        <property name="password" value="dm000" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource6">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.27.11:1433;DatabaseName=pdw_yh08" />
+						        <property name="username" value="mender" />
+						        <property name="password" value="liao" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+				<entry key="testDataSource7">
+					<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+				        <property name="dataSource">
+							<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+						        <property name="driverClassName" value="${SqlServerDriverClass}" />
+						        <property name="url" value="jdbc:sqlserver://192.168.0.101:1433;DatabaseName=pdw_wm" />
+						        <property name="username" value="sa" />
+						        <property name="password" value="123456" />
+						        <property name="initialSize" value="${initialSizeErp}" />
+						        <property name="maxActive" value="${maxActiveErp}" />
+						        <property name="maxWait" value="${maxWaitErp}" />
+						        <property name="maxIdle" value="${maxIdleErp}" />
+						        <property name="minIdle" value="${minIdleErp}" />
+						    </bean>
+				        </property>
+				        <property name="mapperLocations" value="classpath:com/mdoa/*/mapper/*.xml" />
+				        <property name="plugins">
+					        <array value-type="org.apache.ibatis.plugin.Interceptor">
+					            <ref bean="pagehelper"/>
+					        </array>
+					    </property>
+				    </bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+    
+</beans>

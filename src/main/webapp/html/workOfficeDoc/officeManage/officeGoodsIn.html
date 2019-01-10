@@ -1,0 +1,89 @@
+<div id="officeGoodsIn">
+	<div class="maintop">
+		<div class="operate">
+			<input type="button" value="添加入库单" class="button addIn" />			
+		</div>
+	</div>
+	<div class="invitetop">
+		查询条件：
+		商品名称：
+			<input type="text" style="width:120px;" class="suppliesName" />
+		供应商：
+			<input type="text" style="width:120px;" class="providerName" />
+		购买人：
+			<input type="text" style="width:120px;" class="buyer" />
+		<input class="select" type="button" value="查询" /> 
+		<input type="button" class="clean-query" value="清空" /> 
+	</div>
+	<div>
+		<table id="officeGoodsIndg"></table>
+	</div>
+	
+	<div class="popups" style="text-align:left;">	
+		<!-- 添加 入库单 -->
+		<div class="popup addIn" style="height:270px;width:350px;">
+			<h3>添加入库单</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width:310px;height:205px;margin:0 auto;">
+				<table style="height: 150px;padding: 8px;text-align:right;">
+					<tr>
+						<td>入库单号:</td>
+						<td>
+							<input type="text" readonly="readonly" name="stockNo" style="width:60%;float:left" />
+							<input type="button" class="button sysgen" value="生成"  style="width:36%;float:right;"/>
+						</td>
+					</tr>
+					<tr>
+						<td>商品名称:</td>
+						<td>
+							<input type="text" name="supplies" style="width:60%;float:left" readonly="readonly"/>
+							<input type="button" name="suppliesSelect" class="button" value="选择" style="width:36%;float:right;"/>
+						</td>
+					</tr>
+					<tr>
+						<td>供应商:</td>
+						<td>
+							<input name="providerName" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>价格:</td>
+						<td>
+							<input name="price" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>总数:</td>
+						<td>
+							<input name="inCounts" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>总计:</td>
+						<td>
+							<input name="amount" style="width:100%" type="text" readonly="readonly"/>
+						</td>
+					</tr>
+					<tr>
+						<td>进货日期:</td>
+						<td>
+							<input name="inDate" style="width:100%" type="text" onclick="testShow(this)" readonly="readonly"/>
+						</td>
+					</tr>
+					<tr>
+						<td>购买人:</td>
+						<td>
+							<input type="text" name="buyer" style="width:60%;float:left" readonly="readonly"/>
+							<input type="button" name="buyerSelect" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>				
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button comfirm" value="确定">
+				<input type="button" class="button cannel" value="取消">
+			</div>
+		</div>
+	</div>
+	
+</div>

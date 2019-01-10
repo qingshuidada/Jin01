@@ -1,0 +1,105 @@
+ <div id="waterReport" title="水质检测报告">
+	<div class="maintop">
+	</div>
+	<div  class="invitetop">
+		上报时间:
+				<input class="jqdate" type="text" style="width: 100px" name="reportTimeStr" onblur="testDate(this)" onclick="testShow(this);">
+			 ~ 
+			 	<input class="jqdate" type="text" style="width: 100px" name="reportEndTimeStr" onblur="testDate(this)" onclick="testShow(this);">
+		<a class="easyui-linkbutton selectByTime" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空" >
+	</div>
+	<div >
+	 <table id="waterReportdg" width="100%" height="100%" ></table>	
+	</div> 
+	<div  class="popups" style="text-align: left;">
+		<div class="popup saveWaterReport" style="height: 310px;width: 400px;">
+			<h3>添加水质检测报告</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<div class="btnbutton">
+					<label><input name="btn" type="radio" value="0" class="internalStaff btn" style="width:60px" checked data-type="inter"/>工业水(航民)</label> 
+					<label><input name="btn" type="radio" value="1" class="outsideStaff btn"style="width:60px" data-type="out"/>工业水(达美)</label>
+				</div>
+				<table style="text-align: center;width: 280px;height: 210px">
+					<tr>
+						<td style="width:100px;">上报人员:</td>
+						<td><input type="text" style="width:160px;" name="reportName" readonly="readonly"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">上报时间</td>
+						<td><input class="jqdate" type="text" style="width:160px" name="reportTime" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">PH值:</td>
+						<td><input type="text" style="width:160px;" name="phValue"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">硬度(ppm):</td>
+						<td><input type="text" style="width:160px;" name="hardness"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">碱度(ppm):</td>
+						<td><input type="text" style="width:160px;" name="alkalinity"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">氯根(ppm):</td>
+						<td><input type="text" style="width:160px;" name="chlorineRoot"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">备注:</td>
+						<td><input type="text" style="width:160px;" name="text"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div  class="popups" style="text-align: left;">
+	
+		<div class="popup updateWaterReport" style="height: 300px;width: 400px;">
+			<h3>修改水质检测报告</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr>
+						<td style="width:100px;">上报人员:</td>
+						<td><input type="text" style="width:160px;" name="reportName" readonly="readonly"/></td>
+						<td><input type="hidden" name="reportId"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">上报时间</td>
+						<td><input class="jqdate" type="text" style="width:160px" name="reportTime" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">PH值:</td>
+						<td><input type="text" style="width:160px;" name="phValue"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">硬度(ppm):</td>
+						<td><input type="text" style="width:160px;" name="hardness"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">碱度(ppm):</td>
+						<td><input type="text" style="width:160px;" name="alkalinity"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">氯根(ppm):</td>
+						<td><input type="text" style="width:160px;" name="chlorineRoot"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">备注:</td>
+						<td><input type="text" style="width:160px;" name="text"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+</div>

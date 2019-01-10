@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>Archetype Created Web Application</display-name>
+
+	<!-- session过期时间，六小时不过期 -->
+	<session-config>
+		<session-timeout>480</session-timeout>
+	</session-config>
+
+	<!-- 将Spring 配置文件中的内容读取到 servlet context上下文环境中 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:Spring.xml</param-value>
+	</context-param>
+	<!-- Spring 监听器配置，用于进行对依赖注入设置成监听，相当于Spring容器的main入口 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- 企业微信拦截器-->
+	<filter>
+		<filter-name>qywxFilter</filter-name>
+		<filter-class>com.mdoa.filter.QywxFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>qywxFilter</filter-name>
+		<url-pattern>*.qywx</url-pattern>
+	</filter-mapping>
+	<!-- 微信拦截器-->
+	<filter>
+		<filter-name>weixinFilter</filter-name>
+		<filter-class>com.mdoa.filter.WeixinFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>weixinFilter</filter-name>
+		<url-pattern>*.wx</url-pattern>
+		<!-- <url-pattern>/weixin/*</url-pattern> -->
+	</filter-mapping>
+	
+	<!-- 工资管理拦截器-->
+	<filter>
+		<filter-name>loginSalaryFilter</filter-name>
+		<filter-class>com.mdoa.filter.LoginSalaryFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginSalaryFilter</filter-name>
+		<url-pattern>*.salary</url-pattern>
+		<url-pattern>/html/salary/salaryManage/*</url-pattern>
+		<url-pattern>/salary/check/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- ERP登录拦截器-->
+	<filter>
+		<filter-name>loginErpFilter</filter-name>
+		<filter-class>com.mdoa.filter.LoginErpFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginErpFilter</filter-name>
+		<url-pattern>*.erp</url-pattern>
+		<url-pattern>/html/erp/clientManage/*</url-pattern>
+		<url-pattern>/html/erp/salesmanManage/*</url-pattern>
+	</filter-mapping>
+	<!-- 登录页面拦截器 -->
+	<filter>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>com.mdoa.filter.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>/login</url-pattern>
+	</filter-mapping>
+	<!-- 手机端登录拦截器 -->
+	<filter>
+		<filter-name>loginPhFilter</filter-name>
+		<filter-class>com.mdoa.filter.LoginPhFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginPhFilter</filter-name>
+		<url-pattern>*.ph</url-pattern>
+	</filter-mapping>
+	<filter>
+		<filter-name>loginErpAppFilter</filter-name>
+		<filter-class>com.mdoa.filter.LoginErpAppFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>loginErpAppFilter</filter-name>
+		<url-pattern>*.app</url-pattern>
+	</filter-mapping>
+	<!-- tomcat等 启动之前执行 -->
+	<filter>
+		<filter-name>startFilter</filter-name>
+		<filter-class>com.mdoa.filter.StartFilter</filter-class>
+	</filter>
+	<!-- Spring MVC 拦截器/分发器 配置 -->
+	<servlet>
+		<servlet-name>springMVC</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:SpringMVC.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springMVC</servlet-name>
+		<url-pattern>*.do</url-pattern>
+		<url-pattern>*.ph</url-pattern>
+		<url-pattern>*.salary</url-pattern>
+		<url-pattern>*.erp</url-pattern>
+		<url-pattern>*.wx</url-pattern>
+		<url-pattern>*.qywx</url-pattern>
+		<url-pattern>*.cpt</url-pattern>
+		<url-pattern>*.app</url-pattern>
+	</servlet-mapping>
+	<!-- fineReport -->
+	 <servlet>
+	    <servlet-name>ReportServer</servlet-name>
+	    <servlet-class>com.fr.web.ReportServlet</servlet-class>
+	    <load-on-startup>0</load-on-startup>
+	  </servlet>
+	
+	  <servlet-mapping>
+	    <servlet-name>ReportServer</servlet-name>
+	    <url-pattern>/ReportServer</url-pattern>
+	  </servlet-mapping>
+	
+	<!-- 字符集处理 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+</web-app>

@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20151125" releaseVersion="8.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="goodsTypeUrl"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsPositionName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="putUserName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="repertoryId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="beginNumber"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsSize"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endNumber"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="beginTime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endTime"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="getDepartmentId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsPositionId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FRDemo]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[
+SELECT
+			a.goods_id AS goodsId,
+			a.goods_type_id AS goodsTypeId,
+			a.goods_name AS goodsName,
+			'inRecord' AS operation,
+			a.total_number AS totalNumber,
+			a.goods_type_url AS goodsTypeUrl,
+			a.goods_size AS goodsSize,
+			a.unit AS unit,
+			a.warn_number AS warnNumber,
+			a.latest_unit_price AS latestUnitPrice,
+			a.moving_aver_price AS movingAverPrice,
+			a.weighted_aver_price AS weightedAverPrice,
+			b.in_record_id AS inRecordId,
+			b.repertory_id AS repertoryId,
+			b.repertory_name AS repertoryName,
+			b.goods_position_id AS goodsPositionId,
+			b.goods_position_name AS goodsPositionName,
+			b.in_number AS inNumber,
+			b.in_number	AS outNumber,
+			b.pretax_amount AS pretaxAmount,
+			b.tax_amount AS taxAmount,
+			b.in_time AS outTime,
+			b.in_time AS inTime,
+			b.operate_user_name AS operateUserName,
+			b.put_user_name AS getUserName,
+			b.put_user_name AS putUserName,
+			b.record AS record,
+			b.create_time AS createTime,
+			b.create_user_id AS createUserId,
+			b.create_user_name AS createUserName,
+			b.update_time AS updateTime,
+			b.update_user_id AS updateUserId,
+			b.update_user_name AS updateUserName,
+			'入库' AS type
+		FROM
+			repertory_goods a,
+			repertory_in_record b
+		WHERE
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND a.goods_id = b.goods_id AND 
+			if('${goodsTypeUrl}' is not null and '${goodsTypeUrl}' != '',
+				a.goods_type_url LIKE '${goodsTypeUrl}%',
+				TRUE) AND
+  			if('${beginNumber}' is not null and '${beginNumber}' != '',
+				a.total_number >= '${beginNumber}',
+				TRUE) AND
+  			if('${endNumber}' is not null and '${endNumber}' != '',
+				 a.total_number <= '${endNumber}',
+				TRUE) AND
+  			if('${goodsName}' is not null and '${goodsName}' != '',
+				 a.goods_name LIKE '%${goodsName}%',
+				TRUE) AND
+			if('${goodsSize}' is not null and '${goodsSize}' != '',
+				 a.goods_size LIKE '%${goodsSize}%',
+				TRUE) AND
+  			if('${goodsPositionId}' is not null and '${goodsPositionId}' != '',
+				 b.goods_position_id = '${goodsPositionId}',
+				TRUE) AND
+ 			if('${goodsPositionName}' is not null and '${goodsPositionName}' != '',
+				 b.goods_position_name LIKE '${goodsPositionName}%',
+				TRUE) AND
+  			if('${repertoryId}' is not null and '${repertoryId}' != '',
+				 b.repertory_id = '${repertoryId}',
+				TRUE) AND
+  			if('${putUserName}' is not null and '${putUserName}' != '',
+				 b.put_user_name LIKE '${putUserName}%',
+				TRUE) AND
+			if('${putUserName}' is not null and '${putUserName}' != '',
+				 b.operate_user_name LIKE '${putUserName}%',
+				TRUE) AND
+			if('${getDepartmentId}' is not null and '${getDepartmentId}' != '',
+				 b.repertory_id = '0',
+				TRUE) AND
+			if('${beginTime}' is not null and '${beginTime}' != '',
+				 b.in_time >= STR_TO_DATE('${beginTime}','%Y-%m-%d %H'),
+				TRUE) AND
+			if('${endTime}' is not null and '${endTime}' != '',
+				 b.in_time <= STR_TO_DATE('${endTime}','%Y-%m-%d %H'),
+				TRUE) 
+		UNION
+		SELECT
+			a.goods_id AS goodsId,
+			a.goods_type_id AS goodsTypeId,
+			a.goods_name AS goodsName,
+			'outRecord' AS operation,
+			a.total_number AS totalNumber,
+			a.goods_type_url AS goodsTypeUrl,
+			a.goods_size AS goodsSize,
+			a.unit AS unit,
+			a.warn_number AS warnNumber,
+			a.latest_unit_price AS latestUnitPrice,
+			a.moving_aver_price AS movingAverPrice,
+			a.weighted_aver_price AS weightedAverPrice,	
+			b.out_record_id AS outRecordId,
+			b.repertory_id AS repertoryId,
+			b.repertory_name AS repertoryName,
+			b.goods_position_id AS goodsPositionId,
+			b.goods_position_name AS goodsPositionName,
+			b.out_number AS outNumber,
+			b.out_number AS inNumber,
+			b.pretax_amount AS pretaxAmount,
+			b.tax_amount AS taxAmount,
+			b.out_time AS outTime,
+			b.out_time AS inTime,
+			b.get_department_name AS getDepartmentName,
+			b.get_user_name AS getUserName,
+			b.get_user_name AS putUserName,
+			b.record AS record,
+			b.create_time AS createTime,
+			b.create_user_id AS createUserId,
+			b.create_user_name AS createUserName,
+			b.update_time AS updateTime,
+			b.update_user_id AS updateUserId,
+			b.update_user_name AS updateUserName,
+			'出库' AS type
+		FROM
+			repertory_goods a,
+			repertory_out_record b
+		WHERE
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND a.goods_id = b.goods_id AND 
+			if('${goodsTypeUrl}' is not null and '${goodsTypeUrl}' != '',
+			 	a.goods_type_url LIKE '${goodsTypeUrl}%',
+				TRUE) AND 
+			if('${beginNumber}' is not null and '${beginNumber}' != '',
+			 	total_number >= '${beginNumber}',
+				TRUE) AND 
+			if('${endNumber}' is not null and '${endNumber}' != '',
+				 total_number <= '${endNumber}',
+				TRUE) AND
+			if('${goodsName}' is not null and '${goodsName}' != '',
+			 	a.goods_name LIKE '%${goodsName}%',
+				TRUE) AND 
+			if('${goodsSize}' is not null and '${goodsSize}' != '',
+			 	a.goods_size LIKE '%${goodsSize}%',
+				TRUE) AND
+			if('${goodsPositionName}' is not null and '${goodsPositionName}' != '',
+				    b.goods_position_name LIKE ('${goodsPositionName}%'),
+				TRUE) AND
+			if('${goodsPositionId}' is not null and '${goodsPositionId}' != '',
+				    b.goods_position_id = ('${goodsPositionId}'),
+				TRUE) AND
+			if('${repertoryId}' is not null and '${repertoryId}' != '',
+				  b.repertory_id = '${repertoryId}',
+				TRUE) AND
+			if('${getDepartmentId}' is not null and '${getDepartmentId}' != '',
+				 b.get_department_id = '${getDepartmentId}',
+				TRUE) AND
+  			if('${putUserName}' is not null and '${putUserName}' != '',
+				 b.get_department_id = '0',
+				TRUE) AND
+			if('${beginTime}' is not null and '${beginTime}' != '',
+				 b.out_time >= STR_TO_DATE('${beginTime}','%Y-%m-%d %H'),
+				TRUE) AND
+			if('${endTime}' is not null and '${endTime}' != '',
+				 b.out_time <= STR_TO_DATE('${endTime}','%Y-%m-%d %H'),
+				TRUE)
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[1143000,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0">
+<O>
+<![CDATA[进出库]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="0" s="0">
+<O>
+<![CDATA[物品名称]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="2" r="0" s="0">
+<O>
+<![CDATA[物品规格]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="0" s="0">
+<O>
+<![CDATA[数量]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="0" s="0">
+<O>
+<![CDATA[入库/出库数量]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="0" s="0">
+<O>
+<![CDATA[仓位]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="0" s="0">
+<O>
+<![CDATA[单位]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="0" s="0">
+<O>
+<![CDATA[金额（元）]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="0" s="0">
+<O>
+<![CDATA[无税金额（元）]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="0" s="0">
+<O>
+<![CDATA[进库人/领取人]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="0" s="0">
+<O>
+<![CDATA[进出库时间]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="11" r="0" s="0">
+<O>
+<![CDATA[备注]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="0" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="type"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="1" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="goodsName"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="2" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="goodsSize"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="3" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="totalNumber"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="4" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="inNumber"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="5" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="goodsPositionName"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="6" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="unit"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="7" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="pretaxAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="8" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="taxAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="9" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="putUserName"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="10" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="inTime"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="11" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="record"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting/>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<Format class="com.fr.base.CoreDecimalFormat">
+<![CDATA[#0.00]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+<DesignerVersion DesignerVersion="IAA"/>
+<PreviewType PreviewType="0"/>
+</WorkBook>

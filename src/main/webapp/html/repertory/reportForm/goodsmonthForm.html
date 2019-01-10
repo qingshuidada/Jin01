@@ -1,0 +1,73 @@
+<div id="goodsmonthForm">
+	 <div class="listForm"> 
+		<div class="toolbar" >
+			<input type="button" class="button startMonthBalance" value="月结" />
+			<input type="button" class="button withdrawMonthBalance" value="月结撤销" />
+			<input type="button" class="button write" value="导出到Excel" />
+			<form class="printGoodsMonthForm" style="display:inline" action="../../reportForms/printGoodsMonthForm.do?" method="post" target="_blank">
+				<input type = "hidden" name="cptName" value="goodsMonthForm">
+				<input type = "hidden" name="monthBalanceTime">
+				<input type = "hidden" name="goodsName">
+				<input type = "hidden" name="goodsSize">
+				<input type="button" class="button print" value="打印查询结果" />
+			</form>
+		</div>
+		<div class="queryForm">
+			物品名称：<input type="text" class="goodsName"/>
+			物品规格：<input type="text" class="goodsSize"/>
+			月结日期：<select class="monthBalanceTimeStr">
+			</select>
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		</div>
+		<div>
+			<table id="goodsmonthFormdg">
+			</table>
+		</div>
+		<!-- 汇总 -->
+		<div class="sumBar">
+		</div>
+		<input type="button" class="button controlSumBar" value="隐藏"/>
+	</div>
+	
+	<!-- <div class="chartArea" style="display: none">
+		<div class="toolbar" >
+			<input type="button" class="button goback" value="返回" />
+		</div>
+		<div id="goodsmonth" style="margin:0 auto;width:80%;height:80%;"></div>
+	</div> -->
+	<div class="popups">
+		<!-- 导出数据到Excel -->
+		<div class="popup writetoexcel" style="height: 300px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	
+		<div class="popup startMonthBalance">
+			<h3>请选择月结日期</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<table>
+					<tr>
+						<td>月结开始时间:</td>
+						<td><input type="text" name="startTime" disabled="disabled"></td>
+					</tr>
+					<tr>
+						<td>月结结束时间:</td>
+						<td><input type="text" name="endTime" onblur="testDate(this)" class="jadate" onclick="testShow(this)"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" />
+			</div>
+		</div>
+	</div>
+</div>

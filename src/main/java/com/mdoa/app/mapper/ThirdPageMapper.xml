@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.ThirdPageDao">
+
+	<select id="selectProductTypeBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppProductType">
+		SELECT
+			product_type_id AS productTypeId,
+			product_type_name AS productTypeName,
+			sort_id AS sortId
+		FROM
+			app_product_type
+		where
+			sort_id = #{sortId}
+	</select>
+	
+	<select id="selectProductByTypeId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			product_type_id AS productTypeId,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_product
+		WHERE
+			product_type_id = #{productTypeId}
+	</select>
+	
+	<select id="selectProductById" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			product_type_id AS productTypeId,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_product
+		WHERE
+			product_id = #{productId}
+	</select>
+	<select id="selectProdutBySortId" parameterType="java.lang.String"  resultType="com.mdoa.app.model.AppProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			product_type_id AS productTypeId,
+			product_type_name AS productTypeName,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_product
+		WHERE
+			product_type_id 
+		IN
+			(
+				SELECT
+					product_type_id
+				FROM
+					app_product_type
+				WHERE
+					sort_id = #{sortId}
+			)
+	</select>
+	<!-- 首页查询我们的产品  待开发 -->
+	<select id="selectProducts" resultType="com.mdoa.app.model.AppProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			product_type_id AS productTypeId,
+			product_type_name AS productTypeName,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_product	
+	</select>
+	<insert id="addProduct" parameterType="com.mdoa.app.model.AppProduct">
+		INSERT INTO app_product(
+			product_id,
+			product_name,
+			product_number,
+			product_size,
+			product_type_id,
+			product_type_name,
+			product_describe,
+			product_image_url
+		)VALUE(
+			UUID(),
+			#{productName},
+			#{productNumber},
+			#{productSize},
+			#{productTypeId},
+			#{productTypeName},
+			#{productDescribe},
+			#{productImageUrl}
+		)
+	</insert>
+	<delete id="deleteProductById" parameterType="com.mdoa.app.model.AppProduct">
+		DELETE 
+		FROM
+			app_product
+		WHERE
+			product_id = #{productId}
+	</delete>
+</mapper>

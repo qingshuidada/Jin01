@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.admin.dao.CarDao">
+	<!-- 增加车辆信息 -->
+	<insert id="addCarMessage" parameterType="com.mdoa.admin.model.Car">
+		INSERT INTO admin_car(
+			car_id,
+			car_no,
+			car_type,
+			engine_no,
+			buy_insure_time,
+			audit_time,
+			notes,
+			factory_model,
+			driver,
+			buy_date,
+			status,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{carNo},
+			#{carType},
+			#{engineNo},
+			str_to_date(#{buyInsureTimeStr}, '%Y-%m-%d %H:%i:%s'),
+			str_to_date(#{auditTimeStr}, '%Y-%m-%d %H:%i:%s'),
+			#{notes},
+			#{factoryModel},
+			#{driver},
+			str_to_date(#{buyDateStr}, '%Y-%m-%d %H:%i:%s'),
+			#{status},
+			'1'
+		)	
+	</insert>
+	<!-- 删除车辆信息 -->
+	<update id="deleteCarMessage" parameterType="com.mdoa.admin.model.Car">
+		UPDATE admin_car
+		SET 
+			alive_flag = '0'
+		WHERE
+			car_id = #{carId}
+	</update>
+	<!-- 修改车辆信息 -->
+	<update id="updateCarMessage" parameterType="com.mdoa.admin.model.Car">
+		UPDATE admin_car
+		<set>
+			<if test="carNo != null and carNo != ''">
+			car_no = #{carNo},</if>
+			<if test="carType != null and carType != ''">
+			car_type = #{carType},</if>
+			<if test="engineNo != null and engineNo != ''">
+			engine_no = #{engineNo},</if>
+			<if test="buyInsureTimeStr != null and buyInsureTimeStr != ''">
+			buy_insure_time = #{buyInsureTimeStr},</if>
+			<if test="auditTimeStr != null and auditTimeStr != ''">
+			audit_time = #{auditTimeStr},</if>
+			<if test="notes != null and notes != ''">
+			notes = #{notes},</if>
+			<if test="factoryModel != null and factoryModel != ''">
+			factory_model = #{factoryModel},</if>
+			<if test="driver != null and driver != ''">
+			driver = #{driver},</if>
+			<if test="buyDateStr != null and buyDateStr != ''">
+			buy_date = #{buyDateStr},</if>
+			<if test="status != null and status != ''">
+			status = #{status}</if>
+		</set>
+		WHERE
+			car_id = #{carId}
+	</update>
+	<!-- 查询车辆信息 -->
+	<select id="selectCarMessage" parameterType="com.mdoa.admin.model.Car" resultType="com.mdoa.admin.model.Car">
+		SELECT
+			car_id AS carId,
+			car_no AS carNo,
+			car_type AS carType,
+			engine_no AS engineNo,
+			buy_insure_time AS buyInsureTime,
+			audit_time AS auditTime,
+			notes AS notes,
+			factory_model AS factoryModel,
+			driver AS driver,
+			buy_date AS buyDate,
+			status AS status
+		FROM
+			admin_car
+		<where>
+			alive_flag = '1'
+			<if test="carId != null and carId != ''">
+			AND car_id = #{carId}</if>
+			<if test="carType != null and carType != ''">
+			AND car_type LIKE ('${carType}')</if>
+			<if test="carNo != null and carNo != ''">
+			AND car_no LIKE ('${carNo}')</if>
+			<if test="status != null and status != ''">
+			AND status = #{status}</if>
+		</where>
+	</select>
+	<!-- 添加车辆维修单 -->
+	<insert id="addCarRepairbill" parameterType="com.mdoa.admin.model.CarRepair">
+		INSERT INTO admin_car_repair(
+			repair_id,
+			car_id,
+			repair_date,
+			reason,
+			executant,
+			notes,
+			repair_type,
+			fee,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{carId},
+			str_to_date(#{repairDateStr}, '%Y-%m-%d %H:%i:%s'),
+			#{reason},
+			#{executant},
+			#{notes},
+			#{repairType},
+			#{fee},
+			'1'
+		)
+	</insert>
+	<!-- 删除维修单 -->
+	<update id="deleteCarRepairbill" parameterType="com.mdoa.admin.model.CarRepair">
+		UPDATE admin_car_repair
+		SET 
+			alive_flag = '0'
+		WHERE
+			repair_id = #{repairId}	
+	</update>
+	<!-- 修改维修单 -->
+	<update id="updateCarRepairbill" parameterType="com.mdoa.admin.model.CarRepair">
+		UPDATE admin_car_repair
+		<set>
+			<if test="carId != null and carId != ''">
+			car_id = #{carId},</if>
+			<if test="repairDateStr != null and repairDateStr != ''">
+			repair_date = #{repairDateStr},</if>
+			<if test="reason != null and reason != ''">
+			reason = #{reason},</if>
+			<if test="executant != null and executant != ''">
+			executant = #{executant},</if>
+			<if test="notes != null and notes != ''">
+			notes = #{notes},</if>
+			<if test="repairType != null and repairType != ''">
+			repair_type = #{repairType},</if>
+			<if test="fee != null and fee != ''">
+			fee = #{fee}</if>
+		</set>
+		WHERE
+			repair_id = #{repairId}
+	</update>
+	<!-- 查询车辆维修单 -->
+	<select id="selectCarRepairbill" parameterType="com.mdoa.admin.model.CarRepair" resultType="com.mdoa.admin.model.CarRepair">
+		SELECT
+			a.repair_id AS repairId,
+			a.car_id AS carId,
+			b.car_no AS carNo,
+			a.repair_date AS repairDate,
+			DATE_FORMAT(a.repair_date,'%Y-%m-%d') AS repairDateStr,
+			a.reason AS reason,
+			a.executant AS executant,
+			c.user_name AS userName,
+			a.notes AS notes,
+			a.repair_type AS repairType,
+			a.fee AS fee
+		FROM
+			admin_car_repair a,
+			admin_car b,
+			user_info c
+		<where>
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND a.car_id = b.car_id
+			AND a.executant = c.user_id
+			<if test="repairId != null and repairId != ''">
+			AND a.repair_id = #{repairId}</if>
+			<if test="carNo != null and carNo != ''">
+			AND b.car_no LIKE ('${carNo}')</if>
+			<if test="repairType != null and repairType != ''">
+			AND a.repair_type = #{repairType}</if>
+		</where>		
+	</select>
+	<!-- 添加车辆申请单 -->
+	<insert id="addCarApplyNote" parameterType="com.mdoa.admin.model.CarApply">
+		INSERT INTO admin_car_apply(
+			apply_id,
+			car_id,
+			department,
+			user_full_name,
+			apply_date,
+			reason,
+			start_time,
+			end_time,
+			proposer,
+			mileage,
+			oil_use,
+			notes,
+			approval_status,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{carId},
+			#{department},
+			#{userFullName},
+			str_to_date(#{applyDateStr}, '%Y-%m-%d %H:%i:%s'),
+			#{reason},
+			str_to_date(#{startTimeStr}, '%Y-%m-%d %H:%i:%s'),
+			str_to_date(#{endTimeStr}, '%Y-%m-%d %H:%i:%s'),
+			#{proposer},
+			#{mileage},
+			#{oilUse},
+			#{notes},
+			'0',
+			'1'
+		)
+	</insert>
+	<!-- 修改车辆申请单 -->
+	<update id="updateCarApplyNote" parameterType="com.mdoa.admin.model.CarApply">
+		UPDATE admin_car_apply
+		<set>
+			<if test="aliveFlag != null and aliveFlag !=''">
+			alive_flag = #{aliveFlag},</if>
+			<if test="approvalStatus != null and approvalStatus != ''">
+			approval_status = #{approvalStatus}</if>
+		</set>
+		WHERE
+			apply_id = #{applyId}	
+	</update>
+	<!-- 查询车辆申请单 -->
+	<select id="selectCarApplyNote" parameterType="com.mdoa.admin.model.CarApply" resultType="com.mdoa.admin.model.CarApply">
+		SELECT 
+			a.apply_id AS applyId,
+			a.car_id AS carId,
+			b.car_no AS carNo,
+			a.department AS department,
+			a.user_full_name AS userFullName,
+			a.apply_date AS applyDate, 
+			DATE_FORMAT(a.apply_date,'%Y-%m-%d') AS applyDateStr,
+			a.reason AS reason,
+			a.start_time AS startTime,
+			DATE_FORMAT(a.start_time,'%Y-%m-%d') AS startTimeStr,
+			a.end_time AS endTime,
+			DATE_FORMAT(a.end_time,'%Y-%m-%d') AS endTimeStr,
+			a.proposer AS proposer,
+			a.mileage AS mileage,
+			a.oil_use AS oilUse,
+			a.notes AS notes,
+			a.approval_status AS approvalStatus
+		FROM
+			admin_car_apply a,
+			admin_car b
+		<where>
+			a.alive_flag = '1'
+			AND a.car_id = b.car_id
+			AND b.alive_flag = '1'
+			<if test="applyId != null and applyId != ''">
+			AND a.apply_id = #{applyId}</if>
+			<if test="carNo != null and carNo != ''">
+			AND b.car_no LIKE ('${carNo}')</if>
+			<if test="approvalStatus != null and approvalStatus != ''">
+			AND a.approval_status = #{approvalStatus}</if>
+		</where>
+	</select>
+	
+	<insert id="test">
+		insert into test (id) value (uuid())
+	</insert>
+</mapper>

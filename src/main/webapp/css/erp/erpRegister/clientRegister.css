@@ -1,0 +1,10 @@
+#clientRegister .popup .popuparea{
+	padding:10px 20px;
+}
+#clientRegister .popup .popuparea .button{
+	width:40px;
+}
+#clientRegister .popup .popuparea .salesmanIds{
+	width:96px;
+	height:40px;
+}

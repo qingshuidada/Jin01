@@ -1,0 +1,49 @@
+<div id="knowDrafts">
+	<div class="list">
+		<div class="maintop"></div>
+		<div class="invitetop">
+			草稿名：<input type="text" class="titleName"/>
+			修改时间：<input type="text" class="startTime jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+			~ <input type="text" class="endTime jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" value="清空">
+		</div>
+		<div>
+			<table id="knowDraftsdg"></table>
+		</div>
+	</div>
+	<div class="knowEdit">
+		<div class="knowTitle marginTop">
+			<div class="knowLabel">
+				标题：
+			</div>
+			<div class="KnowTitleName">
+				<input type="text" class="titleName"/>
+			</div>
+		</div>
+		<div class="knowClass marginTop">
+			<div class="knowLabel">
+				一级类别：
+			</div>
+			<select class="firstCategoryId">
+			</select>
+			<div class="knowLabel">
+				二级类别：
+			</div>
+			<select class="secondCategoryId">
+			</select>
+		</div>
+		<div class="knowContent marginTop">
+			<div class="knowLabel">
+				正文：
+			</div>
+			<div class="knowUeditor">
+				<script type="text/plain" id="knowDraftsEditor"></script>	
+			</div>
+		</div>
+		<div class="editBtn">
+			<input type="button" class="button confirm" value="确定"/>
+			<input type="button" class="button cannel" value="取消" style="margin-left: 10%;"/>
+		</div>
+	</div>
+</div>

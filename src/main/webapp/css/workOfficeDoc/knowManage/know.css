@@ -1,0 +1,102 @@
+#know{
+	overflow:hidden;
+}
+#know .leftNav{
+	float:left;
+	width:200px;
+	height:100%;
+}
+#know .leftNav h3{
+	height:33px;
+	line-height:33px;
+	background:#e3e3e3;
+	border-bottom:1px solid #ddd;
+	font-weight: 600;
+	font-size:18px;
+	padding-left:30px;
+}
+#know .knowNav{
+	color:#333;
+}
+#know .knowNavBar{
+	cursor: pointer;
+}
+#know .knowNavBar h4{
+	background:#eee;
+	line-height:28px;
+	padding-left:30px;
+	padding-right:14px;
+	width:156px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+	border-bottom:1px solid #dddddd;
+}
+#know .knowNavBar ul{
+	width:100%;
+	height:0px;
+	overflow:hidden;
+}
+#know .knowNavBar ul li{
+	line-height:24px;
+	padding-left:40px;
+	padding-right:14px;
+	width:146px;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+	background:#fefefe;
+	border-bottom:1px solid #dddddd;
+}
+#know .knowNavBar ul .nowLi{
+	 background:#ffc000;
+	 color:#fff;
+}
+#know .rightArea{
+	float:left;
+}
+#know .knowEdit{
+	padding-right:5.1%;
+	overflow:hidden;
+}
+#know .knowEdit .marginTop{
+	margin-top:28px;
+	overflow:hidden;
+}
+#know .knowEdit .knowLabel{
+	width:125px;
+	text-align:right;
+	height:28px;
+	line-height:28px;
+	font-weight:900;
+	padding-right:17px;
+	float:left;
+}
+#know .knowEdit .knowClass{
+	line-height:28px;
+}
+#know .knowEdit .knowClass>select{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 350px;
+}
+#know .knowEdit .knowUeditor{
+	float:left;
+}
+#know .knowEdit .editBtn{
+	height:50px;
+	line-height:50px;
+	text-align:left;
+	padding-left: 400px;
+}
+#know .knowEdit .editBtn input{
+	width:120px;
+	height:20px;
+}
+#know .knowEdit .knowClass input[type=text]{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 350px;
+}

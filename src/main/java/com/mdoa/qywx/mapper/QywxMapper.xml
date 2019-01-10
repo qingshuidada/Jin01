@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.qywx.dao.QywxDao" >
+	
+	<!-- 查询待绑定账号安全性 待确认微信是否已绑定账号-->
+	<select id="checkAccountStatus" parameterType="com.mdoa.qywx.bo.QywxForm" resultType="com.mdoa.qywx.bo.CheckAccountForm">
+		SELECT
+			IF(COUNT(0)=0,0,1) AS isChecked,
+			IF(qywx_user_id IS NULL,0,1) as isBound,
+			qywx_user_id AS bindingUserId,
+			user_account AS userAccount,
+			user_id AS userId,
+			user_name AS userName
+		FROM user_info
+		WHERE
+			alive_flag = '1'
+		AND	user_account = #{userAccount}
+		AND password = #{password}
+	</select>
+	
+	<!-- 通过企业微信userId获取账号 -->
+	<select id="getAccount" parameterType="java.lang.String" resultType="com.mdoa.qywx.bo.QywxForm">
+		SELECT
+			user_account AS userAccount,
+			password AS password,
+			qywx_user_id AS qywxUserId
+		FROM user_info
+		WHERE
+			alive_flag = '1'
+		AND	qywx_user_id = #{qywxUserId}
+	</select>
+	
+	<!-- 通过userId获取qywxUserId -->
+	<select id="getQywxUserId" parameterType="java.lang.String" resultType="com.mdoa.qywx.bo.QywxForm">
+		SELECT
+			user_id AS userId,
+			user_name AS userName,
+			sex AS sex,
+			qywx_user_id AS qywxUserId
+		FROM user_info
+		WHERE
+			alive_flag = '1'
+		AND	user_id = #{userId}
+	</select>
+	
+	<!-- 确认微信是否已绑定账号 -->
+	<select id="checkBind" parameterType="java.lang.String" resultType="com.mdoa.qywx.bo.CheckAccountForm">
+		SELECT
+			IF(COUNT(0)=1,1,0) AS isBound,
+			user_account AS userAccount,
+			report_authority_flag AS reportAuthorityFlag
+		FROM user_info
+		WHERE
+			alive_flag = '1'
+		AND	qywx_user_id = #{qywxUserId}
+	</select>
+	
+	<!-- 绑定企业微信与OA账号 -->
+	<update id="bindOaAccount" parameterType="com.mdoa.qywx.bo.QywxForm">
+		UPDATE
+			user_info
+		SET
+			qywx_user_id = #{qywxUserId},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		AND user_account = #{userAccount}
+		AND password = #{password}
+		AND ISNULL(qywx_user_id)
+	</update>
+	
+	<!-- 解绑企业微信与OA账号 -->
+	<update id="unBindOaAccount" parameterType="com.mdoa.qywx.bo.QywxForm">
+		UPDATE
+			user_info
+		SET
+			qywx_user_id = NULL,
+			update_time = NOW(),
+			update_user_id = user_id,
+			update_user_name = user_name
+		WHERE
+			alive_flag = '1'
+		AND qywx_user_id = #{qywxUserId}
+	</update>
+	
+	<!-- 获取抄送任务 -->
+	<select id="getCopyTask" parameterType="java.lang.String" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			task_id AS taskId,
+			process_id AS processId,
+			executor_id AS executorId,
+			executor_name AS executorName,
+			task_type AS taskType,
+			next_task_id AS nextTaskId,
+			create_time AS createTime
+		FROM process_task
+		WHERE
+			process_id = #{processId}
+		AND	task_type = '2'
+	</select>
+	
+	<!-- 获取第一个审核任务 -->
+	<select id="getFirstTask" parameterType="java.lang.String" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			task_id AS taskId,
+			process_record_id AS processId,
+			examine_status AS examineStatus,
+			executor_id AS executorId,
+			executor_name AS executorName,
+			task_type AS taskType,
+			next_task_id AS nextTaskId,
+			executor_time AS executorTime,
+			create_time AS createTime
+		FROM process_task_record
+		WHERE
+			task_id = #{taskId}
+		AND	task_type = '1'
+		AND examine_status = '1'
+	</select>
+	
+</mapper>

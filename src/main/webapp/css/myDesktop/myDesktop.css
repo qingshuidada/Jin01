@@ -1,0 +1,185 @@
+#myDesktop{
+	overflow:hidden;
+}
+#myDesktop .desktopArea{
+	overflow-y:auto;
+}
+#myDesktop .leftDesktop{
+	padding:10px 0 10px 10px;
+	width:60%;
+	float:left;
+}
+#myDesktop .rightDesktop{
+	padding:10px;
+	width:40%;
+	float:left;
+}
+#myDesktop .desktopMoudleBox{
+	border:1px solid #99bbe8;
+	border-radius:6px;
+	background: #e0edff;
+	margin-bottom:10px;
+	position:relative;
+}
+#myDesktop .desktopEmpty{
+	border:2px dashed #99bbe8;
+	margin-bottom:10px;
+	background:#fff;
+}
+#myDesktop .desktopMoveBox{
+	position:absolute;
+	opacity: 0.8;
+	filter:alpha(opacity=80);
+	left:-1000px;
+	top:-1000px;
+}
+#myDesktop .desktopMoudleBox h3{
+	margin:0 6px;
+	cursor: move;
+}
+#myDesktop .desktopMoudleBox .desktopBarArea{
+	position:absolute;
+	top:1px;
+	right:6px;
+}
+#myDesktop .desktopMoudleBox .desktopMore{
+	height:20px;
+	line-height:20px;
+	text-align:right;
+	padding-right:6px;
+}
+#myDesktop .desktopMoudleBox .desktopMore .more{
+	cursor: pointer;
+}
+#myDesktop .desktopMoudleBox .barblock{
+	display: inline-block;
+    vertical-align: middle;
+    width: 15px;
+    height: 15px;
+    margin-top:2px;
+    margin-left:3px;
+    float:right;
+    cursor: pointer;
+}
+#myDesktop .desktopMoudleBox .desktopMessageList{
+	border-top:1px solid #99bbe8;
+	background:#fff;
+	width:100%;
+	padding:0 2px;
+}
+#myDesktop .desktopMoudleBox .desktopMessageList tr{
+	height:29px; 
+}
+#myDesktop .desktopMoudleBox .desktopMessageList tr td{
+	border-top: 1px dashed #c7e3fa;
+	color:blue;
+}
+#myDesktop .desktopMoudleBox .desktopMessageList tr td:hover{
+	color:aqua;
+}
+#myDesktop .addDesktopWindow .popuparea{
+	padding:10px 20px;
+}
+#myDesktop .addDesktopWindow .popuparea input{
+	width:13px;
+}
+#myDesktop .addDesktopWindow .popuparea td{
+	width:120px;
+}
+#myDesktop .desktopMoudleBox .fold{
+	background: url(../../img/index/tool-sprites.gif) no-repeat 0px -60px;
+}
+#myDesktop .desktopMoudleBox  .refreshDesktop{
+	background: url(../../img/index/tool-sprites.gif) no-repeat 0px -225px;
+}
+#myDesktop .desktopMoudleBox .closeDesktop{
+    background: url(../../img/index/tool-sprites.gif) no-repeat 0px 0px;
+}
+#myDesktop .desktopMoudleBox .fold:hover{
+	background: url(../../img/index/tool-sprites.gif) no-repeat -15px -60px;
+}
+#myDesktop .desktopMoudleBox  .refreshDesktop:hover{
+	background: url(../../img/index/tool-sprites.gif) no-repeat -15px -225px;
+}
+#myDesktop .desktopMoudleBox .closeDesktop:hover{
+    background: url(../../img/index/tool-sprites.gif) no-repeat -15px 0px;
+}
+#myDesktop .desktopMoudleBox .fold1{
+	background: url(../../img/index/tool-sprites.gif) no-repeat 0px -75px;
+}
+#myDesktop .desktopMoudleBox .fold1:hover{
+	background: url(../../img/index/tool-sprites.gif) no-repeat -15px -75px;
+}
+
+#myDesktop ul.editArea li #contractEditorThree{
+	float:left;
+}
+#myDesktop .maintop .back{
+	display:none;
+}
+#myDesktop .editContractWd{	
+	overflow:auto;
+	display:none;
+	padding-top:40px;
+}
+
+#myDesktop .editContractWd ul.editArea{
+	min-width:1063px;
+	padding:0 50px;
+}
+
+
+#myDesktop ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#myDesktop ul.editArea li span,
+#myDesktop ul.editArea li i,
+#myDesktop ul.editArea li input,
+#myDesktop ul.editArea li #contractEditor{
+	float:left;
+}
+#myDesktop ul.editArea li #contractEditorSecond{
+	float:left;
+}
+#myDesktop ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#myDesktop ul.editArea li span{
+	margin-right:15px;
+}
+#myDesktop ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#myDesktop ul.editArea li input.langInput{
+	width:986px;
+}
+#myDesktop ul.editArea li input.shortInput{
+	width:392px;
+}
+#myDesktop ul.editArea li input.fileName{
+	width:566px;
+	height:21px;
+}
+#myDesktop ul.editArea li input.orderExecutorName{
+	width:100px;
+	height:21px;
+}
+#myDesktop ul.editArea li input[name=departmentName]{
+	width:100px;
+	height:21px;
+}
+#myDesktop ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#myDesktop .editContractWd > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}
+
+
+
+

@@ -1,0 +1,221 @@
+ <div id="socialSecurity" title="社保信息">
+	<div class="maintop">
+	</div>
+	<div  class="invitetop">
+	<!-- 养老保险01、医疗保险02、失业保险03、工伤保险04、生育保险05，住房公积金06 -->
+		请输入查询条件：社保大类型：<select name="superType">
+							<option></option>
+							<option value="01">养老保险</option>
+							<option value="02">医疗保险</option>
+							<option value="03">失业保险</option>
+							<option value="04">工伤保险</option>
+							<option value="05">生育保险</option>
+							<option value="06">住房公积金</option>
+						</select>
+			部门名：<input type="text" name="departmentName" style="width: 100px" readOnly="readonly"> 
+				<input type="hidden" name="departmentUrl" style="width: 100px">
+				<input type="button" class="button departmentChooseObj" value="选择"  style="width: 55px"/>
+			员工姓名：<input name="peopleName" type="text" />
+			身份证号：<input name="idCard" type="text" />
+		<a class="easyui-linkbutton" iconCls="icon-search" name="search" style="line-height:16px;">查询</a>
+		<input  type="button" value="清空" >
+	</div>
+	<div>
+	 <table id="socialSecuritydg"></table>	
+	</div>
+	<div class="popups" style="text-align: left;">
+		<div class="popup savesocialsecurity" style="height: 250px;width: 400px;">
+			<h3>添加社保信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 310px;height: 165px">
+					<tr>
+						<td>
+							员工：
+						</td>
+						<td>
+							<input type="text" style="width:156px;" name="peopleName" readonly="readonly"/>
+							<input type="button" class="button chooseUser" value="选择"  style="width: 60px"/>
+							<input type="text" style="display: none" name="userId"/>
+						</td>
+					</tr>
+					<tr>
+						<td>社保大类型：</td>
+						<td>
+							<select name="superType" style="width:222px;" >
+								<option value="00"></option>
+								<option value="01">养老保险</option>
+								<option value="02">医疗保险</option>
+								<option value="03">失业保险</option>
+								<option value="04">工伤保险</option>
+								<option value="05">生育保险</option>
+								<option value="06">住房公积金</option>
+							</select>
+						</td>
+					</tr>
+					<!-- <tr>
+						<td>社保类型：</td>
+						<td>
+							<select name="typeName" style="width:222px;text-indent:36%;">
+								<option></option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-bottom: 24px;">保险描述：</td>
+						<td >
+							<textarea name="typeText" style="width:217px;text-indent:36%;" disabled="disabled" ; readonly="readonly">
+							</textarea>
+						</td>
+					</tr> -->
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="popups" style="text-align: left;">
+		<div class="popup definedsocialsecurity" style="height: 250px;width: 400px;">
+			<h3>定义社保类型</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 310px;height: 165px">
+					<tr>
+						<td>社保大类型:</td>
+						<td><select style="width:223px;">
+						    <option>养老保险</option>
+							<option>医疗保险</option>
+							<option>失业保险</option>
+							<option>工伤保险</option>
+							<option>生育保险</option>
+							<option>住房公积金</option>
+			  			</select></td>
+					</tr>
+					<tr>
+						<td>社保类型名称:</td>
+						<td><input type="text" style="width:220px;" name="typeName"/></td>
+					</tr>
+					<tr>
+						<td style="padding-bottom:24px;">社保类型描述:</td>
+						<td><textarea style="width: 216px" name="socialDis"></textarea></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="popups">
+		<!--添加人员弹窗-->
+		<div class="popup" id="batchAddUserInfo" style="height:410px;width:848px;z-index:999">
+			<h3>请选择无社保员工(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width:1016px; height:340px;">
+					<div class="listForm" style="float:left;height:340px;width:515px;overflow:auto;">
+						<div class="queryForm">
+							员工姓名：<input type="text" style="width:55px" name="userName"/>
+							身份证号：<input type="text" style="width:130px" name="userName"/>
+							部门名称：<input type="text" style="width:55px" name="departmentName"/>
+									<input type="hidden" name="departmentUrl">
+									<input type="button" style="width:40px" class="button departmentChooseObj" value="选择"  style="width: 55px"/>
+							<input type="button" style="width:55px" class="button query" value="查询" />
+						</div>
+						<div>
+							<table id="findUserInfodg" style="height:340px;">
+							</table>
+						</div>
+					</div>
+					<div class="addUser" style="float:left;height:340px;width:305px;overflow:auto;">
+						<div class="addTitle" style="padding-left: 10px;padding-top: 2px;line-height: 30px;">
+							已选员工：
+						</div>
+						<div>
+							<table class="addUserInfoList" style="height:340px;">
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+			请为员工选择社保大类型：<select name="superType" style="margin-right: 100px">
+								<option></option>
+							</select>
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+	</div>
+	<div class="popups" style="text-align: left;">
+		<div class="popup editsocialsecurity" style="height: 250px;width: 400px;">
+			<h3>修改社保信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 310px;height: 165px">
+					<tr>
+						<td>
+							员工：
+						</td>
+						<td>
+							<input type="text" style="width:156px;" name="userName" readonly="readonly"/>
+							<input type="text" style="display: none" name="insuranceId"/>
+						</td>
+					</tr>
+					<tr>
+						<td>社保大类型：</td>
+						<td>
+							<select name="superType" style="width:222px;" >
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="popups" style="text-align: left;">
+		<div class="popup batchEditsocialsecurity" style="height: 250px;width: 400px;">
+			<h3>请为员工选择社保类型</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 310px;height: 165px">
+					<tr>
+						<td>
+							社保类型：
+						</td>
+						<td>
+							<select name="superType" style="width:222px;" >
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="popups" style="text-align: left;">
+		<!-- 导出数据到Excel -->
+		<div class="popup exporttoExcel" style="height: 300px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSources>  
+    <dataSource1 dataSourceKey="testDataSource1" dataSourceName="精品车间"></dataSource1>  
+    <dataSource2 dataSourceKey="testDataSource2" dataSourceName="精二车间"></dataSource2>  
+    <dataSource1 dataSourceKey="testDataSource3" dataSourceName="轧染车间"></dataSource1>  
+    <dataSource2 dataSourceKey="testDataSource4" dataSourceName="针织车间"></dataSource2>  
+    <dataSource2 dataSourceKey="testDataSource5" dataSourceName="后车间"></dataSource2>  
+    <dataSource1 dataSourceKey="testDataSource6" dataSourceName="印花车间"></dataSource1>
+    <dataSource1 dataSourceKey="testDataSource7" dataSourceName="外贸车间"></dataSource1>
+</dataSources>

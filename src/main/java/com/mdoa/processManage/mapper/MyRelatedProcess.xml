@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.processManage.dao.MyRelatedProcessDao">
+	<select id="getProcessList" resultType="com.mdoa.processManage.model.ProcessMessage" 
+		parameterType="com.mdoa.processManage.po.GetMyRelatedProcessForm">
+		SELECT
+			a.process_record_id AS processRecordId,
+			a.process_id AS processId,
+			a.user_id AS userId,
+			a.title AS title,
+			a.process_type_id AS processTypeId,
+			a.execute_status AS executeStatus,
+			a.form_url AS formUrl,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			b.user_name AS userName,
+			b.department_name AS departmentName
+		FROM
+			process_record a
+		LEFT JOIN
+			user_info b
+		ON (a.user_id = b.user_id)
+	<if test="relativeLeave != '02'">
+		LEFT JOIN
+			process_task_record c
+		ON (a.process_record_id = c.process_record_id 
+			<if test="relativeLeave == '01'">
+				AND c.executor_id = #{userId}
+			</if>
+		)
+	</if>
+	    WHERE
+			1=1
+		<if test="relativeLeave != '02'">
+			AND c.task_type = '1' 
+		</if>
+		<if test="relativeLeave != '02'">
+			AND c.examine_status != '0'
+		</if>
+		<if test="relativeLeave == '02'">
+			AND a.user_id = #{userId}
+		</if>
+		<if test="relativeLeave == '01'">
+			AND c.executor_id = #{userId}
+		</if>
+		<if test="relativeLeave == '' or relativeLeave == null">
+			AND (c.executor_id = #{userId} OR a.user_id = #{userId})
+		</if>
+		<if test="createTimeEnd != null and createTimeEnd != ''">
+			AND a.create_time &lt; STR_TO_DATE(#{createTimeEnd},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="createTimeStart != null and createTimeStart != ''">
+			AND a.create_time &gt; STR_TO_DATE(#{createTimeStart},'%Y-%m-%d %H:%i:%s')
+		</if>
+		<if test="createUserName != null and createUserName != ''">
+			AND b.user_name LIKE(${createUserName})
+		</if>
+		<if test="processType != null and processType != ''">
+			AND a.process_type_id = #{processType}
+		</if>
+		<if test="sort == null or sort == ''">
+			ORDER BY a.create_time DESC
+		</if>
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort} ${order}
+		</if>
+	</select>
+	
+	<select id="getProcessFormMessage" parameterType="java.lang.String" 
+		resultType="com.zhou.myProcess.instance.Process">
+		SELECT
+			json_data AS jsonData
+		FROM
+			process_record
+		WHERE
+			process_record_id = #{processRecordId}
+	</select>
+</mapper>

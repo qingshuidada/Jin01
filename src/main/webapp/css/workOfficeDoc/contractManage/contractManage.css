@@ -1,0 +1,127 @@
+#contractManage .invitetop input[type=text]{
+	width:100px;
+}
+#contractManage .imgBox{
+	width:60px;
+	margin:0 auto;
+}
+#contractManage .maintop .back{
+	display:none;
+}
+#contractManage .addContractWd{	
+	overflow:auto; 
+	display:none;
+	padding-top:40px;
+}
+#contractManage .editContractWd{	
+	overflow:auto;
+	display:none;
+	padding-top:40px;
+}
+#contractManage .addContractWd ul.editArea{
+	min-width:1063px;
+	padding:0 100px;
+}
+#contractManage .editContractWd ul.editArea{
+	min-width:1063px;
+	padding:0 100px;
+}
+#contractManage .documentary{	
+	overflow:auto;
+	display:none;
+	padding-top:40px;
+}
+#contractManage .documentary ul.editArea{
+	min-width:1063px;
+	padding:0 50px;
+}
+#contractManage ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#contractManage ul.editArea li span,
+#contractManage ul.editArea li i,
+#contractManage ul.editArea li input,
+#contractManage ul.editArea li #contractEditor{
+	float:left;
+}
+#contractManage ul.editArea li #contractEditorSecond{
+	float:left;
+}
+#contractManage ul.editArea li #contractEditorFour{
+	float:left;
+}
+#contractManage ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#contractManage ul.editArea li span{
+	margin-right:15px;
+}
+#contractManage ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#contractManage ul.editArea li input.langInput{
+	width:986px;
+}
+#contractManage ul.editArea li input.shortInput{
+	width:392px;
+}
+#contractManage ul.editArea li input.fileName{
+	width:700px;
+}
+#contractManage ul.editArea li input.orderExecutorName{
+	width:360px;
+}
+#contractManage ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#contractManage .addContractWd > input[type=button]{
+	margin:10px 0 0 570px;
+	width:115px;
+}
+#contractManage .editContractWd > input[type=button]{
+	margin:10px 0 0 570px;
+	width:115px;
+}
+#contractManage .documentary .recordUl{
+	width:1086px;
+	height:324px;
+	overflow-y:auto;
+}
+#contractManage .documentary .recordLi{
+	border-top:10px solid #66ccff;
+}
+#contractManage .documentary .recordLi p{
+	overflow:hidden;
+	line-height:28px;
+}
+#contractManage .documentary #documentaryEditor{
+	width:1010px;
+	height:320px;
+	border:1px solid #333;
+	overflow-y:auto;
+}
+#contractManage .documentary .record{
+	width:1006px;
+	height:50px;
+}
+#contractManage .documentary .addRecordBtn{
+	text-align:center;
+}
+#contractManage .documentary .pageLi{
+	color:#0099cc;
+	text-align:center;
+}
+#contractManage .documentary .pageLi span{
+	padding:2px 4px;
+	cursor:pointer;
+}
+#contractManage .documentary .pageLi .pageArea{
+	padding:0px;
+}
+#contractManage .documentary .pageLi .pageON{
+	color:#666;
+}

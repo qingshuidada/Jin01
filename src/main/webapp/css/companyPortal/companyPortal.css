@@ -1,0 +1,186 @@
+#companyPortal .companyContent{
+	display:none;
+}
+#companyPortal .moduleBox{
+	width:98%;
+	margin:0 auto;
+	margin-top:10px;
+	border:1px solid #95b8e7;
+	overflow:hidden;
+}
+#companyPortal .moduleBox .title{
+	line-height:22px;
+	height:22px;
+	background-color:#cfdff3;
+	overflow:hidden;
+}
+#companyPortal .title i{
+	float:left;
+	width:15px;
+	height:15px;
+	margin:3px;
+	background: url(../../img/index/icon3.png);
+}
+#companyPortal .title h2{
+	float:left;
+	font-size:12px;
+	font-weight:bold;
+}
+#companyPortal .title span{
+	float:right;
+	width:15px;
+	height:15px;
+	margin:2px 3px 0 0;
+	cursor:pointer;
+}
+#companyPortal .title .slideDown{
+	background: url(../../img/index/tool-sprites.gif) no-repeat 0px -60px;
+}
+#companyPortal .title .slideDown:hover{
+	background: url(../../img/index/tool-sprites.gif) no-repeat -15px -60px;
+}
+#companyPortal .title .slideUp{
+	background: url(../../img/index/tool-sprites.gif) no-repeat 0px -75px;;
+}
+#companyPortal .title .slideUp:hover{
+	background: url(../../img/index/tool-sprites.gif) no-repeat -15px -75px;
+}
+#companyPortal .title .refresh{
+	background: url(../../img/index/tool-sprites.gif) no-repeat 0px -225px;
+}
+#companyPortal .title .refresh:hover{
+	background: url(../../img/index/tool-sprites.gif) no-repeat -15px -225px;
+}
+#companyPortal ul{
+	overflow:hidden;
+	background:#fafcfb;
+}
+#companyPortal ul li{
+	padding:0 10px;
+	height:24px;
+	line-height:24px;
+	float:left;
+	color:rgb(189, 189, 189);
+	cursor:pointer;
+}
+#companyPortal ul .now{
+	color:rgb(3, 122, 207);
+}
+#companyPortal .moduleBox .contentArea{
+	overflow:hidden;
+}
+#companyPortal .moduleBox .contentArea div{
+	width:100%;
+	float:left;
+	display:none;
+	text-indent:1em;
+	height:100px;
+	overflow:auto;
+}
+#companyPortal .moduleBox .contentArea div p{
+	cursor:pointer;
+	line-height:20px;
+}
+#companyPortal .moduleBox .contentArea div p:hover{
+	color:rgb(3, 122, 207);
+}
+#companyPortal .moduleBox .contentArea .on{
+	display:block;
+}
+#companyPortal .companyBanner{
+	position:relative;
+	width:98%;
+	margin:0 1%;
+	margin-top:10px;
+	height:250px;
+}
+#companyPortal .companyBanner .img{
+	background:#000;
+	width:100%;
+	height:250px;
+}
+#companyPortal .companyBanner .img img{
+	width:100%;
+	height:100%;
+	position:absolute;
+	left:0;
+	top:0;
+	opacity: 0;
+	filter:alpha(opacity=0);
+}
+#companyPortal .companyBanner .imgnum{
+	opacity: 0.8;
+	filter:alpha(opacity=80);
+	position:absolute;
+	left:0px;
+	bottom:0px;
+	width:100%;
+	height:;
+	background: #c3bbc7;
+} 
+#companyPortal .companyBanner .imgnum>div{
+	float:left;
+	width:33.3%;
+	line-height:36px;
+	font-weight:800;
+	font-size:20px;
+	text-align:center;
+}
+#companyPortal .companyBanner .imgnum .onselect{
+	color:#fff;
+	background: rgb(33,61,125);
+}
+#companyPortal .companyContent{
+	padding:0px 7.2% 0px 5.2%;
+	overflow-y:auto;
+}
+#companyPortal .companyContent .lookBLod{
+	font-weight:800;
+	font-size:16px;
+	margin-top:28px;
+	height:18px;
+}
+#companyPortal .companyContent .knowData .clickAmount{
+	width:50%;
+	display:inline-block;
+}
+#companyPortal .companyContent .knowContent{
+	font-weight:500;
+	font-size:12px;
+	border:1px solid #333;
+	height:400px;
+	overflow-y:auto;
+}
+#companyPortal .companyContent .commentTitle{
+	margin-bottom:20px;
+}
+#companyPortal .companyContent .comment{
+	overflow-y:auto;
+	height:180px;
+}
+#companyPortal .companyContent .oneComment{
+	margin-bottom:20px;
+}
+#companyPortal .companyContent .oneComment h3{
+	font-size:14px;
+	font-weight:600;
+}
+#companyPortal .companyContent .oneComment .commentCon{
+	border-left:1px solid #797979;
+	padding-left:10px;
+	margin:6px 0 0px 14px;
+}
+#companyPortal .companyContent .writeComment{
+	margin-top:16px;
+}
+#companyPortal .companyContent .writeComment textarea{
+	height:90px;
+	margin-bottom:10px;
+	width:100%;
+}
+#companyPortal .companyContent .writeComment .commentReport{
+	float:right;
+	width:94px;
+	height:22px;
+	margin-bottom:20px;
+}

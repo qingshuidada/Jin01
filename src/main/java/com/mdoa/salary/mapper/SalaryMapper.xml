@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.salary.dao.SalaryDao">
+
+	<!-- 批量插入工资信息 -->
+	<insert id="insertSalaryInfoByBatch" parameterType="java.util.List">
+		INSERT INTO salary_info
+		(
+			salary_info_id,
+			user_account,
+			user_name,
+			final_pay_amount,
+			class_level,
+			daily_wage,
+			monthly_pay,
+			days,
+			total_pay_amount,
+			night_shift,
+			night_shift_amount,
+			subsidy_amount,
+			actual_pay_amount,
+			award_amount,
+			overtime_pay_amount,
+			communication_amount,
+			other_amount,
+			withhold_amount,
+			insurance_amount,
+			department_name,
+			post_name,
+			month_date,
+			ensure_flag
+		)
+		VALUES
+		<foreach collection="list" separator="," item="salaryInfo">
+		(
+			UUID(),
+			#{salaryInfo.userAccount},
+			#{salaryInfo.userName},
+			#{salaryInfo.finalPayAmount},
+			#{salaryInfo.classLevel},
+			#{salaryInfo.dailyWage},
+			#{salaryInfo.monthlyPay},
+			#{salaryInfo.days},
+			#{salaryInfo.totalPayAmount},
+			#{salaryInfo.nightShift},
+			#{salaryInfo.nightShiftAmount},
+			#{salaryInfo.subsidyAmount},
+			#{salaryInfo.actualPayAmount},
+			#{salaryInfo.awardAmount},
+			#{salaryInfo.overtimePayAmount},
+			#{salaryInfo.communicationAmount},
+			#{salaryInfo.otherAmount},
+			#{salaryInfo.withholdAmount},
+			#{salaryInfo.insuranceAmount},
+			#{salaryInfo.departmentName},
+			#{salaryInfo.postName},
+			#{salaryInfo.monthDate},
+			'0'
+		)
+		</foreach>
+	</insert>
+	
+	<!-- 查询工资信息 -->
+	<select id="findSalaryInfoByCondition" parameterType="com.mdoa.salary.bo.SalaryInfoForm" resultType="com.mdoa.salary.bo.SalaryInfoForm">
+		SELECT
+			salary_info_id AS salaryInfoId,
+			user_account AS userAccount,
+			user_name AS userName,
+			final_pay_amount AS finalPayAmount,
+			class_level AS classLevel,
+			daily_wage AS dailyWage,
+			monthly_pay AS monthlyPay,
+			days AS days,
+			total_pay_amount AS totalPayAmount,
+			night_shift AS nightShift,
+			night_shift_amount AS nightShiftAmount,
+			subsidy_amount AS subsidyAmount, 
+			actual_pay_amount AS actualPayAmount,
+			award_amount AS awardAmount,
+			overtime_pay_amount AS overtimePayAmount,
+			communication_amount AS communicationAmount,
+			other_amount AS otherAmount,
+			withhold_amount AS withholdAmount,
+			insurance_amount AS insuranceAmount,
+			department_name AS departmentName,
+			post_name AS postName,
+			month_date AS monthDate,
+			ensure_flag AS ensureFlag
+		FROM
+			salary_info
+		<where>
+			<if test="monthDate != null and monthDate != ''">
+			AND	month_date = #{monthDate}
+			</if>
+			<if test="userName != null and userName != ''">
+			AND	user_name LIKE '${userName}%'
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+			AND	user_account = #{userAccount}
+			</if>
+			<if test="departmentName != null and departmentName != ''">
+			AND	department_name = #{departmentName}
+			</if>
+			<if test="ensureFlag != null and ensureFlag != ''">
+			AND	ensure_flag = #{ensureFlag}
+			</if>
+		</where>
+		ORDER BY month_date DESC
+	</select>
+	
+	<!-- 查询工资日期 -->
+	<select id="findMonthDate" resultType="com.mdoa.salary.bo.SalaryInfoForm">
+		SELECT
+			month_date AS monthDate
+		FROM
+			salary_info
+		GROUP BY month_date
+		ORDER BY month_date DESC
+	</select>
+	
+	<!-- 修改工资信息 -->
+	<update id="updateSalaryInfo" parameterType="com.mdoa.salary.bo.SalaryInfoForm">
+		UPDATE
+			salary_info
+		<set>
+			<if test="finalPayAmount != null and finalPayAmount != ''">
+				final_pay_amount = #{finalPayAmount},
+			</if>
+			<if test="totalPayAmount != null and totalPayAmount != ''">
+				total_pay_amount = #{totalPayAmount},
+			</if>
+			<if test="nightShiftAmount != null and nightShiftAmount != ''">
+				night_shift_amount = #{nightShiftAmount},
+			</if>
+			<if test="actualPayAmount != null and actualPayAmount != ''">
+				actual_pay_amount = #{actualPayAmount},
+			</if>
+		</set>
+		WHERE
+			salary_info_id = #{salaryInfoId}
+	</update>
+	
+	<!--确认工资信息 -->
+	<update id="ensureSalaryInfo">
+		UPDATE
+			salary_info
+		SET
+			ensure_flag = '1'
+		WHERE
+			ensure_flag = '0'
+	</update>
+	
+	<!-- 删除未确认信息 -->
+	<delete id="deleteNotSureData">
+		DELETE
+
+		FROM
+			salary_info
+		WHERE
+			ensure_flag = '0'
+	</delete>
+	
+	<!-- 查询错误工资信息 -->
+	<select id="findSalaryInfoForError" parameterType="com.mdoa.salary.bo.SalaryInfoForm" resultType="com.mdoa.salary.bo.SalaryInfoForm">
+		SELECT
+			salary_info_id AS salaryInfoId,
+			user_account AS userAccount,
+			user_name AS userName,
+			final_pay_amount AS finalPayAmount,
+			class_level AS classLevel,
+			daily_wage AS dailyWage,
+			days AS days,
+			total_pay_amount AS totalPayAmount,
+			night_shift AS nightShift,
+			night_shift_amount AS nightShiftAmount,
+			subsidy_amount AS subsidyAmount, 
+			actual_pay_amount AS actualPayAmount,
+			award_amount AS awardAmount,
+			overtime_pay_amount AS overtimePayAmount,
+			communication_amount AS communicationAmount,
+			other_amount AS otherAmount,
+			withhold_amount AS withholdAmount,
+			insurance_amount AS insuranceAmount,
+			department_name AS departmentName,
+			post_name AS postName,
+			month_date AS monthDate,
+			IF(night_shift_amount = night_shift * 5,0,1) AS nightShiftAmountErr,
+			IF(ABS(total_pay_amount - ROUND(days * daily_wage,0)) > 1,1,0) AS totalPayAmountErr,
+			IF(actual_pay_amount = total_pay_amount + night_shift_amount + subsidy_amount,0,1) AS actualPayAmountErr,
+			IF(final_pay_amount = actual_pay_amount + award_amount + overtime_pay_amount + communication_amount + other_amount - withhold_amount - insurance_amount,0,1) AS finalPayAmountErr
+		FROM
+			salary_info
+		WHERE
+			(
+				night_shift_amount &lt;> night_shift * 5
+			OR ABS(total_pay_amount - ROUND(days * daily_wage,0)) > 1
+			OR actual_pay_amount &lt;> total_pay_amount + night_shift_amount + subsidy_amount
+			OR final_pay_amount &lt;> actual_pay_amount + award_amount + overtime_pay_amount + communication_amount + other_amount - withhold_amount - insurance_amount
+			)
+			<if test="monthDate != null and monthDate != ''">
+			AND	month_date = #{monthDate}
+			</if>
+			<if test="userName != null and userName != ''">
+			AND	user_name LIKE '${userName}%'
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+			AND	user_account = #{userAccount}
+			</if>
+			<if test="departmentName != null and departmentName != ''">
+			AND	department_name = #{departmentName}
+			</if>
+			<if test="ensureFlag != null and ensureFlag != ''">
+			AND	ensure_flag = #{ensureFlag}
+			</if>
+		ORDER BY month_date DESC
+	</select>
+	
+	<!-- 查询工资统计信息 -->
+	<select id="findSalaryInfoByTotal" parameterType="com.mdoa.salary.bo.SalaryInfoForm" resultType="com.mdoa.salary.bo.SalaryInfoForm">
+		SELECT
+			user_account AS userAccount,
+			user_name AS userName,
+			SUM(final_pay_amount) AS finalPayAmount,
+			class_level AS classLevel,
+			daily_wage AS dailyWage,
+			SUM(monthly_pay) AS monthlyPay,
+			SUM(days) AS days,
+			SUM(total_pay_amount) AS totalPayAmount,
+			SUM(night_shift) AS nightShift,
+			SUM(night_shift_amount) AS nightShiftAmount,
+			SUM(subsidy_amount) AS subsidyAmount, 
+			SUM(actual_pay_amount) AS actualPayAmount,
+			SUM(award_amount) AS awardAmount,
+			SUM(overtime_pay_amount) AS overtimePayAmount,
+			SUM(communication_amount) AS communicationAmount,
+			SUM(other_amount) AS otherAmount,
+			SUM(withhold_amount) AS withholdAmount,
+			SUM(insurance_amount) AS insuranceAmount,
+			department_name AS departmentName,
+			post_name AS postName,
+			LEFT(#{yearDate},4) AS yearDate,
+			#{monthDate} AS monthDate
+		FROM
+			salary_info
+		WHERE
+			ensure_flag = '1'
+		<if test="monthDate != null and monthDate != ''">
+		AND	month_date = #{monthDate}
+		</if>
+		<if test="yearDate != null and yearDate != ''">
+		AND	month_date LIKE '${yearDate}%'
+		</if>
+		<if test="userName != null and userName != ''">
+		AND	user_name LIKE '${userName}%'
+		</if>
+		<if test="userAccount != null and userAccount != ''">
+		AND	user_account = #{userAccount}
+		</if>
+		<if test="departmentName != null and departmentName != ''">
+		AND	department_name = #{departmentName}
+		</if>
+		GROUP BY 
+			user_account
+		ORDER BY 
+			LENGTH(user_account),user_account DESC
+	</select>
+	
+</mapper>

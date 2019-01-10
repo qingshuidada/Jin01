@@ -1,0 +1,48 @@
+#myChargeMission .lookChargeMission{	
+	overflow:auto;
+	display:none;
+	padding-top:20px;
+}
+#myChargeMission .maintop .back{
+	display:none;
+}
+#myChargeMission .lookChargeMission ul.editArea{
+	min-width:1063px;
+	padding:0 50px;
+}
+#myChargeMission ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#myChargeMission ul.editArea li span,
+#myChargeMission ul.editArea li i,
+#myChargeMission ul.editArea li input,
+#myChargeMission ul.editArea li #chargeMissionEditor{
+	float:left;
+}
+#myChargeMission ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#myChargeMission ul.editArea li span{
+	margin-right:15px;
+	font-weight:bold;
+}
+#myChargeMission ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#myChargeMission ul.editArea li input.langInput{
+	width:986px;
+}
+#myChargeMission ul.editArea li input.shortInput{
+	width:392px;
+}
+#myChargeMission ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#myChargeMission .lookChargeMission > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}

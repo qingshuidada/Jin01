@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20151125" releaseVersion="8.0.0">
+<TableDataMap>
+<TableData name="ds2" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="providerCode"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endTimeStr"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="invoiceNumber"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="startTimeStr"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="invoiceAmount"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="invoiceId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="providerName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FRDemo]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT
+			IFNULL(c.redAmount,0) AS redAmount,
+			d.invoiceId AS invoiceId,
+			d.providerCode AS providerCode,
+			d.invoiceNumber AS invoiceNumber,
+			DATE_FORMAT(d.openDateStr, '%Y-%m-%d') AS openDateStr,
+			d.invoiceAmount AS invoiceAmount,
+			d.text AS text,
+			DATE_FORMAT(
+				d.createTimeStr,
+				'%Y-%m-%d %H:%i:%s'
+			) AS createTimeStr,
+			d.createUserId AS createUserId,
+			d.createUserName AS createUserName,
+			DATE_FORMAT(
+				d.updateTimeStr,
+				'%Y-%m-%d %H:%i:%s'
+			) AS updateTimeStr,
+			d.updateUserId AS updateUserId,
+			d.updateUserName AS updateUserName,
+			d.aliveFlag AS aliveFlag,
+			d.providerName AS providerName
+		FROM
+		(SELECT
+				a.invoice_id AS invoiceId,
+				a.provider_code AS providerCode,
+				a.invoice_number AS invoiceNumber,
+				DATE_FORMAT(a.open_date, '%Y-%m-%d') AS openDateStr,
+				a.invoice_amount AS invoiceAmount,
+				a.text,
+				DATE_FORMAT(
+					a.create_time,
+					'%Y-%m-%d %H:%i:%s'
+				) AS createTimeStr,
+				a.create_user_id AS createUserId,
+				a.create_user_name AS createUserName,
+				DATE_FORMAT(
+					a.update_time,
+					'%Y-%m-%d %H:%i:%s'
+				) AS updateTimeStr,
+				a.update_user_id AS updateUserId,
+				a.update_user_name AS updateUserName,
+				a.alive_flag AS aliveFlag,
+				b.provider_name AS providerName
+			FROM
+				repertory_goods_invoice a,
+				repertory_provider b
+			WHERE
+				a.alive_flag = '1'
+				AND b.alive_flag = '1'
+				AND a.provider_code = b.provider_code AND
+			if('${invoiceNumber}' is not null and '${invoiceNumber}' != '',
+				 a.invoice_number = '${invoiceNumber}',
+				TRUE) AND
+			if('${startTimeStr}' is not null and '${startTimeStr}' != '',
+				 a.open_date >= '${startTimeStr}',
+				TRUE) AND
+			if('${endTimeStr}' is not null and '${endTimeStr}' != '',
+				 a.open_date <= '${endTimeStr}',
+				TRUE) AND 
+			if('${invoiceAmount}' is not null and '${invoiceAmount}' != '',
+				 a.invoice_amount = '${invoiceAmount}',
+				TRUE) AND 
+			if('${providerName}' is not null and '${providerName}' != '',
+				 b.provider_name LIKE '%${providerName}%',
+				TRUE) AND 
+			if('${providerCode}' is not null and '${providerCode}' != '',
+				 b.provider_code = '${providerCode}',
+				TRUE) AND 
+			if('${invoiceId}' is not null and '${invoiceId}' != '',
+				 	a.invoice_id = '${invoiceId}',
+				TRUE) 
+		) d 
+		LEFT JOIN (
+			SELECT
+				SUM(no_write_amount) AS redAmount,
+				invoice_id
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+				AND !ISNULL(red_id)
+			GROUP BY
+				invoice_id
+		) c ON (d.invoiceId = c.invoice_id)
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0" s="0">
+<O>
+<![CDATA[开票日期]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="0" s="0">
+<O>
+<![CDATA[供应商]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="2" r="0" s="0">
+<O>
+<![CDATA[发票号]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="0" s="0">
+<O>
+<![CDATA[开票金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="0" s="0">
+<O>
+<![CDATA[冲红金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="0" s="0">
+<O>
+<![CDATA[备注]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="0" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="openDateStr"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="1" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="providerName"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="2" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="invoiceNumber"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="3" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="invoiceAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="4" r="1" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="redAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="5" r="1" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds2" columnName="text"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting/>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<Format class="com.fr.base.CoreDecimalFormat">
+<![CDATA[#0.00]]></Format>
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+<DesignerVersion DesignerVersion="IAA"/>
+<PreviewType PreviewType="0"/>
+</WorkBook>

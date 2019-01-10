@@ -1,0 +1,87 @@
+<div id="invoiceVerification">
+	<div class="outPut">
+		<div class="box">
+			<input type="button" value="保存" class="button save" />
+			<input type="button" value="清空" class="button reset" />
+		</div>
+	</div>
+	<div class="listBody">
+		<div class="filtCondition">
+			<ul>
+				<li>
+					<span>发票号：</span>
+					<input type="text" class="invoiceNumber"/>
+				</li>
+				<li>
+					<span>开票日期：</span>
+					<input class="jqdate openDate" type="text" readonly="readonly" onclick="YMD(this);" />
+				</li>
+				<li>
+					<span>开票金额：</span>
+					<input type="text" class="invoiceAmount" />
+				</li>
+				<li>
+					<span>供应商:</span>
+					<input type="text" style="width:120px;" name="providerName" readonly="readonly" />
+					<input type="button" class="button chooseProvider" value="选择" style="width:35px;font-size:12px;margin:2px 0 0 5px"/>
+					<input style="display:none" name="providerCode"/>
+				</li>
+				<li>
+					<span>登记日期：</span>
+					<input type="text" class="recordDate" disabled="disabled" />
+				</li>
+				<li>
+					<span>登记人：</span>
+					<input type="text" class="recordUser" disabled="disabled" />
+				</li>				
+				<li>
+					<span>备注：</span>
+					<input type="text" class="text" />
+				</li>		
+			</ul>
+			<dl>
+				<dd>合计：</dd>
+				<dd>					
+					<span>应核销金额：</span>
+					<div style="color:red;" class="noWriteAmountSum">0</div>
+				</dd>				
+				<dd>
+					<span>已核销金额：</span>
+					<div style="color:red;" class="writeAmountSum">0</div>
+				</dd>
+				<dd>
+					<span>未核销金额：</span>
+					<div style="color:red;" class="shouldWriteAmountSum">0</div>
+				</dd>
+				<dd>					
+					<span>开票金额剩余：</span>
+					<div style="color:red;" class="openAmountSurplus">0</div>
+				</dd>
+			</dl>	
+		</div>
+		<div class="verification">
+			<input type="button" name="oneVerification" value="一键核销" class="button" />
+		</div>
+		<table border="0" cellspacing="0" cellpadding="0" class="list">
+			<thead>
+				<tr>
+					<th>
+						<!-- <input type="checkbox" /> -->
+					</th>
+					<th>入库日期</th>
+					<th>入库流水号</th>
+					<th>品名</th>
+					<th>规格</th>
+					<th>数量</th>
+					<th>单价(无税)</th>
+					<th>入库金额(无税)</th>
+					<th>应核销金额</th>
+					<th>核销金额(无税)</th>
+					<th>未核销金额</th>
+				</tr>
+			</thead>
+			<tbody id="waitSubmitIn">
+			</tbody>
+		</table>
+	</div>
+</div>

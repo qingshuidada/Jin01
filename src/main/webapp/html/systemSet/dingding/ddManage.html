@@ -1,0 +1,32 @@
+<div id="ddManage" title="钉钉管理">
+	<div class="maintop">
+	</div>
+	<div class="invitetop">
+		部门名：
+			<input type="text" name="departmentName" style="width: 100px" readOnly="readonly"> 
+			<input type="hidden" name="departmentId" style="width: 100px">
+			<input type="button" class="button chooseDept" value="选择"  style="width: 55px"/> 
+		<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" class="clean" value="清空" >
+	</div>
+	<div>
+		<table id="ddManagedg" width="100%" height="100%"></table>
+	</div>
+	<!-- 部门选择器（单选） -->
+	<div class="popup" id="chooseDDDepartment" style="height: 410px;width: 300px;z-index: 1000">
+		<h3>请选择部门(单选)</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<div style="width: 282px; height: 340px;">
+				<div style="float: left;height: 338x;width: 272px;border: 1px #95B8E7 solid;overflow-y:auto;">
+					<div class="title">选择部门</div>
+					<div style="height: 311px;width:270px" class="dept"></div>
+				</div>
+			</div>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="确定"/>
+			<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+		</div>
+	</div>
+</div>

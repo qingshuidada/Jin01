@@ -1,0 +1,58 @@
+#knowType .saveOrderCode{
+	display:none;
+}
+#knowType .popuparea{
+	padding:10px 20px;
+}
+#knowType .eaitSonType .popuparea{
+	max-height:200px;
+	overflow-y:auto;
+}
+#knowType .eaitSonType .typeBar{
+	width:320px;
+	height:29px;
+	padding:2px 0;
+	line-height:29px;
+	text-align:center;
+	overflow:hidden;
+}
+#knowType .eaitSonType .typeBar .sortNum{
+	display:block;
+	width:35px;
+	height:25px;
+	float:left;
+}
+#knowType .eaitSonType .typeBar .sonTypeName{
+	float:left;
+	width:170px;
+	height:25px;
+}
+#knowType .eaitSonType .typeBar .sonTypeName input{
+	width:166px;
+}
+#knowType .eaitSonType .typeBar .operation{
+	padding:0 20px;
+	width:100px;
+	float:left;
+}
+#knowType .empty-button{
+	background-size: 16px 16px;
+	width: 16px;
+	height: 16px;
+	display:inline-block;
+	margin:0 2px;
+}
+#knowType .eaitSonType .typeBar .operation .empty{
+	width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+#knowType .eaitSonType .typeBar .operation .addTypeBar{
+	width:40px;
+	float:left;
+	margin-top:4px;
+}
+#knowType .eaitSonType .typeBar .operation span{
+	float:left;
+	margin-top:5px;
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.repertory.dao.GoodsApplyDao" >
+	<!-- 插入物品信息 -->
+	<insert id="insertGoodsApply" parameterType="com.mdoa.repertory.model.GoodsApply">
+		INSERT INTO goods_apply(
+			goods_id,
+			goods_name,
+			total_number,
+			goods_size,
+			unit,
+			record,
+			user_name,
+			department_name,
+			create_time
+		)VALUE(
+			UUID(),
+			#{goodsName},
+			#{totalNumber},
+			#{goodsSize},
+			#{unit},
+			#{record},
+			#{userName},
+			#{departmentName},
+			NOW()
+		)
+	</insert>
+	<!-- 删除物资申请信息 -->
+	<delete id="deleteGoodsApply" parameterType="java.lang.String">
+		DELETE
+		FROM
+			goods_apply
+		WHERE
+			goods_id = #{goodsId}
+	</delete>
+		<!-- 根据物品的信息查询商品 -->
+	<select id="selectGoodsApply" parameterType="com.mdoa.repertory.model.GoodsApply" resultType="com.mdoa.repertory.model.GoodsApply">
+		SELECT 
+			goods_id AS goodsId,
+			goods_name AS goodsName,
+			total_number AS totalNumber,
+			goods_size AS goodsSize,
+			unit AS unit,
+			record AS record,
+			user_name AS userName,
+			department_name AS departmentName,
+			create_time AS createTime
+		FROM 
+			goods_apply
+		<where>
+  			 <if test="goodsId  != null and goodsId != '' ">
+  			 AND goods_id = ${goodsId}</if>
+  			 <if test="goodsName !=null and goodsName != ''">
+  			 AND goods_name LIKE ('${goodsName}')</if>
+  			 <if test="goodsSize != null and goodsSize !=''">
+  			 AND goods_size LIKE ('${goodsSize}')</if>
+  			 <if test="userName != null and userName !=''">
+  			 AND user_name LIKE ('${userName}')</if>
+  			 <if test="departmentName != null and departmentName !=''">
+  			 AND department_name LIKE ('${departmentName}')</if>
+  		</where> 
+  		ORDER BY
+			create_time
+		DESC
+	</select>
+</mapper>

@@ -1,0 +1,48 @@
+<div id="goodstypemonthForm">
+	<input class="goodsTypeUrl" type="hidden" style="display:none;">
+	<div class="treearea">
+		<h3>选择物品类别</h3>
+		<ul id="goodstypemonthFormtg" data-options="region:'center',border: true"  
+         class="easyui-tree">  
+     	</ul>  
+	</div>
+	<div class="listForm">
+		<div class="toolbar" >
+			<input type="button" class="button write" value="导出到Excel" />
+			<form class="printTypeMonthForm" style="display:inline" action="../../reportForms/printTypeMonthForm.do?" method="post" target="_blank">
+				<input type = "hidden" name="cptName" value="typeMonthForm">
+				<input type = "hidden" name="monthBalanceTime">
+				<input type="button" class="button print" value="打印明细汇总" />
+			</form>
+		</div>
+		<div class="queryForm">
+			月结日期：<select class="monthBalanceTimeStr"></select>
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		</div>
+		<div>
+			<table id="goodstypemonthFormdg">
+			</table>
+		</div>
+	</div>
+	<div class="chartArea" style="display: none">
+		<div class="toolbar" >
+			<input type="button" class="button goback" value="返回" />
+		</div>
+		<div id="goodstypemonth" style="margin:0 auto;width:80%;height:80%;"></div>
+	</div>
+	<div class="popups">
+	
+		<!-- 导出数据到Excel -->
+		<div class="popup writetoexcel" style="height: 300px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	</div>
+</div>

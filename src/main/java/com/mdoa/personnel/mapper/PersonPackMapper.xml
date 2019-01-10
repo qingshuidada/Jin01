@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.personnel.dao.PersonPackDao" >
+	 
+	<!-- 查询无合同在职人员 -->
+	 <select id="selectNoPactPerson" parameterType="com.mdoa.personnel.bo.PackForm" resultType="com.mdoa.personnel.bo.PackForm">
+		  SELECT
+		    c.user_id AS userId,
+			c.user_account AS userAccount,
+			c.user_name AS userName,
+			c.id_card AS idCard,
+			c.phone_num AS phoneNum,
+			c.sex AS sex,
+			c.alive_flag AS aliveFlag,
+			c.department_name AS departmentName,
+			c.post_name AS postName,
+			c.invite_flag AS inviteFlag
+		  FROM
+			user_info c
+		  WHERE
+			NOT EXISTS (
+				SELECT
+					1
+				FROM
+					(
+						SELECT
+							a.user_id
+						FROM
+							user_info a,
+							personnel_pack b
+						WHERE
+							a.user_id = b.user_id
+						AND b.alive_flag = '1'
+					) d
+				WHERE
+					d.user_id = c.user_id
+			)
+		  AND c.alive_flag = '1'
+		  AND c.invite_flag = '1'
+		  AND c.retire_flag = '1'
+	 	<if test="userId != null and userId !=''">
+		 	AND c.user_id = #{userId}
+		</if>
+		<if test="userAccount != null and userAccount !=''">
+		 	AND c.user_account = #{userAccount}
+		</if>
+		<if test="userName != null and userName !=''">
+			AND c.user_name LIKE (${userName})
+		</if>
+		<if test="postName != null and postName !=''">
+			AND c.post_name LIKE (${postName})
+		</if>
+		<if test="departmentName != null and departmentName !=''">
+			AND c.department_name LIKE (${departmentName})
+		</if>
+	 
+	 </select>
+	 
+  <!-- 查询在试用期的人员 -->
+  <select id="selectTryUserById" parameterType="com.mdoa.personnel.bo.PackForm" resultType="com.mdoa.personnel.bo.PackForm">
+	SELECT
+		a.user_id AS userId,
+		a.user_name AS userName,
+		a.user_account AS userAccount,
+		a.phone_num AS phoneNum,
+		a.accident_phone_num AS accidentPhoneNum,
+		a.sex AS sex,
+		a.address AS address,
+		a.id_card AS idCard,
+		a.invite_flag AS inviteFlag,
+		a.department_name AS departmentName,
+		a.post_name AS postName,
+		b.try_end_time AS tryEndTime,
+		DATE_FORMAT(b.try_end_time,'%Y-%m-%d') AS strTryEndTime,
+		b.try_star_time AS tryStarTime,
+		DATE_FORMAT(b.try_star_time,'%Y-%m-%d') AS strTryStarTime
+	FROM
+		user_info a  LEFT OUTER JOIN personnel_pack b
+	ON
+		a.user_id = b.user_id
+	WHERE
+		    a.alive_flag = '1'
+		AND a.invite_flag = '4'
+		<if test="userName != null and userName != '' ">
+		AND a.user_name LIKE (${userName})</if>
+		<if test="idCard != null and idCard != '' ">
+		AND a.id_card LIKE (${idCard})</if>
+		<if test="postName != null and postName !=''">
+		AND a.post_name LIKE (${postName})</if>
+		<if test="departmentName != null and departmentName !=''">
+		AND a.department_name LIKE (${departmentName})</if>
+    <if test="sort != null and sort != ''">
+    	ORDER BY ${sort} ${order}
+    </if>
+  </select>
+  <!-- 把员工转为正式员工 -->
+  	<update id="updateTryUser" parameterType="com.mdoa.user.model.UserInfo"> 
+  		UPDATE
+			user_info
+		SET
+			invite_flag = '1',
+			update_user_id = #{userId},
+			update_user_name = #{updateUserName},
+			update_time = NOW()
+		WHERE
+			user_id = #{userId}
+  	</update>
+  
+  <!-- 查询合同的信息 -->
+  <select id="selectPackByTime" resultType="com.mdoa.personnel.model.PersonPack" parameterType="com.mdoa.personnel.model.PersonPack" >
+    SELECT
+    	a.pack_id AS packId,
+    	a.user_id AS userId,
+    	b.user_name AS userName,
+    	a.start_time AS startTime,
+    	DATE_FORMAT(a.start_time,'%Y-%m-%d') AS strStarTime,
+    	a.end_time AS endTime,
+    	DATE_FORMAT(a.end_time,'%Y-%m-%d') AS strEndTime,
+    	a.try_star_time AS tryStarTime,
+    	DATE_FORMAT(a.try_star_time,'%Y-%m-%d') AS strTryStarTime,
+    	a.try_end_time AS tryEndTime,
+    	DATE_FORMAT(a.try_end_time,'%Y-%m-%d') AS strTryEndTime,
+    	a.pack_flag AS packFlag,
+    	b.department_name AS departmentName,
+    	b.invite_flag AS inviteFlag
+    FROM 
+    	personnel_pack a
+    LEFT JOIN
+    	user_info b
+    ON
+    	a.user_id = b.user_id
+    <where>
+    	a.alive_flag = '1'
+		<if test="userName != null and userName != '' ">
+		AND b.user_name LIKE ('${userName}')</if>
+		<if test="packId != null and packId != ''">
+		AND a.pack_id = #{packId}</if>
+		<if test="packFlag != null and packFlag != ''">
+		AND a.pack_flag = #{packFlag}</if>   
+		<if test="departmentName != null and departmentName != ''">
+		AND b.department_name LIKE ('${departmentName}')</if>
+		<if test="startTimeStr != null and startTimeStr !=''">
+		AND DATE_FORMAT(a.end_time,'%Y-%m-%d') >= #{startTimeStr}
+		</if>
+		<if test="endTimeStr != null and endTimeStr !=''">
+		AND DATE_FORMAT(a.end_time,'%Y-%m-%d') &lt;= #{endTimeStr}
+		</if>
+		<if test="inviteFlag != null and inviteFlag != '' ">
+		AND b.invite_flag = #{inviteFlag}</if>
+		<if test="sort == null or sort == ''">
+			ORDER BY a.create_time DESC
+		</if>
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort} ${order}
+		</if>
+	</where>    
+  </select>
+  
+  <select id="selectPackInfo" resultType="com.mdoa.personnel.model.PersonPack" parameterType="com.mdoa.personnel.model.PersonPack" >
+	    SELECT
+	    	DATE_FORMAT(start_time,'%Y-%m-%d') AS starTimeStr,
+	    	DATE_FORMAT(end_time,'%Y-%m-%d') AS endTimeStr,
+	    	DATE_FORMAT(try_star_time,'%Y-%m-%d') AS tryStarTimeStr,
+	    	DATE_FORMAT(try_end_time,'%Y-%m-%d') AS tryEndTimeStr,
+	    	pack_flag AS packFlag
+	    FROM 
+	    	personnel_pack a
+	    LEFT JOIN user_info b ON(a.user_id = b.user_id)
+	   	WHERE
+	    	a.alive_flag = '1'
+		AND b.id_card = #{idCard}
+  </select>
+  
+	<!-- 根据packid查询合同图片的信息 -->
+	<select id="selectPhotoByPackId" parameterType="java.lang.String" resultType="com.mdoa.personnel.model.PersonPackPhoto">
+		SELECT
+			photo_id AS photoId,
+	    	pack_id AS packId,
+	    	photo_name AS photoName,
+	    	current_page AS currentPage,
+	    	url AS url,
+	    	url_small AS urlSmall
+	    FROM 
+	    	personnel_pack_photo
+    	WHERE
+    		pack_id = #{packId}
+    		AND alive_flag = '1' 
+    	ORDER BY
+    		current_page
+	</select>
+	<!-- 删除合同 -->
+  <update id="deletePack" parameterType="java.lang.String" >
+    UPDATE 
+    	 personnel_pack
+    SET
+    	alive_flag = '0',
+    	update_user_id = #{userId},
+		update_time = NOW()
+    WHERE
+    	pack_id = #{packId,jdbcType=CHAR}
+  </update>
+  <!-- 新建合同 -->
+  <insert id="insertPack" parameterType="com.mdoa.personnel.model.PersonPack" >
+    	INSERT INTO personnel_pack (
+			pack_id,
+			user_id,
+			user_name,
+			start_time,
+			end_time,
+			try_star_time,
+			try_end_time,
+			create_user_id,
+			create_time,
+			pack_flag,
+			alive_flag
+		)VALUES(
+			UUID(),
+			#{userId,jdbcType=CHAR}, 
+			#{userName,jdbcType=VARCHAR}, 
+			#{startTime,jdbcType=DATE}, 
+			#{endTime,jdbcType=DATE}, 
+			#{tryStarTime},
+			#{tryEndTime},
+			#{createUserId,jdbcType=CHAR}, 
+			now(),
+			#{packFlag},
+			'1'
+		)
+  </insert>
+  <!-- 修改合同的信息 -->
+  <update id="updatePack" parameterType="com.mdoa.personnel.model.PersonPack" >
+  	 UPDATE 
+   		personnel_pack
+	SET 
+		user_name = #{userName,jdbcType=VARCHAR},
+		start_time = #{startTime,jdbcType=DATE},
+		end_time = #{endTime,jdbcType=DATE},
+		try_star_time = #{tryStarTime},
+		try_end_time = #{tryEndTime},
+		update_user_id = #{updateUserId,jdbcType=CHAR},
+		<if test="packFlag != null and packFlag != ''">
+		pack_flag = #{packFlag},</if>
+		update_time = now()
+	WHERE
+		pack_id = #{packId,jdbcType=CHAR}
+  </update>
+  
+  <!-- ========================================================================================= -->
+  <select id="selectPackPhotoByTime" resultType="com.mdoa.personnel.model.PersonPackPhoto" parameterType="java.lang.String" >
+    select 
+    	photo_id AS photoId,
+    	pack_id AS packId,
+    	photo_name AS photoName,
+    	url AS url,
+    	url_small AS urlSmall
+    from 
+    	personnel_pack_photo
+    where 
+    	alive_flag = '1'
+    ORDER BY	
+    	create_time 
+    	DESC
+  </select>
+  
+  <select id="selectById" resultType="com.mdoa.personnel.model.PersonPackPhoto" parameterType="java.lang.String" >
+    select 
+    	photo_id AS photoId,
+    	pack_id AS packId,
+    	photo_name AS photoName,
+    	url AS url,
+    	url_small AS urlSmall
+    from 
+    	personnel_pack_photo
+    where 
+    	pack_id = #{packId,jdbcType=TIMESTAMP}
+    	and alive_flag = '1'
+  </select>
+  
+  <update id="deletePackPhoto" parameterType="java.lang.String" >
+    UPDATE 
+    	 personnel_pack_photo
+   	SET
+   		alive_flag = '0',
+		update_user_id = #{userId},
+		update_time = NOW()
+    where 
+    	photo_id = #{photoId,jdbcType=CHAR}
+  </update>
+  <!-- 删除合同下的一张照片 -->
+  <update id="deletePackPhotoByPackId" parameterType="java.lang.String" >
+	  UPDATE 
+			personnel_pack a,
+	    	personnel_pack_photo b
+	   	SET
+   			b.alive_flag = '0',
+			b.update_user_id = #{userId},
+			b.update_time = NOW()
+	    where 
+			a.pack_id = b.pack_id = #{packId,jdbcType=CHAR}
+		AND
+	    	b.photo_id = #{photoId,jdbcType=CHAR}
+  </update>
+  
+  <insert id="insertPackPhoto" parameterType="com.mdoa.personnel.model.PersonPackPhoto" >
+    INSERT INTO personnel_pack_photo (
+		photo_id,
+		photo_name,
+		pack_id,
+		url,
+		url_small,
+		current_page,
+		create_time,
+		create_user_id,
+		alive_flag
+	)VALUES(
+		UUID(),
+		#{photoName},
+		#{packId,jdbcType=CHAR}, 
+		#{url,jdbcType=VARCHAR},
+		#{urlSmall},
+		#{currentPage,jdbcType=INTEGER}, 
+		now(), 
+		#{createUserId,jdbcType=CHAR}, 
+		'1'
+	)
+  </insert>
+  
+  <update id="updatePackPhoto" parameterType="java.lang.String" >
+    UPDATE 
+    	personnel_pack_photo
+	SET 
+		pack_id = #{packId,jdbcType=CHAR},
+		url = #{url,jdbcType=VARCHAR},
+		url_small = #{urlSmall},
+		current_page = #{currentPage,jdbcType=INTEGER},
+		update_time = now(),
+		update_user_id = #{updateUserId,jdbcType=CHAR}
+	WHERE
+		photo_id = #{photoId,jdbcType=CHAR}
+  </update>
+  
+</mapper>

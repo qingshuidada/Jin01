@@ -1,0 +1,96 @@
+ <div id="myCheckInfo">
+ 	<div class="Calendar"></div>
+ 	<!-- 当天的考勤详细 -->
+ 	<div class="myCheckInfoDetail">
+ 		<div class="title">
+ 
+ 		</div> 		
+ 		<ul>
+ 			<li>
+ 				<span>当日上班状态：</span>
+ 				<p class="leaveFlag"></p>
+ 			</li>
+ 			<li>
+ 				<span>上班时间：</span>
+ 				<p class="onDutyTime"></p>
+ 			</li>
+ 			<li> 				
+ 				<span>下班时间：</span>
+ 				<p class="offDutyTime"></p>
+ 			</li>
+ 			<li>
+ 				<span>上班打卡时间：</span>
+ 				<p class="clockInTime"></p>
+ 			</li>
+ 			<li> 				
+ 				<span>下班打卡时间：</span>
+ 				<p class="clockOutTime"></p>
+ 			</li>
+ 			<li>
+ 				<span>是否迟到：</span>
+ 				<p class="beLateFlag"></p>
+ 			</li>
+ 			<li>
+ 				<span>是否早退：</span>
+ 				<p class="leaveEarlyFlag"></p>
+ 			</li>
+ 		</ul> 		
+ 	</div>
+ 	<!-- 当月的考勤详细 -->
+ 	<div class="monthCheckInfoDetail">
+ 		<h2>本月考勤信息</h2>
+ 		<ul>
+ 			<li>
+ 				<span>出勤天数：</span>
+ 				<p class="attendanceDays"></p>
+ 				<p>天</p>
+ 			</li>
+ 			<li>
+ 				<span>休息天数：</span>
+ 				<p class="restDays"></p>
+ 				<p>天</p>
+ 			</li>
+ 			<li>
+ 				<span>迟到次数：</span>
+ 				<p class="lateTimes"></p>
+ 				<p>次</p>
+ 			</li>
+ 			<li>
+ 				<span>早退次数：</span>
+ 				<p class="earlyTimes"></p>
+ 				<p>次</p>
+ 			</li>
+ 			<li>
+ 				<span>缺卡次数：</span>
+ 				<p class="missTimes"></p>
+ 				<p>次</p>
+ 			</li>
+ 			<li>
+ 				<span>旷工天数：</span>
+ 				<p class="absentDays"></p>
+ 				<p>天</p>
+ 			</li>
+ 			<li>
+ 				<span>请假天数：</span>
+ 				<p class="leaveDays"></p>
+ 				<p>天</p>
+ 			</li>
+ 		</ul>
+ 	</div>
+ 	
+ </div>
+ <div id="clockReplace">
+ 	<div class="processStart" style="display:none;overflow-y: auto">
+		<div style="margin: 0px 20% 0px 10%;">
+			<div class="include-form">
+			</div>
+			<div style="border: 1px gray solid;" class="processMessage">
+				<div class="box"></div>
+			</div>
+			<div style="text-align: center; margin: 30px 0px 150px 0px;">
+				<input type="button" class="submit-button submitProcess" value="发起" style="margin-right: 100px"/>
+				<input type="button" class="submit-button backUp" value="返回"/>
+			</div>
+		</div>
+	</div>
+ </div>

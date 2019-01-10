@@ -1,0 +1,54 @@
+#knowLook{
+	padding:0px 7.2% 0px 5.2%;
+	overflow-y:auto;
+}
+#knowLook .lookBLod{
+	font-weight:800;
+	font-size:16px;
+	margin-top:28px;
+	height:18px;
+}
+#knowLook .knowData .clickAmount{
+	width:50%;
+	display:inline-block;
+}
+#knowLook .knowContent{
+	font-weight:500;
+	font-size:12px;
+	border:1px solid #333;
+	height:400px;
+	overflow-y:auto;
+}
+#knowLook .commentTitle{
+	margin-bottom:20px;
+}
+#knowLook .comment{
+	overflow-y:auto;
+	height:180px;
+}
+#knowLook .oneComment{
+	margin-bottom:20px;
+}
+#knowLook .oneComment h3{
+	font-size:14px;
+	font-weight:600;
+}
+#knowLook .oneComment .commentCon{
+	border-left:1px solid #797979;
+	padding-left:10px;
+	margin:6px 0 0px 14px;
+}
+#knowLook .writeComment{
+	margin-top:16px;
+}
+#knowLook .writeComment textarea{
+	height:90px;
+	margin-bottom:10px;
+	width:100%;
+}
+#knowLook .writeComment .commentReport{
+	float:right;
+	width:94px;
+	height:22px;
+	margin-bottom:20px;
+}

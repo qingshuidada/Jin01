@@ -1,0 +1,93 @@
+ <div id="rainWaterReport" title="雨水检测报告">
+	<div class="maintop">
+	</div>
+	<div  class="invitetop">
+		上报时间:
+				<input class="jqdate" type="text" style="width: 100px" name="reportTimeStr" onblur="testDate(this)" onclick="testShow(this);">
+			 ~ 
+			 	<input class="jqdate" type="text" style="width: 100px" name="reportEndTimeStr" onblur="testDate(this)" onclick="testShow(this);">
+		<a class="easyui-linkbutton selectByTime" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空" >
+	</div>
+	<div >
+	 <table id="rainWaterReportdg" width="100%" height="100%" ></table>	
+	</div> 
+	<div  class="popups" style="text-align: left;">
+		<div class="popup saveRainWaterReport" style="height: 310px;width: 400px;">
+			<h3>添加雨水检测报告</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: center;width: 280px;height: 210px">
+					<tr>
+						<td style="width:100px;">上报人员:</td>
+						<td><input type="text" style="width:160px;" name="reportName" readonly="readonly"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">上报时间</td>
+						<td><input class="jqdate" type="text" style="width:160px" name="reportTime" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">PH值:</td>
+						<td><input type="text" style="width:160px;" name="phValue"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">COD值(mg/L):</td>
+						<td><input type="text" style="width:160px;" name="codValue"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">取样点:</td>
+						<td><input type="text" style="width:160px;" name="samplingPoint"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">备注:</td>
+						<td><input type="text" style="width:160px;" name="text"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div  class="popups" style="text-align: left;">
+	
+		<div class="popup updateRainWaterReport" style="height: 300px;width: 400px;">
+			<h3>修改雨水检测报告</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr>
+						<td style="width:100px;">上报人员:</td>
+						<td><input type="text" style="width:160px;" name="reportName" readonly="readonly"/></td>
+						<td><input type="hidden" name="rainId"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">上报时间</td>
+						<td><input class="jqdate" type="text" style="width:160px" name="reportTime" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">PH值:</td>
+						<td><input type="text" style="width:160px;" name="phValue"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">COD值(mg/L):</td>
+						<td><input type="text" style="width:160px;" name="codValue"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">取样点:</td>
+						<td><input type="text" style="width:160px;" name="samplingPoint"/></td>
+					</tr>
+					<tr>
+						<td style="width:100px;">备注:</td>
+						<td><input type="text" style="width:160px;" name="text"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+</div>

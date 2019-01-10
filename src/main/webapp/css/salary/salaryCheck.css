@@ -1,0 +1,186 @@
+#salaryCheck{
+	color:#333;
+}
+#salaryCheck .grey{
+	background:rgba(204, 204, 204, 1);
+}
+#salaryCheck .loginTop{
+	padding-top:30px;
+}
+#salaryCheck .loginTop .logoArea{
+	overflow:hidden;
+}
+#salaryCheck .loginTop .logoArea>div{
+	float:left;
+}
+#salaryCheck .loginTop .logoArea .logo img{
+	width:80px;
+	height:73px;
+}
+#salaryCheck .loginTop .logoArea .logoText img{
+	margin-top:8px;
+}
+#salaryCheck .loginTop .logoArea .title{
+	border-left:4px solid #ccc;
+	height:60px;
+	font-size: 26px;
+	font-weight: 800;
+	color:#333;
+	line-height:60px;
+	padding-left:12px;
+	margin-left:12px;
+}
+#salaryCheck .loginBg img{
+	height:546px;
+	width:100%;
+	float:left;
+}
+#salaryCheck .loginBg .loginMiddle{
+	height:546px;
+	position:relative;
+}
+#salaryCheck .loginBg .loginMiddle .loginArea{
+	position:absolute;
+	right:0px;
+	top:54px;
+	background:rgb(195, 229, 239);
+	width:460px;
+	padding:18px 40px;
+}
+#salaryCheck .loginBg .loginMiddle .loginArea .loginTitle{
+	text-align:center;
+	font-size:22px;
+	height:40px;
+	line-height:40px;
+	border-bottom:2px solid #cccccc;
+	font-weight:600;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent p{
+	margin-top:24px;
+	padding:0 13px;
+	overflow:hidden;
+}	
+#salaryCheck .loginMiddle .loginArea .loginContent .loginIcon{
+	display:inline-block;
+	width:41px;
+	height:43px;
+	border:1px solid rgba(121, 121, 121, 1);
+	border-right:none;
+	vertical-align: middle;
+	float:left;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent input{
+	height:41px;
+	float:left;
+	width:308px;
+	text-indent:2em;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .auto{
+	width:13px;
+	height:13px;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .zzz{
+	color:#6B6B6B;
+	float:left;
+}
+
+#salaryCheck .loginMiddle .loginArea .loginContent .loginAccentIcon{
+	background:url(../../img/erp/phone.png) no-repeat center center #fff;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .loginPasswordIcon{
+	background:url(../../img/erp/lock.png) no-repeat center center #fff;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .refreshIcon{
+	background:url(../../img/erp/refresh.png) no-repeat center center;
+	border:none;
+	height:42px;
+	width:34px;
+	margin-left:4px;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .verificationCode{
+	width:136px;
+	margin-right:68px;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .verificationCodeArea{
+	width:107px;
+	height:33px;
+	display:inline-block;
+	float:left;
+	margin-top:6px;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .verificationCodeArea img{
+	width:107px;
+	height:33px;
+}
+#salaryCheck .loginMiddle .loginArea .loginContent .Login{
+	width:268px;
+	height:47px;
+	background:rgba(70, 173, 217, 1);
+	color:#fff;
+	font-size:24px;
+	display:inline-block;
+	line-height:47px;
+	cursor:pointer;
+}
+#salaryCheck .loginButtom{
+	overflow:hidden;
+	padding-top:28px;
+	padding-bottom:20px;
+}
+#salaryCheck .loginButtom .block{
+	width: 248px;
+    padding-left: 20px;
+    margin-right: 18px;
+    float: left;
+    overflow: hidden;
+}
+#salaryCheck .loginButtom .block .bigIcon{
+	float:left;
+	width:94px;
+	height:100px;
+}
+#salaryCheck .loginButtom .block .bigIcon1{
+	background:url(../../img/erp/u995.png) no-repeat center center;
+}
+#salaryCheck .loginButtom .block .bigIcon2{
+	background:url(../../img/erp/u999.png) no-repeat center center;
+}
+#salaryCheck .loginButtom .block .bigIcon3{
+	background:url(../../img/erp/u997.png) no-repeat center center;
+}
+#salaryCheck .loginButtom .block .iconText{
+	float:left;
+	width:128px;
+	text-align:left;
+}
+#salaryCheck .loginButtom .block .iconText h4{
+	font-weight:800;
+	font-size:24px;
+	height:40px;
+	line-height:40px;
+	margin-top:8px;
+}
+#salaryCheck .loginButtom .block .iconText p{
+    color: #999999
+}
+#salaryCheck .errortishi{
+	float:right;
+	display:none;
+}
+#salaryCheck .errortishi img{
+	margin-right:20px;
+}
+#salaryCheck .switch{
+	text-align:right;
+}
+#salaryCheck .switch a{
+	color:#666;
+}
+#salaryCheck .switch .arrow{
+	display:inline-block;
+	vertical-align: middle;
+	width:14px;
+	height:14px;
+	background:url(../../img/erp/arrow.png) no-repeat;
+	margin-left:8px;
+}

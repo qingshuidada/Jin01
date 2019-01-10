@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.DocumentDao" >
+
+	<!-- UUID -->
+	<select id="getUuid" resultType="java.lang.String">
+		SELECT UUID() AS uuid
+	</select>
+	<!-- 根据父Id查询下一级类 -->
+	<select id="list" parameterType="java.lang.String" resultType="com.mdoa.work.model.DTreeModel">
+		SELECT
+			catalog_id AS thisId,
+			catalog_name AS text,
+			url AS id,
+			'icon-directory' AS iconCls,
+			'0' AS attributes
+		FROM
+			work_office_doc_catalog
+		WHERE
+			alive_flag = '1'
+			AND super_catalog_id = #{pid}
+	</select>
+	<!-- 根据父Id添加下一级文件或目录 -->
+	<insert id="addDocument" parameterType="com.mdoa.work.bo.WorkOfficeDocForm">
+		INSERT INTO work_office_doc_catalog(
+			catalog_id,
+			catalog_name,
+			super_catalog_id,
+			url,
+			create_user_id,
+			create_user_name,
+			create_time,
+			alive_flag
+		)VALUE(
+			#{catalogId},
+			#{catalogName},
+			#{superCatalogId},
+			#{url},
+			#{createUserId},
+			#{createUserName},
+			NOW(),
+			'1'
+		)
+	</insert>
+	<!-- 删除目录或文件 -->
+	<update id="removeDocument" parameterType="com.mdoa.work.bo.WorkOfficeDocForm">
+		UPDATE
+			work_office_doc_catalog
+		SET
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName},
+			update_time = NOW(),
+			alive_flag = '0'
+		WHERE
+			url LIKE (${url})
+			AND alive_flag = '1'
+			
+	</update>
+	<!-- 修改文件或目录名 -->
+	<update id="updateDocument" parameterType="com.mdoa.work.bo.WorkOfficeDocForm">
+		UPDATE
+			work_office_doc_catalog
+		SET
+			catalog_name = #{catalogName}
+		WHERE
+			alive_flag = '1'
+			AND catalog_id = #{catalogId}
+	</update>
+	<!-- 根据ID修改Url(append) -->
+	<update id="updateDragSourceGoodsUrl" parameterType="com.mdoa.work.bo.WorkOfficeDocForm">
+		UPDATE
+			work_office_doc_catalog
+		SET
+			super_catalog_id = #{targetId},
+			url = #{sourceUrlo},
+			update_time = NOW(),
+	 		update_user_id = #{updateUserId},
+	 		update_user_name = #{updateUserName}
+		WHERE
+			catalog_id = #{sourceId}
+	</update>
+	<!-- 拖动的时候下面的物品类url全部更改 -->
+	<update id="updateDragLaterUrl" parameterType="com.mdoa.work.bo.WorkOfficeDocForm">
+		UPDATE 
+			work_office_doc_catalog
+	 	SET
+	 		url = REPLACE(url,${previousUrl},${replaceUrl}),
+	 		update_time = NOW(),
+	 		update_user_id = #{updateUserId},
+		 	update_user_name = #{updateUserName}
+	 	WHERE
+	 		url LIKE (${queryUrl})
+	</update>
+	<!-- 拖动插入后修改source的下属物品类的url(bottom,top) -->
+	<update id="updateDragSourceGoodsUrlBt" parameterType="com.mdoa.work.bo.WorkOfficeDocForm">
+		UPDATE 
+			work_office_doc_catalog
+	 	SET
+	 		url = #{sourceUrlo},
+	 		super_catalog_id = #{targetParentId},
+	 		update_time = NOW(),
+	 		update_user_id = #{updateUserId},
+	 		update_user_name = #{updateUserName}
+	 	WHERE
+	 		catalog_id = #{sourceId}
+	</update>
+	
+	<!-- 添加公文，在流程中进行使用 -->
+	<insert id="addDocumentDoc" parameterType="com.mdoa.work.model.DocumentDoc">
+		INSERT INTO
+			work_office_doc
+		(
+			doc_id,
+			doc_name,
+			catalog_url,
+			doc_describe,
+			file_url,
+			file_name,
+			create_user_id,
+			create_user_name,
+			create_time,
+			alive_flag
+		)VALUES(
+			UUID(),
+			#{docName},
+			#{catalogUrl},
+			#{docDescribe},
+			#{fileUrl},
+			#{fileName},
+			#{userId},
+			#{userName},
+			NOW(),
+			'1'
+		)
+	</insert>
+	
+	<select id="queryDoc" parameterType="com.mdoa.work.model.DocumentDoc" resultType="com.mdoa.work.model.DocumentDoc">
+		SELECT
+			doc_id AS docId,
+			doc_name AS docName,
+			catalog_url AS catalogUrl,
+			doc_describe AS docDescribe,
+			file_url AS fileUrl,
+			file_name AS fileName,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime
+		FROM
+			work_office_doc
+		WHERE
+			alive_flag = '1'
+			<if test="createTimeStart != null and createTimeStart != ''">
+				AND STR_TO_DATE(#{createTimeStart},'%Y-%m-%d %H:%i:%s') &lt; create_time
+			</if>
+			<if test="createTimeEnd != null and createTimeEnd != ''">
+				AND STR_TO_DATE(#{createTimeEnd},'%Y-%m-%d %H:%i:%s') &gt; create_time
+			</if>
+			<if test="docName != null and docName != ''">
+				AND doc_name LIKE(${docName})
+			</if>
+			<if test="catalogUrl != null and catalogUrl != ''">
+				AND catalog_url LIKE(${catalogUrl})
+			</if>
+		ORDER BY 
+			create_time DESC
+	</select>
+	
+	<update id="deleteDoc" parameterType="java.lang.String">
+		UPDATE
+			work_office_doc
+		SET
+			alive_flag = '0'
+		WHERE
+			doc_id = #{docId}
+	</update>
+</mapper>

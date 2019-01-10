@@ -1,0 +1,47 @@
+#knowEdit{
+	padding-right:5.1%;
+	overflow:hidden;
+}
+#knowEdit .marginTop{
+	margin-top:40px;
+	overflow:hidden;
+}
+#knowEdit .knowLabel{
+	width:125px;
+	text-align:right;
+	height:28px;
+	line-height:28px;
+	font-weight:900;
+	padding-right:17px;
+	float: left;
+	margin-left: 100px;
+}
+#knowEdit .knowClass input[type=text]{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 350px;
+}
+#knowEdit .knowClass{
+	line-height:28px;
+}
+#knowEdit .knowClass>select{
+	float:left;
+	vertical-align: middle;
+	margin-top:5px;
+	width: 350px;
+}
+#knowEdit .knowUeditor{
+	float:left;
+	width: 1000px;
+}
+#knowEdit .btnArea{
+	height:50px;
+	line-height:50px;
+	text-align:left;
+}
+#knowEdit .btnArea input{
+	width:120px;
+	height:20px;
+	margin-left: 500px;
+}

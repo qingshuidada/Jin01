@@ -1,0 +1,32 @@
+<div id="infoQuery">
+	<div class="outPut"></div>
+	<div class="filtCondition">
+		<ul>
+			<li>
+				<span>车间名称:</span>
+				<select class="shopName"></select>
+			</li>
+			<li>
+				<span>指标名称:</span>
+				<select class="targetName"></select>
+			</li>
+			<li>
+				<span>数据日期</span>
+				<input type="text" class="dateStartTime" onclick="testShow(this);" readonly/>
+				<span> ~ </span>
+				<input type="text" class="dateEndTime" onclick="testShow(this);" readonly/>
+			</li>
+			<li>
+				<span>提交人:</span>
+				<input type="text" readonly class="people" />
+			</li>
+			<li>
+				<input type="button" class="button query" value="查询" />
+				<input type="button" class="button reset" value="清空" />
+			</li>			
+		</ul>				
+	</div>
+	<div>
+		<table id="infoQuerydg"></table>
+	</div>
+</div>

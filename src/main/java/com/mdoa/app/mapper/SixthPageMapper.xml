@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.SixthPageDao">
+	<select id="selectEmployeeCareBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.EmployeeCare">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId}
+	</select>
+	<select id="selectEnvironmentBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.bo.Environment">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId}
+	</select>
+</mapper>

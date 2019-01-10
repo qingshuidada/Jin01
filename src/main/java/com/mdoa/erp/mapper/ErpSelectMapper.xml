@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.ErpSelectDao">
+
+	<!--白胚入库明细 -->
+	<select id="queryVbprkmx" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			riqi,
+			dingzi,
+			peiliao,
+			Pitem,
+			pishu,
+			mishu,
+			peizhong,
+			mkzh,
+			cnote,
+			ywman,
+			kehu
+		FROM
+			(
+			SELECT
+				TOP ${outterLines} *
+			FROM
+				(
+					SELECT
+						TOP ${innerLines} *
+					FROM
+						v_bprkmx
+					WHERE
+		 				1=1
+					<if test="startriqi != null and startriqi != ''">
+						AND riqi &gt;= #{startriqi}
+					</if>
+					<if test="endriqi != null and endriqi != ''">
+						AND riqi &lt;= #{endriqi}
+					</if>
+					<if test="dingzi != null and dingzi != ''">
+						AND dingzi LIKE #{dingzi}
+					</if>
+					<if test="peiliao != null and peiliao != ''">
+						AND peiliao LIKE #{peiliao}
+					</if>
+					<if test="ywman != null and ywman != ''">
+						AND ywman LIKE #{ywman}
+					</if>
+					<if test="kehu != null and kehu != ''">
+						AND kehu LIKE #{kehu}
+					</if>
+					<if test="ywmanFlag != null and ywmanFlag == 1">
+						AND ywman IN 
+						<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+		                        #{subNameList}
+		                </foreach> 
+					</if>
+					<if test="kehuFlag != null and kehuFlag == 1">
+						AND kehu IN
+						<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+		                        #{subNameList}
+		                </foreach>
+					</if>
+				ORDER BY
+					riqi DESC,
+					dingzi ASC
+				) a
+			ORDER BY
+				riqi ASC,
+				dingzi DESC
+		) b
+		ORDER BY
+			riqi DESC,
+			dingzi ASC
+	</select>
+	
+	<!-- 白胚入库明细条数 -->
+	<select id="queryVbprkmxTotal" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpTotalPages">
+		SELECT
+			COUNT(*) AS total,
+			CEILING(CONVERT(FLOAT,COUNT(*))/#{rows}) AS pages
+		FROM
+			v_bprkmx
+		 WHERE
+		 		1=1
+			<if test="startriqi != null and startriqi != ''">
+				AND riqi &gt;= #{startriqi}
+			</if>
+			<if test="endriqi != null and endriqi != ''">
+				AND riqi &lt;= #{endriqi}
+			</if>
+			<if test="dingzi != null and dingzi != ''">
+				AND dingzi LIKE #{dingzi}
+			</if>
+			<if test="peiliao != null and peiliao != ''">
+				AND peiliao LIKE #{peiliao}
+			</if>
+			<if test="ywman != null and ywman != ''">
+				AND ywman LIKE #{ywman}
+			</if>
+			<if test="kehu != null and kehu != ''">
+				AND kehu LIKE #{kehu}
+			</if>
+			<if test="ywmanFlag != null and ywmanFlag == 1">
+				AND ywman IN 
+				<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                        #{subNameList}
+                </foreach> 
+			</if>
+			<if test="kehuFlag != null and kehuFlag == 1">
+				AND kehu IN
+				<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                        #{subNameList}
+                </foreach>
+			</if>
+	</select>
+	
+	<!-- 白配库存 -->
+	<select id="queryVbpkc" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			dingzi,
+			peiliao,
+			Pitem,
+			pishu,
+			mishu,
+			peizhong,
+			kashu,
+			zhrktime,
+			zhkaiktime,
+			ywman,
+			kehu
+		FROM
+			(
+			SELECT
+				TOP ${outterLines} *
+			FROM
+				(
+					SELECT
+						TOP ${innerLines} *
+					FROM
+						v_bpkc
+					WHERE
+		 				1=1
+					<if test="dingzi != null and dingzi != ''">
+						AND dingzi LIKE #{dingzi}
+					</if>			 
+					<if test="peiliao != null and peiliao != ''">
+						AND peiliao LIKE #{peiliao}
+					</if>
+					<if test="ywman != null and ywman != ''">
+						AND ywman LIKE #{ywman}
+					</if>
+					<if test="kehu != null and kehu != ''">
+						AND kehu LIKE #{kehu}
+					</if>
+					<if test="ywmanFlag != null and ywmanFlag == 1">
+						AND ywman IN 
+						<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+		                        #{subNameList}
+		                </foreach> 
+					</if>
+					<if test="kehuFlag != null and kehuFlag == 1">
+						AND kehu IN
+						<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+		                        #{subNameList}
+		                </foreach>
+					</if>
+				ORDER BY
+					dingzi ASC,
+					Pitem ASC
+				) a
+			ORDER BY
+				dingzi DESC,
+				Pitem DESC
+		) b
+		ORDER BY
+			dingzi ASC,
+			Pitem ASC
+	</select>
+	
+	<!-- 白胚库存条数查询 -->
+	<select id="queryVbpkcTotal" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpTotalPages">
+		SELECT
+			COUNT(*) AS total,
+			CEILING(CONVERT(FLOAT,COUNT(*))/#{rows}) AS pages
+		FROM
+			v_bpkc
+		WHERE
+				1=1
+			<if test="dingzi != null and dingzi != ''">
+				AND dingzi LIKE #{dingzi}
+			</if>			 
+			<if test="peiliao != null and peiliao != ''">
+				AND peiliao LIKE #{peiliao}
+			</if>
+			<if test="ywman != null and ywman != ''">
+				AND ywman LIKE #{ywman}
+			</if>
+			<if test="kehu != null and kehu != ''">
+				AND kehu LIKE #{kehu}
+			</if>
+			<if test="ywmanFlag != null and ywmanFlag == 1">
+				AND ywman IN 
+				<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                        #{subNameList}
+                </foreach> 
+			</if>
+			<if test="kehuFlag != null and kehuFlag == 1">
+				AND kehu IN
+				<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                        #{subNameList}
+                </foreach>
+			</if>
+	</select>
+	
+	<!-- 订单查询 -->
+	<select id="queryVsaleordermx" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			riqi AS ddriqi,
+			dingzi,
+			peiliao,
+			Pitem,
+			cfukuan,
+			mkzh,
+			sehao,
+			okpsw, 
+			kpishu,
+			gangshu,
+			yanse,
+			mishu,
+			peizhong,
+			cnote,
+			ovriqi,
+			ywman,
+			kehu,
+			danhao,
+			idxno
+		FROM(
+			SELECT
+				TOP ${outterLines} *
+			FROM
+			(
+				SELECT
+					TOP ${innerLines} *
+				FROM
+					v_saleordermx
+				WHERE
+	 				1=1
+				<if test="startddriqi != null and startddriqi != ''">
+					AND riqi &gt;= #{startddriqi}
+				</if>
+				<if test="endddriqi != null and endddriqi != ''">
+					AND riqi &lt;= #{endddriqi}
+				</if>
+				<if test="dingzi != null and dingzi != ''">
+					AND dingzi LIKE #{dingzi}
+				</if>
+				<if test="peiliao != null and peiliao != ''">
+					AND peiliao LIKE #{peiliao}
+				</if>
+				<if test="sehao != null and sehao != ''">
+					AND sehao = #{sehao}
+				</if>
+				<if test="yanse != null and yanse != ''">
+					AND yanse = #{yanse}
+				</if>
+				<if test="ywman != null and ywman != ''">
+					AND ywman LIKE #{ywman}
+				</if>
+				<if test="kehu != null and kehu != ''">
+					AND kehu LIKE #{kehu}
+				</if>
+				<if test="ywmanFlag != null and ywmanFlag == 1">
+					AND ywman IN 
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+	                        #{subNameList}
+	                </foreach> 
+				</if>
+				<if test="kehuFlag != null and kehuFlag == 1">
+					AND kehu IN
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+	                        #{subNameList}
+	                </foreach>
+				</if>
+				ORDER BY
+					riqi DESC,
+					danhao ASC,
+					idxno ASC
+			)a
+			ORDER BY
+				riqi ASC,
+				danhao DESC,
+				idxno DESC
+		)b
+		ORDER BY
+			riqi DESC,
+			danhao ASC,
+			idxno ASC
+	</select>
+	
+	<!-- 订单条数查询 -->
+	<select id="queryVsaleordermxTotal" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpTotalPages">
+		SELECT
+			COUNT(*) AS total,
+			CEILING(CONVERT(FLOAT,COUNT(*))/#{rows}) AS pages
+		FROM
+			v_saleordermx
+		WHERE
+				1=1
+			<if test="startddriqi != null and startddriqi != ''">
+				AND riqi &gt;= #{startddriqi}
+			</if>
+			<if test="endddriqi != null and endddriqi != ''">
+				AND riqi &lt;= #{endddriqi}
+			</if>
+			<if test="dingzi != null and dingzi != ''">
+				AND dingzi LIKE #{dingzi}
+			</if>
+			<if test="peiliao != null and peiliao != ''">
+				AND peiliao LIKE #{peiliao}
+			</if>
+			<if test="sehao != null and sehao != ''">
+				AND sehao = #{sehao}
+			</if>
+			<if test="yanse != null and yanse != ''">
+				AND yanse = #{yanse}
+			</if>
+			<if test="ywman != null and ywman != ''">
+				AND ywman LIKE #{ywman}
+			</if>
+			<if test="kehu != null and kehu != ''">
+				AND kehu LIKE #{kehu}
+			</if>
+			<if test="ywmanFlag != null and ywmanFlag == 1">
+				AND ywman IN 
+				<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                        #{subNameList}
+                </foreach> 
+			</if>
+			<if test="kehuFlag != null and kehuFlag == 1">
+				AND kehu IN
+				<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                        #{subNameList}
+                </foreach>
+			</if>
+	</select>
+	
+	<!-- 生产进度条数查询 -->
+	<select id="queryVkashengTotal" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpTotalPages">
+		SELECT
+			COUNT(*) AS total,
+			CEILING(CONVERT(FLOAT,COUNT(*))/#{rows}) AS pages
+		FROM
+			v_kasheng
+		WHERE
+			1=1
+		<if test="dingzi != null and dingzi != ''">
+			AND dingzi LIKE #{dingzi}
+		</if>
+		<if test="kahao != null and kahao != ''">
+			AND kahao = #{kahao}
+		</if>
+		<if test="peiliao != null and peiliao != ''">
+			AND peiliao LIKE #{peiliao}
+		</if>
+		<if test="sehao != null and sehao != ''">
+			AND sehao =#{sehao}
+		</if>
+		<if test="yanse != null and yanse != ''">
+			AND yanse = #{yanse}
+		</if>
+		<if test="status != null and status != ''">
+			AND status = #{status}
+		</if>
+		<if test="startkkriqi != null and startkkriqi != ''">
+			AND riqi &gt;= #{startkkriqi}
+		</if>
+		<if test="endkkriqi != null and endkkriqi != ''">
+			AND riqi &lt;= #{endkkriqi}
+		</if>
+		<if test="ywman != null and ywman != ''">
+			AND ywman LIKE #{ywman}
+		</if>
+		<if test="kehu != null and kehu != ''">
+			AND kehu LIKE #{kehu}
+		</if>
+		<if test="ywmanFlag != null and ywmanFlag == 1">
+			AND ywman IN 
+			<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                       #{subNameList}
+               </foreach> 
+		</if>
+		<if test="kehuFlag != null and kehuFlag == 1">
+			AND kehu IN
+			<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                       #{subNameList}
+               </foreach>
+		</if>
+	</select>
+	
+	<!-- 生产进度 -->
+	<select id="queryVkasheng" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			kahao,
+			danhao,
+			iftg,
+			dingzi,
+			peiliao,
+			Pitem,
+			sehao,
+			yanse,
+			status,
+			quick,
+			cfukuan,
+			mkzh,
+			kpishu,
+			kmishu,
+			pishu,
+			mishu,
+			peizhong,
+			pctime,
+			fbtime,
+			oktime,
+			dxtime,
+			bcptime,
+			cpitime,
+			cpotime,
+			dstime,
+			riqi AS kkriqi,
+			pmkz,
+			cnote,
+			ovriqi,
+			ywman,
+			kehu
+		FROM(
+			SELECT
+				TOP ${outterLines} *
+			FROM
+			(
+				SELECT
+					TOP ${innerLines} *
+				FROM
+					v_kasheng
+				WHERE
+				1=1
+				<if test="dingzi != null and dingzi != ''">
+					AND dingzi LIKE #{dingzi}
+				</if>
+				<if test="kahao != null and kahao != ''">
+					AND kahao = #{kahao}
+				</if>
+				<if test="peiliao != null and peiliao != ''">
+					AND peiliao LIKE #{peiliao}
+				</if>
+				<if test="sehao != null and sehao != ''">
+					AND sehao =#{sehao}
+				</if>
+				<if test="yanse != null and yanse != ''">
+					AND yanse = #{yanse}
+				</if>
+				<if test="status != null and status != ''">
+					AND status = #{status}
+				</if>
+				<if test="startkkriqi != null and startkkriqi != ''">
+					AND riqi &gt;= #{startkkriqi}
+				</if>
+				<if test="endkkriqi != null and endkkriqi != ''">
+					AND riqi &lt;= #{endkkriqi}
+				</if>
+				<if test="ywman != null and ywman != ''">
+					AND ywman LIKE #{ywman}
+				</if>
+				<if test="kehu != null and kehu != ''">
+					AND kehu LIKE #{kehu}
+				</if>
+				<if test="ywmanFlag != null and ywmanFlag == 1">
+					AND ywman IN 
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+	                        #{subNameList}
+	                </foreach> 
+				</if>
+				<if test="kehuFlag != null and kehuFlag == 1">
+					AND kehu IN
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+	                        #{subNameList}
+	                </foreach>
+				</if>
+				ORDER BY
+					riqi DESC,
+					kahao ASC
+			)a
+			ORDER BY
+				riqi ASC,
+				kahao DESC
+		)b
+		ORDER BY
+			riqi DESC,
+			kahao ASC
+	</select>
+	
+	<!-- 成品入库明细条数 -->
+	<select id="queryVspinputTotal" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpTotalPages">
+		SELECT
+			COUNT(*) AS total,
+			CEILING(CONVERT(FLOAT,COUNT(*))/#{rows}) AS pages
+		FROM
+			v_spinput
+		WHERE
+			1=1
+		<if test="startriqi != null and startriqi != ''">
+			AND riqi >= #{startriqi}
+		</if>
+		<if test="endriqi != null and endriqi != ''">
+			AND riqi &lt;= #{endriqi}
+		</if>
+		<if test="dingzi != null and dingzi != ''">
+			AND dingzi LIKE #{dingzi}
+		</if>
+		<if test="peiliao != null and peiliao != ''">
+			AND peiliao LIKE #{peiliao}
+		</if>
+		<if test="sehao != null and sehao != ''">
+			AND sehao = #{sehao}
+		</if>
+		<if test="yanse != null and yanse != ''">
+			AND yanse = #{yanse}
+		</if>
+		<if test="ywman != null and ywman != ''">
+			AND ywman LIKE #{ywman}
+		</if>
+		<if test="kehu != null and kehu != ''">
+			AND kehu LIKE #{kehu}
+		</if>
+		<if test="ywmanFlag != null and ywmanFlag == 1">
+			AND ywman IN 
+			<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                       #{subNameList}
+               </foreach> 
+		</if>
+		<if test="kehuFlag != null and kehuFlag == 1">
+			AND kehu IN
+			<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                       #{subNameList}
+               </foreach>
+		</if>
+	</select>
+	
+	<!-- 成品入库明细 -->
+	<select id="queryVspinput" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			riqi,
+			kahao,
+			dingzi,
+			peiliao,
+			Pitem,
+			sehao,
+			yanse,
+			pishu,
+			mishu,
+			peizhong,
+			cfukuan,
+			mkzh,
+			cnote,
+			okpsw,
+			ckplace,
+			ywman,
+			kehu
+		FROM(
+			SELECT
+				TOP ${outterLines} *
+			FROM
+			(
+				SELECT
+					TOP ${innerLines} *
+				FROM
+					v_spinput
+				WHERE
+					1=1
+				<if test="startriqi != null and startriqi != ''">
+					AND riqi >= #{startriqi}
+				</if>
+				<if test="endriqi != null and endriqi != ''">
+					AND riqi &lt;= #{endriqi}
+				</if>
+				<if test="dingzi != null and dingzi != ''">
+					AND dingzi LIKE #{dingzi}
+				</if>
+				<if test="peiliao != null and peiliao != ''">
+					AND peiliao LIKE #{peiliao}
+				</if>
+				<if test="sehao != null and sehao != ''">
+					AND sehao = #{sehao}
+				</if>
+				<if test="yanse != null and yanse != ''">
+					AND yanse = #{yanse}
+				</if>
+				<if test="ywman != null and ywman != ''">
+					AND ywman LIKE #{ywman}
+				</if>
+				<if test="kehu != null and kehu != ''">
+					AND kehu LIKE #{kehu}
+				</if>
+				<if test="ywmanFlag != null and ywmanFlag == 1">
+					AND ywman IN 
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+		                       #{subNameList}
+		               </foreach> 
+				</if>
+				<if test="kehuFlag != null and kehuFlag == 1">
+					AND kehu IN
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+		                       #{subNameList}
+		               </foreach>
+				</if>
+				ORDER BY
+					riqi DESC,
+					kahao ASC	
+			)a
+			ORDER BY
+				riqi ASC,
+				kahao DESC
+		)b
+		ORDER BY
+			riqi DESC,
+			kahao ASC
+	</select>
+	
+	<!-- 成品库存条数 -->
+	<select id="queryVspkcTotal" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpTotalPages">
+		SELECT
+			COUNT(*) AS total,
+			CEILING(CONVERT(FLOAT,COUNT(*))/#{rows}) AS pages
+		FROM
+			v_spkc
+		WHERE
+			1=1
+		<if test="startriqi != null and startriqi != ''">
+			AND riqi >= #{startriqi}
+		</if>
+		<if test="endriqi != null and endriqi != ''">
+			AND riqi &lt;= #{endriqi}
+		</if>
+		<if test="dingzi != null and dingzi != ''">
+			AND dingzi LIKE #{dingzi}
+		</if>
+		<if test="peiliao != null and peiliao != ''">
+			AND peiliao LIKE #{peiliao}
+		</if>
+		<if test="sehao != null and sehao != ''">
+			AND sehao = #{sehao}
+		</if>
+		<if test="yanse != null and yanse != ''">
+			AND yanse = #{yanse}
+		</if>
+		<if test="ywman != null and ywman != ''">
+			AND ywman LIKE #{ywman}
+		</if>
+		<if test="kehu != null and kehu != ''">
+			AND kehu LIKE #{kehu}
+		</if>
+		<if test="ywmanFlag != null and ywmanFlag == 1">
+			AND ywman IN 
+			<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                       #{subNameList}
+               </foreach> 
+		</if>
+		<if test="kehuFlag != null and kehuFlag == 1">
+			AND kehu IN
+			<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+                       #{subNameList}
+               </foreach>
+		</if>
+	</select>
+	
+	<!-- 成品库存 -->
+	<select id="queryVspkc" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			riqi,
+			kahao,
+			dingzi,
+			peiliao,
+			Pitem,
+			sehao,
+			yanse,
+			pishu,
+			mishu,
+			peizhong,
+			cfukuan,
+			mkzh,
+			cnote,
+			ckplace,
+			ywman,
+			kehu
+		FROM(
+			SELECT
+				TOP ${outterLines} *
+			FROM
+			(
+				SELECT
+					TOP ${innerLines} *
+				FROM
+					v_spkc
+				WHERE
+					1=1
+				<if test="startriqi != null and startriqi != ''">
+					AND riqi >= #{startriqi}
+				</if>
+				<if test="endriqi != null and endriqi != ''">
+					AND riqi &lt;= #{endriqi}
+				</if>
+				<if test="dingzi != null and dingzi != ''">
+					AND dingzi LIKE #{dingzi}
+				</if>
+				<if test="peiliao != null and peiliao != ''">
+					AND peiliao LIKE #{peiliao}
+				</if>
+				<if test="sehao != null and sehao != ''">
+					AND sehao = #{sehao}
+				</if>
+				<if test="yanse != null and yanse != ''">
+					AND yanse = #{yanse}
+				</if>
+				<if test="ywman != null and ywman != ''">
+					AND ywman LIKE #{ywman}
+				</if>
+				<if test="kehu != null and kehu != ''">
+					AND kehu LIKE #{kehu}
+				</if>
+				<if test="ywmanFlag != null and ywmanFlag == 1">
+					AND ywman IN 
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+	                        #{subNameList}
+	                </foreach> 
+				</if>
+				<if test="kehuFlag != null and kehuFlag == 1">
+					AND kehu IN
+					<foreach item="subNameList" index="index" collection="subNameList"  open="(" separator="," close=")">
+	                        #{subNameList}
+	                </foreach>
+				</if>
+				ORDER BY 
+					riqi ASC,
+					kahao ASC
+			)a
+			ORDER BY 
+				riqi DESC,
+				kahao DESC
+		)b
+		ORDER BY 
+			riqi ASC,
+			kahao ASC
+	</select>
+	<!-- 工序 -->
+	<select id="queryVkashenggx" parameterType="com.mdoa.erp.bo.ErpSelectForm" resultType="com.mdoa.erp.bo.ErpSelectForm">
+		SELECT
+			MIN(c.kahao) AS kahao,
+			c.idxid AS idxid,
+			MIN(c.cname) AS cname,
+			MIN(c.xjtime) AS xjtime,
+			MIN(c.chehao) AS chehao,
+			MIN(c.jihao) AS jihao,
+			MIN(d.kkriqi) AS kkriqi,
+			MIN(d.ddriqi) AS ddriqi,
+			MIN(d.sehao) AS sehao,
+			MIN(d.yanse) AS yanse,
+			MIN(d.peiliao) AS peiliao,
+			MIN(d.danhao) AS danhao,
+			MIN(d.Pitem) AS Pitem,
+			MIN(d.idxno) AS idxno
+		FROM
+			v_kasheng_gx c LEFT JOIN(
+				SELECT
+					a.kahao,
+					a.iftg,
+					a.dingzi,
+					a.peiliao,
+					a.Pitem,
+					a.sehao,
+					a.yanse,
+					a.status,
+					a.quick,
+					a.cfukuan,
+					a.mkzh,
+					a.kpishu,
+					a.kmishu,
+					a.pishu,
+					a.mishu,
+					a.peizhong,
+					a.pctime,
+					a.fbtime,
+					a.oktime,
+					a.dxtime,
+					a.bcptime,
+					a.cpitime,
+					a.cpotime,
+					a.dstime,
+					a.pmkz,
+					a.cnote,
+					a.ovriqi,
+					a.ywman,
+					a.kehu,
+					a.danhao,
+					a.riqi AS kkriqi,
+					b.riqi AS ddriqi,
+					b.idxno
+				FROM
+					v_kasheng a INNER JOIN(
+						SELECT
+							idxno,
+							danhao,
+							riqi
+						FROM
+							v_saleordermx 
+					) b ON(a.danhao = b.danhao)
+			) d ON(c.kahao = d.kahao)
+		WHERE
+				1=1
+			<if test="kahao != null and kahao != ''">
+				AND c.kahao = #{kahao}
+			</if>
+		GROUP BY
+			idxid
+	</select>
+	
+</mapper>

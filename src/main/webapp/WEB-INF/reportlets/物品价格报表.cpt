@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20151125" releaseVersion="8.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="goodsTypeUrl"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsTypeId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="repertoryId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsId"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="beginNumber"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsSize"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="endNumber"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="goodsLack"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[localhost]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT 
+			goods_id AS goodsId,
+			goods_type_id AS goodsTypeId,
+			goods_name AS goodsName,
+			total_number AS totalNumber,
+			goods_type_url AS goodsTypeUrl,
+			goods_size AS goodsSize,
+			unit AS unit,
+			record AS record,
+			warn_number AS warnNumber,
+			latest_unit_price AS latestUnitPrice,
+			moving_aver_price AS movingAverPrice,
+			weighted_aver_price AS weightedAverPrice,
+			create_time AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			update_time AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			IF(total_number >= warn_number,'0','1') AS isLack
+		FROM 
+			repertory_goods
+		WHERE
+  			 alive_flag = '1' AND 
+  			 if('${goodsLack}' = 0,
+  				 total_number >= warn_number,
+  				 total_number < warn_number) AND
+  			 if('${goodsId}' is not null and '${goodsId}' != '',
+  				 goods_id = '${goodsId}',
+  			      TRUE) AND
+  			 if('${goodsTypeUrl}' is not null and '${goodsTypeUrl}' != '',
+  				 goods_type_url LIKE ('${goodsTypeUrl}%'),
+  			 	 TRUE) AND
+  			 if('${goodsTypeId}' is not null and '${goodsTypeId}' != '',
+  			 	 goods_type_id = '${goodsTypeId}',
+  			 	 TRUE) AND    
+  			 if('${beginNumber}' is not null and '${beginNumber}' != '',
+  				 total_number >= '${beginNumber}',
+  			 	 TRUE) AND
+  			 if('${endNumber}' is not null and '${endNumber}' != '',
+  				 total_number <= '${endNumber}',
+  			 	 TRUE) AND
+  			 if('${goodsName}' is not null and '${goodsName}' != '',
+  				 goods_name LIKE '${goodsName}%',
+  			 	 TRUE ) AND
+  			 if('${goodsSize}' is not null and '${goodsSize}' != '',
+  			 	 goods_size LIKE '${goodsSize}%',
+  			 	TRUE)
+  			 AND goods_id IN
+				(
+					SELECT
+							a.goods_id
+					FROM
+							repertory_goods_position a,
+							repertory_type b
+					WHERE
+						1=1 AND 
+						if('${repertoryId}' is not null and '${repertoryId}' != '',
+							a.repertory_id = '${repertoryId}',
+							TRUE) AND 
+  						 if('${repertoryId}' is not null and '${repertoryId}' != '',
+							 b.repertory_id = '${repertoryId}',
+							 TRUE)
+					
+					)	
+  		ORDER BY
+				create_time
+		DESC
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2743200,2743200,2743200,2743200,2743200,2743200,2743200,3086100,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="7" r="3" s="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="4" s="1">
+<O>
+<![CDATA[物品名]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="2" r="4" s="1">
+<O>
+<![CDATA[规格]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="4" s="1">
+<O>
+<![CDATA[数量]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="4" s="1">
+<O>
+<![CDATA[单位]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="4" s="1">
+<O>
+<![CDATA[警示数量]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="4" s="1">
+<O>
+<![CDATA[最新价格]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="4" s="1">
+<O>
+<![CDATA[更新日期]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="4" s="1">
+<O>
+<![CDATA[备注]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="goodsName"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="2" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="goodsSize"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="3" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="totalNumber"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="4" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="unit"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="5" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="warnNumber"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="6" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="latestUnitPrice"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="7" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="updateTimeStr"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="8" r="5" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="record"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="7" r="12">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="12">
+<PrivilegeControl/>
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting>
+<Margin top="986400" left="2743200" bottom="986400" right="2743200"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-16777216"/>
+<Bottom style="1" color="-16777216"/>
+<Left style="1" color="-16777216"/>
+<Right style="1" color="-16777216"/>
+</Border>
+</Style>
+</StyleList>
+<DesignerVersion DesignerVersion="IAA"/>
+<PreviewType PreviewType="1"/>
+</WorkBook>

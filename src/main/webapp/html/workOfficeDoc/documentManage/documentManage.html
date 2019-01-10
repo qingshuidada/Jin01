@@ -1,0 +1,87 @@
+<div id="documentManage">
+	<input id="catalogUrl" type="hidden">
+	<div class="treearea">
+		<h3>公文树</h3>
+		<div>  
+		    <ul id="ddd" data-options="region:'center',border: true"  
+		         class="easyui-tree">  
+		    </ul>  
+		</div>
+	</div>
+	<div id="mmm" class="easyui-menu" style="width:120px;">
+		<div class="add" style="display:none;" onclick="addcatalogue()" data-options="iconCls:'icon-add'">添加目录</div>
+		<div class="remove" style="display:none;" onclick="remove()" data-options="iconCls:'icon-remove'">删除</div>
+		<div class="update" style="display:none;" onclick="edit()" data-options="iconCls:'icon-edit'">修改</div>
+	</div>
+	<div class="listForm">
+		<div class="toolbar" >
+		</div>
+		<div class='invitetop'>
+			公文名称：<input type="text" class="docName"/>
+			创建时间：<input class="jqdate createTimeStart" type="text" style="width: 100px" onblur="testDate(this)" onclick="testShow(this);">
+			~ <input class="jqdate createTimeEnd" type="text" style="width: 100px" onblur="testDate(this)" onclick="testShow(this);">
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" value="清空"/>
+		</div>
+		<div>
+			<table id="documentManagedg" data-options="nowrap:false"></table>
+		</div>
+		<!-- <div class="lookdocument">
+		</div> -->
+		<!-- <div class="editorarea">
+			<input type="text" name="titleName" placeholder="请输入正文标题">
+			<script type="text/plain" id="myEditor"></script>
+		</div> -->
+	</div>
+	<!-- 弹窗 -->
+	<div class="popups">
+		<div class="addcatalogueWindow popup">
+			<h3>添加目录</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<table>
+					<tr>
+						<td>请输入目录名称：</td>
+						<td><input type="text" class="catalogName"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button quedingadd" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+		<div class="removeWindow popup">
+			<h3>删除目录(文件)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				你确定要删除该文件吗
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button quedingremove" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+				
+		<div class="editWindow popup">
+			<h3>修改目录(文件)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<table>
+					<tr>
+						<td>请输入修改后的文件名：</td>
+						<td><input type="text" class="catalogName"></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button quedingedit" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+	</div>
+</div>

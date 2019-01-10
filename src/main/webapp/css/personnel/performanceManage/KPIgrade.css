@@ -1,0 +1,42 @@
+#KPIgrade .KPIarea{
+	margin-top:20px;
+}
+#KPIgrade .grade{
+	text-align:center;
+	padding-right:0px;
+	margin:10px 0;
+}
+.grade span{
+	display:inline-block;
+	width:60px;
+}
+.score label{
+	margin-left:72px;
+}
+.staffName,.department,.KPIgroupName,.fullmark,.condition{
+	border:none;
+}
+#KPIgrade .editarea textarea{
+	width:240px;
+}
+.popuparea{
+	position:relative;
+}
+.btnbutton{
+	position:absolute;
+	margin:0 auto;
+	left:0;right:0;
+	botton:0;
+}
+.btnbutton .internalStaff,.btnbutton .outsideStaff{
+	width:50px;
+	height:20px;
+	float:left;
+	border:1px solid #000;
+}
+table.contentBtn{
+	text-align: right;width: 300px;height: 210px;
+	position:absolute;
+	left:0;top:23px;
+	display:none;
+}

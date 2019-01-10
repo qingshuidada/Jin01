@@ -1,0 +1,39 @@
+<div id="infoAppear">
+	<div class="outPut">
+		<div>
+			<input type="button" value="我提交的数据" class="button mydata" />
+		</div>
+		<div>
+			<input type="button" value="返回" class="button back" />
+		</div>
+	</div>	
+	<div class="content"></div>
+	
+	<div class="list" style="display:none;">
+		<div class="filtCondition">
+			<ul>
+				<li>
+					<span>车间名称:</span>
+					<select class="shopName"></select>
+				</li>
+				<li>
+					<span>指标名称:</span>
+					<select class="targetName"></select>
+				</li>
+				<li>
+					<span>数据日期</span>
+					<input type="text" class="dateStartTime" onclick="testShow(this);" readonly/>
+					<span> ~ </span>
+					<input type="text" class="dateEndTime" onclick="testShow(this);" readonly/>
+				</li>	
+				<li>
+					<input type="button" class="button query" value="查询" />
+					<input type="button" class="button reset" value="清空"/>
+				</li>			
+			</ul>			
+		</div>
+		<div>
+			<table id="infoAppeardg"></table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,238 @@
+ <div id="rewardPenalties" title="员工奖惩">
+	<div class="maintop">
+		<div style="margin-right:6px;"><input type="button" value="导出查询结果到Excel" class="button write" /></div>
+		<form class="printRewardPenalties" style="display:inline" action="" method="post" target="_blank">
+				<input type = "hidden" name="cptName" value="rewardPenalties">
+				<input type="button" class="button print" value="打印扣款记录" />
+		</form>
+		<div><input type="button" value="导入Excel" class="button leadin" /></div>
+	</div>
+	<div  class="invitetop">
+		查询条件：员工名称：<input class="userName" type="text">
+		执行人：<input name="executorName" type="text">
+		发票号：<input class="invoiceNumber" type="text">
+		登记时间：	<input class="jqdate" type="text" style="width: 100px" name="workTimeStartStr" onblur="testDate(this)" onclick="testShow(this);">
+			 ~ 
+			 	<input class="jqdate" type="text" style="width: 100px" name="workTimeEndStr" onblur="testDate(this)" onclick="testShow(this);">
+		原因：<input name="reason" type="text">
+		部门：
+			<input type="text" name="departmentName" style="width: 100px" readOnly="readonly"> 
+			<input type="hidden" name="departmentUrl" style="width: 100px">
+			<input type="button" class="button departmentChooseObj" value="选择"  style="width: 55px"/>
+		人员类型：
+			<select name="type">
+				<option></option>
+				<option value="1">内部员工</option>
+				<option value="2">外来人员</option>
+			</select>
+		<a class="easyui-linkbutton selectByName" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空" >
+	</div>
+	<div >
+	 <table id="rewardPenaltiesdg" width="100%" height="100%" ></table>	
+	</div>
+
+	<div  class="popups" style="text-align: left;">
+		<!-- 导出数据到Excel -->
+		<div class="popup writetoexcel" style="height: 300px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:240px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	
+		<div class="popup savepunishment" style="height: 300px;width: 400px;">
+			<h3>添加奖惩信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<div class="btnbutton">
+					<label><input name="btn" type="radio" value="" class="internalStaff btn" style="width:50px" checked data-type="inter"/>内部员工 </label> 
+					<label><input name="btn" type="radio" value="" class="outsideStaff btn"style="width:50px" data-type="out"/>外来人员 </label>
+				</div>
+				<table style="text-align: right;width: 300px;height: 200px;display:block;" class="contentBtn" data-type="1">
+					<tr style="height:30px">
+						<td style="width:100px;">员工名称:</td>
+						<td style="width:250px;">
+							<input type="text" style="width:160px;" name="peopleName" readonly="readonly"/>
+							<input type="button" class="button chooseUser" value="选择"  style="width: 55px"/>
+							<input style="display: none" name="userName"/>
+							<input style="display: none" name="departmentName"/>
+						</td>
+					</tr>
+					<tr style="height:30px">
+						<td>时间:</td>
+						<td><input class="jqdate" type="text" style="width: 220px" name="date" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					
+					<tr style="height:30px">
+						<td>扣奖原因:</td>
+						<td><input type="text" style="width:220px;" class="reason"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td>扣奖金额:</td>
+						<td><input type="text" style="width:220px;" class="amount"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td style="width:100px;">执行人:</td>
+						<td style="width:250px;">
+							<input type="text" style="width:160px;" name="executor" readonly="readonly"/>
+							<input type="button" class="button chooseExecutor" value="选择"  style="width: 55px"/>
+							<input style="display: none" name="executorName"/>
+						</td>
+					</tr>
+					<tr style="height:30px">
+						<td>备注:</td>
+						<td><input type="text" style="width:220px;" class="text"/></td>
+					</tr>
+				</table>
+				<table style="text-align: right;width: 300px;height: 200px;display:none;" class="contentBtn" data-type="2">
+					<tr  style="height:30px">
+						<td style="width:100px;">发票号:</td>
+						<td><input type="text" style="width:220px;" class="invoiceNumber"/></td>
+						<td><input style="display: none" name="userNameOut"/></td>
+					</tr>
+					<tr  style="height:30px">
+						<td>时间:</td>
+						<td><input class="jqdate" type="text" style="width:220px" name="dateOut" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr  style="height:30px">
+						<td>扣奖原因:</td>
+						<td><input type="text" style="width:220px;" class="reasonOut"/></td>
+					</tr>
+					<tr  style="height:30px">
+						<td>扣奖金额:</td>
+						<td><input type="text" style="width:220px;" class="amountOut"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td style="width:100px;">执行人:</td>
+						<td style="width:250px;">
+							<input type="text" style="width:160px;" name="executor1" readonly="readonly"/>
+							<input type="button" class="button chooseExecutor1" value="选择"  style="width: 55px"/>
+							<input style="display: none" name="executorName1"/>
+						</td>
+					</tr>
+					<tr style="height:30px">
+						<td>备注:</td>
+						<td><input type="text" style="width:220px;" class="text1"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div  class="popups" style="text-align: left;">
+	
+		<div class="popup updatepunishment" style="height: 300px;width: 400px;">
+			<h3>修改奖惩信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr style="height:30px">
+						<td style="width:100px;">员工名称:</td>
+						<td style="width:250px;">
+							<input type="text" style="width:160px;" name="peopleName" readonly="readonly"/>
+							<input type="button" class="button chooseUser" value="选择"  style="width: 55px"/>
+							<input style="display: none" name="userName"/>
+							<input style="display: none" name="departmentName"/>
+						</td>
+					</tr>
+					<tr  style="height:30px">
+						<td>时间:</td>
+						<td><input class="jqdate" type="text" style="width:220px" name="dateOut" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr  style="height:30px">
+						<td>扣奖原因:</td>
+						<td><input type="text" style="width:220px;" class="reasonOut"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td>罚款金额:</td>
+						<td><input type="text" style="width:220px;" class="amount"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td style="width:100px;">执行人:</td>
+						<td style="width:250px;">
+							<input type="text" style="width:160px;" name="executor1" readonly="readonly"/>
+							<input type="button" class="button chooseExecutor1" value="选择"  style="width: 55px"/>
+							<input style="display: none" name="executorName1"/>
+						</td>
+					</tr>
+					<tr style="height:30px">
+						<td>备注:</td>
+						<td><input type="text" style="width:220px;" class="text"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<div class="popup updatepunishment1" style="height: 300px;width: 400px;">
+			<h3>修改奖惩信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr  style="height:30px">
+						<td style="width:100px;">发票号:</td>
+						<td><input type="text" style="width:220px;" class="invoiceNumber"/></td>
+						<td><input style="display: none" name="userNameOut"/></td>
+					</tr>
+					<tr  style="height:30px">
+						<td>时间:</td>
+						<td><input class="jqdate" type="text" style="width:220px" name="dateOut" onblur="testDate(this)" onclick="testShow(this);"></td>
+					</tr>
+					<tr  style="height:30px">
+						<td>扣奖原因:</td>
+						<td><input type="text" style="width:220px;" class="reasonOut"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td>罚款金额:</td>
+						<td><input type="text" style="width:220px;" class="amount"/></td>
+					</tr>
+					<tr style="height:30px">
+						<td style="width:100px;">执行人:</td>
+						<td style="width:250px;">
+							<input type="text" style="width:160px;" name="executor1" readonly="readonly"/>
+							<input type="button" class="button chooseExecutor1" value="选择"  style="width: 55px"/>
+							<input style="display: none" name="executorName1"/>
+						</td>
+					</tr>
+					<tr style="height:30px">
+						<td>备注:</td>
+						<td><input type="text" style="width:220px;" class="text"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<div class="popup leadinExcel" style="height: 300px;width: 400px;">
+			<h3>导入excel</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr>
+						<td>excel文件:</td>
+						<td><input type="file" style="width:220px;" class="excelFile"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定导入"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+</div>
+

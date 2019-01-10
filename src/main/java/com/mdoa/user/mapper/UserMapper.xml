@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.user.dao.UserDao" >
+	<select id="selectUserInfoByAccount" parameterType="java.lang.String" 
+		resultType="com.mdoa.user.model.UserInfo">
+		SELECT
+			user_id AS userId,
+			user_account AS userAccount,
+			password AS password,
+			user_name AS userName,
+			department_name AS departmentName,
+			department_url AS departmentUrl
+		from 
+			user_info
+		WHERE
+			user_account = #{account}
+			
+	</select>
+	
+	<update id="updatePassword" parameterType="java.util.HashMap">
+		UPDATE 
+			user_info a,
+			erp_sales b
+		SET
+			a.update_user_id = a.user_id,
+			a.update_user_Name = a.user_name,
+			a.update_time = NOW(),
+			a.password = #{newPassword},
+			b.password = IF(b.user_id = #{userId},#{newPassword},b.password)
+		WHERE
+			a.user_id = #{userId}
+	</update>
+	
+	<update id="updateSalesPassword" parameterType="java.util.HashMap">
+		UPDATE erp_sales
+		SET
+			password = #{newPassword}
+		WHERE
+			user_id = #{userId}
+	</update>
+</mapper>

@@ -1,0 +1,196 @@
+#myCheckInfo{
+	overflow-y:auto;
+}
+/************时间控件样式start************/
+#myCheckInfo .Calendar{
+	float:left;
+	width:70%;
+	display: block;
+}
+#myCheckInfo .Calendar .calendarTitle{
+	position: relative;
+	width: 100%;
+	height:50px;
+	line-height:50px;
+	border-bottom: 1px solid #95B8E7;
+}
+#myCheckInfo .Calendar .calendarTitle .yearsSelect{
+	float:left;
+	width:80px;
+	height:23px;
+	margin:10px 10px 0 15px;
+	border:1px solid #999;
+}
+#myCheckInfo .Calendar .calendarTitle .monthsSelect{
+	float:left;
+  	width:60px;
+	height:23px;
+	margin-top:10px;
+	border:1px solid #999;
+}
+#myCheckInfo .Calendar .calendarTop dl dt,
+#myCheckInfo .Calendar .calendarTop dl dd{
+	float:left;
+	margin-left:10px;
+	line-height:45px;
+}
+/**
+ * 设置按钮图标
+ */
+#myCheckInfo .Calendar .prevMonth,#myCheckInfo .Calendar .nextMonth{
+	float:left;
+	width:15px;
+	height:21px;
+	line-height:21px;
+	border:1px solid #999;
+	font-size:16px;
+	cursor: pointer;
+	margin-top:10px;
+	text-align:center;
+}
+#myCheckInfo .Calendar .prevMonth{
+	border-right:0px;
+}
+#myCheckInfo .Calendar .nextMonth{
+	border-left:0px;
+}
+/* 设置日历表格样式 */
+#myCheckInfo .calendarTable{
+	width: 100%;
+	border-collapse: collapse;
+	text-align:center;
+}
+/* 表格行高 */
+#myCheckInfo .calendarTable tr{
+	font-size:14px;
+	height:50px;
+	line-height:50px;
+}
+#myCheckInfo .calendarTable tr th{
+	height:50px;
+	line-height:50px;
+}
+#myCheckInfo .calendarTable tr td{
+	border:1px solid #ccc;
+	width: 14%;
+}
+/* 当前天 颜色特殊显示 */
+#myCheckInfo .calendarTable .currentDay {
+	background-color:#eee;
+	font-weight:bold;
+}
+#myCheckInfo .calendarTable .dateNember{
+	display:inline-block;
+	width:30px;
+	height:20px;
+	line-height:12px;
+	overflow:hidden;	
+}
+#myCheckInfo .calendarTable .prevDateNember{
+	color:#fff;	
+	background:#7edafc;
+}
+/* 本月 文字颜色 */
+#myCheckInfo .calendarTable .currentMonth {
+	color:#666;
+	font-weight:bold;
+}
+#myCheckInfo .calendarTable td ul li{
+	font-size:12px;
+	line-height:25px;
+	font-weight:normal;
+	border-top:1px solid #ddd;
+}
+/* 其他月颜色 */
+#myCheckInfo .calendarTable .otherMonth{
+	color: #ccc;
+	border:0px;
+	visibility:hidden;
+}
+#myCheckInfo .calendarTable td{
+	cursor:pointer;
+}
+#myCheckInfo td .workStatus{
+	margin-top:-22px;
+}
+#myCheckInfo td .workStatus li span{
+	display:inline-block;
+	width:50%;
+	height:25px;
+}
+#myCheckInfo td .workStatus li span:first-child{
+	border-right:1px solid #ddd;
+	box-sizing: border-box;
+}
+#myCheckInfo td .workStatus li span.warn{
+	color:red;
+}
+#myCheckInfo td .workStatus li span.normal{
+	color:#049cfd;
+}
+/***************时间控件样式end*********************/
+
+
+#myCheckInfo .myCheckInfoDetail{
+	float:right;
+	width:30%;
+	height:100%;	
+}
+#myCheckInfo .myCheckInfoDetail .title{
+	width:100%;
+	height:50px;
+	line-height:50px;
+	font-size:18px;
+	padding-left:20px;
+	margin-top:50px;
+}
+
+#myCheckInfo .monthCheckInfoDetail{
+	float:left;
+	width:70%;
+	overflow:hidden;
+}
+#myCheckInfo .monthCheckInfoDetail h2{
+	height:30px;
+	line-height:30px;
+	margin:5px 0 5px 10px;
+}
+#myCheckInfo .myCheckInfoDetail .currentDayCheck{
+	font-size:14px;
+	height:30px;
+	line-height:30px;
+	margin-left:10px;
+}
+#myCheckInfo .myCheckInfoDetail ul{
+	display:none;
+	padding-left:10px;	
+}
+#myCheckInfo .myCheckInfoDetail ul li{
+	line-height:30px;
+	height:30px;
+}
+#myCheckInfo .myCheckInfoDetail ul li span{
+	float:left;	
+	margin-left:20px;
+}
+#myCheckInfo .myCheckInfoDetail ul li p{
+	float:left;
+}
+
+#myCheckInfo .monthCheckInfoDetail ul{
+	overflow:hidden;
+}
+#myCheckInfo .monthCheckInfoDetail ul li{
+	float:left;
+	font-size:14px;
+	line-height:25px;
+	height:25px;
+	width:25%;
+}
+#myCheckInfo .monthCheckInfoDetail ul li span{
+	float:left;	
+	margin-left:30px;
+}
+#myCheckInfo .monthCheckInfoDetail ul li p{
+	float:left;
+}

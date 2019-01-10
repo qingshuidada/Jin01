@@ -1,0 +1,1101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20151125" releaseVersion="8.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="departmentName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="monthDate"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="userAccount"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="userName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[FRDemo]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT
+	salary_info_id AS salaryInfoId,
+	user_account AS '账号/身份证',
+	user_name AS '姓名',
+	final_pay_amount AS '实发金额',
+	class_level AS '等级',
+	daily_wage AS dailyWage,
+	monthly_pay AS monthlyPay,
+	days AS '天数',
+	total_pay_amount AS '应发工资',
+	night_shift AS nightShift,
+	night_shift_amount AS '夜班费',
+	subsidy_amount AS '医餐费', 
+	actual_pay_amount AS actualPayAmount,
+	award_amount AS '工奖',
+	overtime_pay_amount AS '加班费',
+	communication_amount AS '通讯费',
+	other_amount AS '其它',
+	withhold_amount AS '扣款',
+	insurance_amount AS '养老保险',
+	department_name AS departmentName,
+	post_name AS postName,
+	month_date AS monthDate,
+	CONCAT(DATE_FORMAT(STR_TO_DATE('${monthDate}','%Y%m'),'%Y年%m月')
+		,'工资奖金汇总表') AS '封面标题',
+	CONCAT('杭州航民达美染整有限公司',DATE_FORMAT(STR_TO_DATE('${monthDate}','%Y%m'),'%Y年%m月')
+		,'工资奖金表') AS '页头',month_date AS 月份
+FROM
+	salary_info
+WHERE
+	ensure_flag = '1'
+AND	IF('${monthDate}' IS NOT NULL AND '${monthDate}' != ''
+	,month_date = '${monthDate}',TRUE)
+AND IF('${userName}' IS NOT NULL AND '${userName}' != ''
+	,user_name LIKE '${userName}%',TRUE)
+AND IF('${userAccount}' IS NOT NULL AND '${userAccount}' != ''
+	,user_account = '${userAccount}',TRUE)
+AND IF('${departmentName}' IS NOT NULL AND '${departmentName}' != ''
+	,department_name = '${departmentName}',TRUE)
+ORDER BY LENGTH(user_account),user_account
+]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR F="18" T="20"/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[864000,1728000,1296000,864000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,1440000,0,0,1008000,864000,813600,813600,0,806400,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[0,2016000,0,5040000,2592000,3312000,2016000,2016000,2390400,2390400,2390400,2390400,2390400,2390400,2174400,2390400,2390400,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="11" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="13" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="15" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="16" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="1" cs="16" s="0">
+<O>
+<![CDATA[杭州航民达美染整有限公司]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="2" cs="16" s="1">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="封面标题"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="1" r="3" cs="17">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="4" cs="7" s="2">
+<O>
+<![CDATA[基本工资：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="4" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(I24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="17" r="4">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="5" cs="7" s="2">
+<O>
+<![CDATA[夜班费：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="5" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(J24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="6" cs="7" s="2">
+<O>
+<![CDATA[医餐费：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="6" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(K24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="7" cs="7" s="2">
+<O>
+<![CDATA[工奖总额：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="7" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(L24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="8" cs="7" s="2">
+<O>
+<![CDATA[加班费：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="8" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(M24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="9" cs="7" s="2">
+<O>
+<![CDATA[通讯费：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="9" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(N24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="10" cs="7" s="2">
+<O>
+<![CDATA[其它总额：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="10" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(O24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="11" cs="7" s="2">
+<O>
+<![CDATA[扣款总额：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="11" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(P24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="12" cs="7" s="2">
+<O>
+<![CDATA[养老保险：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="12" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(Q24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="13" cs="7" s="2">
+<O>
+<![CDATA[实发总金额：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="13" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=MAX(F24)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="14" cs="7" s="2">
+<O>
+<![CDATA[大写人民币：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="14" cs="9" s="3">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=CNMONEY(MAX(F24))]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="15" cs="7" s="2">
+<O>
+<![CDATA[制表：]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="15" cs="9" s="3">
+<O>
+<![CDATA[朱春霞]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="16" cs="7" s="2">
+<O>
+<![CDATA[审批：]]></O>
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.PageHighlightAction">
+<P i="1"/>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand/>
+</C>
+<C c="8" r="16" cs="9" s="3">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="17" cs="16">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=F23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=I23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=J23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=K23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="11" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=L23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=M23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="13" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=N23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=O23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="15" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=P23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="16" r="18">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=Q23]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="19" cs="16" s="4">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="页头"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="17" r="19" s="5">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="1" r="20" s="6">
+<O>
+<![CDATA[序号]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="20" s="6">
+<O>
+<![CDATA[账号/身份证号码]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="20" s="6">
+<O>
+<![CDATA[姓 名]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="20" s="6">
+<O>
+<![CDATA[实发金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="20" s="6">
+<O>
+<![CDATA[等级]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="20" s="6">
+<O>
+<![CDATA[天数]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="20" s="6">
+<O>
+<![CDATA[应发工资]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="20" s="6">
+<O>
+<![CDATA[夜班费]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="20" s="6">
+<O>
+<![CDATA[医餐费]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="11" r="20" s="6">
+<O>
+<![CDATA[工奖]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="20" s="6">
+<O>
+<![CDATA[加班费]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="13" r="20" s="6">
+<O>
+<![CDATA[通讯费]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="20" s="6">
+<O>
+<![CDATA[其它]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="15" r="20" s="6">
+<O>
+<![CDATA[扣款]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="16" r="20" s="6">
+<O>
+<![CDATA[养老保险]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="17" r="20" s="7">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="0" r="21">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=ds1.group(int(($$group_result_sequence - 1) / 30))]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand dir="0" leftParentDefault="false" left="A20"/>
+</C>
+<C c="1" r="21" s="6">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=C22 + ($$page_number-2)*30]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand dir="0" leftParentDefault="false" left="D22"/>
+</C>
+<C c="2" r="21">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=&D22]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand leftParentDefault="false" left="D22"/>
+</C>
+<C c="3" r="21" s="8">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="账号/身份证"/>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper">
+<Attr divideMode="1"/>
+</RG>
+<Result>
+<![CDATA[$$$]]></Result>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0" leftParentDefault="false" left="A22"/>
+</C>
+<C c="4" r="21" s="6">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="姓名"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="5" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="实发金额"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="6" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="等级"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="7" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="天数"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="8" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="应发工资"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="9" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="夜班费"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="10" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="医餐费"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="11" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="工奖"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="12" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="加班费"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="13" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="通讯费"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="14" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="其它"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="15" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="扣款"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="16" r="21" s="9">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="养老保险"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="17" r="21" s="7">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="0" r="22" s="7">
+<PrivilegeControl/>
+<Expand dir="0" leftParentDefault="false" left="A22"/>
+</C>
+<C c="1" r="22" s="10">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="22" s="11">
+<O>
+<![CDATA[本页小计]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="22" s="10">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(F22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="22" s="9">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="22" s="9">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(I22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(J22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(K22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="11" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(L22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(M22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="13" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(N22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(O22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="15" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(P22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="16" r="22" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(Q22)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="0" r="23" s="7">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=A22]]></Attributes>
+</O>
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.FormulaCondition">
+<Formula>
+<![CDATA[$$$ = ROUNDUP(ROWCOUNT("ds1") / 30) - 1]]></Formula>
+</Condition>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.RowHeightHighlightAction">
+<RowHeight i="864000"/>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand leftParentDefault="false" left="A22"/>
+</C>
+<C c="1" r="23" s="10">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="23" s="11">
+<O>
+<![CDATA[合计]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="23" s="10">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(F19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="23" s="9">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="7" r="23" s="9">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="8" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(I19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="9" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(J19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="10" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(K19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="11" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(L19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="12" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(M19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="13" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(N19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="14" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(O19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="15" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(P19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="16" r="23" s="9">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=sum(Q19)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="0" r="24">
+<PrivilegeControl/>
+<HighlightList>
+<Highlight class="com.fr.report.cell.cellattr.highlight.DefaultHighlight">
+<Name>
+<![CDATA[条件属性1]]></Name>
+<Condition class="com.fr.data.condition.ListCondition"/>
+<HighlightAction class="com.fr.report.cell.cellattr.highlight.PageHighlightAction">
+<P i="1"/>
+</HighlightAction>
+</Highlight>
+</HighlightList>
+<Expand leftParentDefault="false" left="A22"/>
+</C>
+<C c="15" r="24" cs="2" s="12">
+<O t="Formula" class="Formula">
+<Attributes>
+<![CDATA[=($$page_number - 1) + " / " + ($$totalPage_number - 1)]]></Attributes>
+</O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting orientation="1">
+<Margin top="648000" left="864000" bottom="648000" right="864000"/>
+</PaperSetting>
+</ReportSettings>
+<Header reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Header>
+<Footer reportPageType="0">
+<Background name="NullBackground"/>
+<LeftList/>
+<CenterList/>
+<RightList/>
+</Footer>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="楷体" style="1" size="160"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="128"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1" paddingRight="10">
+<FRFont name="SimSun" style="1" size="128"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1" paddingLeft="10">
+<FRFont name="SimSun" style="1" size="128"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="宋体" style="1" size="104"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style imageLayout="1">
+<FRFont name="宋体" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-16777216"/>
+<Bottom style="1" color="-16777216"/>
+<Left style="1" color="-16777216"/>
+<Right style="1" color="-16777216"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="80"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+<Style horizontal_alignment="2" imageLayout="1">
+<FRFont name="SimSun" style="0" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-16777216"/>
+<Bottom style="1" color="-16777216"/>
+<Left style="1" color="-16777216"/>
+<Right style="1" color="-16777216"/>
+</Border>
+</Style>
+<Style horizontal_alignment="4" imageLayout="1">
+<FRFont name="SimSun" style="0" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-16777216"/>
+<Bottom style="1" color="-16777216"/>
+<Left style="1" color="-16777216"/>
+<Right style="1" color="-16777216"/>
+</Border>
+</Style>
+<Style imageLayout="1">
+<FRFont name="SimSun" style="0" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-16777216"/>
+<Bottom style="1" color="-16777216"/>
+<Left style="1" color="-16777216"/>
+<Right style="1" color="-16777216"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="80"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1" color="-16777216"/>
+<Bottom style="1" color="-16777216"/>
+<Left style="1" color="-16777216"/>
+<Right style="1" color="-16777216"/>
+</Border>
+</Style>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="1" size="72"/>
+<Background name="NullBackground"/>
+<Border/>
+</Style>
+</StyleList>
+<DesignerVersion DesignerVersion="IAA"/>
+<PreviewType PreviewType="0"/>
+</WorkBook>

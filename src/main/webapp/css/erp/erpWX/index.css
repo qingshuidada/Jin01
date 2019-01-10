@@ -1,0 +1,47 @@
+/*------------------------------reset--------------------------------*/
+html,body,ul,ol,li,dl,dt,dd,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img,i,em,b,strong,figure{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6,b{font-weight:normal;}
+ul,li{list-style:none;}
+i{font-style:normal;}
+a{text-decoration:none;}
+html,body{
+	height:100%;
+	width:100%;
+}
+body{font:12px "宋体"}
+/*----------------------------body--------------------------------------*/
+header{
+	height:8.2%;
+	box-sizing:border-box;
+	border:1px solid #acacac;
+	text-align:center;
+	font-size:.40rem;
+}
+setion{
+	height:85.8%;
+	box-sizing:border-box;
+	border:1px solid #9b9a98;
+	background:#fef7ed;
+	overflow:hidden;
+	display:block;
+	border-bottom:none;
+}
+setion>figure{
+	box-sizing:border-box;
+	float:left;
+	width:25%;
+	height:20%;
+	padding-top:.2rem;
+	text-align:center;
+}
+setion figure img{
+	width:80%;
+	height:60%;
+}
+setion figure figcaption{
+	margin-top:8px;
+}
+button{
+	height:6%;
+	width:100%;
+}

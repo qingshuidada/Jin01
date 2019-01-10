@@ -1,0 +1,117 @@
+<div id="knowType">
+	<div class="maintop">
+		<!-- <input type="button" value="添加类别" class="button addKnowType"/>
+		<input type="button" value="保存类别顺序" class="button saveOrderCode"/>
+ -->	</div>
+	<div>
+		<table id="knowTypedg"></table>
+	</div>
+	<div class="popups">
+		<div class="popup eaitSonType">
+			<h3>修改子类别</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div class="typeBar">
+					<span class ="sortNum"></span>
+					<div class="sonTypeName">
+						子类别名称
+					</div>
+					<div class="operation">
+						操作
+					</div>
+				</div>
+				<div class="typeBar">
+					<span class ="sortNum">
+						1.
+					</span>
+					<div class="sonTypeName">
+						<input type="text"  flag="1"/>
+					</div>
+					<div class="operation">
+						<span class="small-button delete" title="删除" onclick="deleteSonKnowType(this)"></span>
+						<span class="empty"></span>
+						<span class="downset" title="下移" onclick="downSonKnowType(this)"></span>
+					</div>
+				</div>
+				<!-- <div class="typeBar">
+					<span class ="sortNum">
+						2.
+					</span>
+					<div class="sonTypeName">
+						<input type="text" flag="2"/>
+					</div>
+					<div class="operation">
+						<span class="small-button delete" title="删除" onclick="deleteSonKnowType(this)"></span>
+						<span class="upset" title="上移" onclick="upSonKnowType(this)"></span>
+						<span class="empty"></span>
+					</div>
+				</div> -->
+				<div class="typeBar">
+					<span class ="sortNum">
+						3.
+					</span>
+					<div class="sonTypeName">
+						<input type="text"  flag="3" />
+					</div>
+					<div class="operation">
+						<input type="button" class="button addTypeBar" value="添加"/>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<div class="popup addType">
+			<h3>添加类别</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<table>
+					<tr>
+						<td>类别名称：</td>
+						<td><input type="text" class="firstCategoryName"></td>
+					</tr>
+					<tr>
+						<td>公开级别：</td>
+						<td>
+							<select class="openness">
+								<option value="1">公开</option>
+								<option value="0">普通</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<div class="popup eaitType">
+			<h3>修改类别</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<table>
+					<tr>
+						<td>新名称：</td>
+						<td><input type="text" class="firstCategoryName"></td>
+					</tr>
+					<tr>
+						<td>公开级别：</td>
+						<td>
+							<select class="openness">
+								<option value="1">公开</option>
+								<option value="0">普通</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+</div>

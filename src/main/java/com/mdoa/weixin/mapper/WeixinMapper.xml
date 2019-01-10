@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.weixin.dao.WeixinDao" >
+	
+	<!-- 判断客户是否进行了绑定 -->
+	<select id="checkCustomerBind" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			a.open_id AS openId,
+			a.phone_number AS phoneNumber,
+			b.password
+		FROM
+			erp_weixin a INNER JOIN(
+				SELECT
+					phone_number,
+					password
+				FROM
+					erp_custom
+				WHERE
+					alive_flag = '1'
+			) b ON(a.phone_number = b.phone_number)
+		WHERE
+			a.alive_flag = '1'
+			AND a.open_id = #{openId}
+	</select>
+	<!-- 判断业务员是否进行了绑定 -->
+	<select id="checkSalesmanBind" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			b.password,
+			a.user_account
+		FROM
+			erp_weixin a INNER JOIN(
+					SELECT
+						user_account,
+						password
+					FROM
+						erp_sales
+					WHERE
+						alive_flag = '1'
+			) b ON (a.user_account = b.user_account)
+		WHERE
+			alive_flag = '1'
+			AND open_id = #{openId}
+	</select>
+	<!-- 验证帐号密码的正确性 -->
+	<select id="checkExistCustomer" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			customer_id AS customerId
+		FROM
+			erp_custom
+		WHERE
+			alive_flag = '1'
+			AND phone_number = #{phoneNumber}
+			AND password = #{password}
+	</select>
+	<select id="checkExistSalesman" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			salesman_id AS salesmanId
+		FROM
+			erp_sales
+		WHERE
+			alive_flag = '1'
+			AND user_account = #{userAccount}
+			AND password = #{password}
+	</select>
+	<!-- 用户绑定 -->
+	<insert id="insertErpWeixin" parameterType="com.mdoa.weixin.bo.WeixinForm">
+		INSERT INTO erp_weixin(
+			erp_weixin_id,
+			<if test="phoneNumber != null and phoneNumber != ''">
+				phone_number,
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+				user_account,
+			</if>
+			open_id,
+			nick_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			<if test="phoneNumber != null and phoneNumber != ''">
+				#{phoneNumber},
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+				#{userAccount},
+			</if>
+			#{openId},
+			#{nickName},
+			'1'
+		)
+	</insert>
+	<!-- 解除绑定 -->
+	<update id="unBind" parameterType="com.mdoa.weixin.bo.WeixinForm">
+		UPDATE
+			erp_weixin
+		SET
+			alive_flag = '0'
+		WHERE
+			alive_flag = '1'
+			AND open_id = #{openId}
+	</update>
+	<!-- 根据openid查询信息 -->
+	<select id="queryUserMessage" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			b.password,
+			<if test="csFlag != null and csFlag == 'customer'">
+			b.phone_number AS phoneNumber
+			</if>
+			<if test="csFlag != null and csFlag == 'salesman'">
+			b.user_account AS userAccount
+			</if>
+		FROM
+			erp_weixin a 
+				<if test="csFlag != null and csFlag == 'customer'">
+		INNER JOIN(SELECT
+						customer_id,
+						phone_number,
+						password
+					FROM
+						erp_custom
+					WHERE
+						alive_flag = '1'
+				) b ON (a.phone_number = b.phone_number)
+				</if>
+				<if test="csFlag != null and csFlag == 'salesman'">
+		INNER JOIN(SELECT
+						salesman_id,
+						user_account,
+						password
+					FROM
+						erp_sales
+					WHERE
+						alive_flag = '1'
+				) b ON (a.user_account = b.user_account)
+				</if>
+		WHERE
+			a.alive_flag = '1'
+			AND a.open_id = #{openId}
+		
+	</select>
+	<!-- 判定客户是否绑定了他其他微信 -->
+	<select id="checkOpenForUser" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			erp_weixin_id AS erpWeixinId
+		FROM
+			erp_weixin
+		WHERE
+			alive_flag = '1'
+			<if test="phoneNumber !=null and phoneNumber != ''">
+				AND phone_number = #{phoneNumber}
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+				AND user_account = #{userAccount}
+			</if>
+	</select>
+	<select id="checkOpenForUserHaveOpenId" parameterType="com.mdoa.weixin.bo.WeixinForm" resultType="com.mdoa.weixin.bo.WeixinForm">
+		SELECT
+			erp_weixin_id AS erpWeixinId
+		FROM
+			erp_weixin
+		WHERE
+			alive_flag = '1'
+			<if test="phoneNumber !=null and phoneNumber != ''">
+				AND phone_number = #{phoneNumber}
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+				AND user_account = #{userAccount}
+			</if>
+			<if test="openId != null and openId != ''">
+				AND open_id = #{openId}
+			</if>
+	</select>
+</mapper>

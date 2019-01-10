@@ -1,0 +1,56 @@
+<div id="voteManage">
+	<div class="maintop">
+		<!-- <input type="button" class="button addVote" value="发起投票"/> -->
+	</div>
+	<div class="invitetop">
+		投票名称：<input type="text" class="voteName"/>
+		发起时间：<input type="text" class="createStartTimeStr jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+		~ <input type="text" class="createEndTimeStr jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+		结束时间：<input type="text" class="finishStartTimeStr jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+		~ <input type="text" class="finishEndTimeStr jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+		状态：<select class="status">
+			<option value="">全部</option>
+			<option value="0">关闭</option>
+			<option value="1">投票中</option>
+			<option value="2">已结束</option>
+		</select>
+		<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空">
+	</div>
+	<div>
+		<table id="voteManagedg"></table>
+	</div>
+	<div class="popup launchVote">
+		<h3>发起投票</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table>
+				<tr>
+					<td>投票名称：</td>
+					<td><input type="text" class="voteName"/></td>
+				</tr>
+				<tr>
+					<td style="padding-bottom:29px;">投票描述：</td>
+					<td><textarea class="detail" rows="3"></textarea></td>
+				</tr>
+				<tr>
+					<td>结束时间：</td>
+					<td>
+						<input type="text" class="endTimeStr jqdate"  onblur="testDate(this)" onclick="testShow(this);"/>
+					</td>
+				</tr>
+				<tr class="addVote">
+					<td>投票选项：</td>
+					<td>
+						<input type="text" class="voteItemName"/>
+						<input type="button" class="button addVoteItem" value="添加"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="发起投票"/>
+			<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+		</div>
+	</div>
+</div>

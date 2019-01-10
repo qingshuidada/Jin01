@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>登录</title>
+	<link rel="stylesheet" type="text/css" href="../../css/erp/bootstrap.min.css">
+	<script type="text/javascript" src="../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../js/erp/bootstrap.min.js"></script>
+	
+</head>
+<body>
+	<script type="text/javascript">
+		$(function(){
+			var url = window.location.href;
+			var obj = new parseQueryString(url);
+			$.ajax({
+			    url: '../../qywx/getAccount.qywx',
+			    data:{
+			    	qywxUserId:obj.userId
+			    },
+			    type:"post",
+			    dataType:"json",
+			    success:function(data){
+			       //成功回调
+			       var userData = data.returnObj;
+			       if(data.success){
+			    	   $.ajax({
+						    url: '../../phUser/login.ph',
+						    data:{
+						    	sessionId: localStorage.getItem('sessionId') || null,
+						    	userAccount:userData.userAccount,
+								password:userData.password,
+								qywxUserId:userData.qywxUserId
+						    },
+						    type:"post",
+						    dataType:"json",
+						    success:function(data){
+						    	if(data.sessionId){
+									localStorage.setItem('sessionId',data.sessionId);
+								};
+						    	if(data.success){
+                            		window.location.href='../dist';
+						    	}else{
+						    		alert(data.message);
+						    	}
+							}
+						})
+			       } else{
+			    	   alert("账号密码获取失败")
+			       }						
+			    },
+			    error:function(data){
+			    	console.log(data);
+			    }
+			
+			})
+			
+			
+		})
+		//获取地址栏的构造函数
+		function parseQueryString(url){
+			var str = url.split("?")[1],items = str.split("&");
+			var arr,name,value;
+			
+			for(var i=0; i<items.length; i++){
+				arr = items[i].split("=");
+				name = arr[0];
+				value = arr[1];
+				this[name] = value;
+			}
+		}
+
+		
+	</script>
+</body>
+</html>

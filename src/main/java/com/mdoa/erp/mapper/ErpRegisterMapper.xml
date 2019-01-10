@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.ErpRegisterDao">
+
+	<!-- UUID -->
+	<select id="getUuid" resultType="java.lang.String">
+		SELECT UUID() AS uuid
+	</select>
+	<!-- 添加父业务员 -->
+	<insert id="addParentSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		INSERT INTO erp_sales(
+			salesman_id,
+			user_id,
+			password,
+			user_account,
+			salesman_name,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{userId},
+			#{password},
+			#{userAccount},
+			#{salesmanName},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+		
+	</insert>
+	
+	<!-- 添加子业务员 -->
+	<insert id="addSubSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		INSERT INTO erp_sales_name(
+			salesman_name_id,
+			salesman_name_sub,
+			salesman_id,
+			data_source_key,
+			data_source_name,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{salesmanNameSub},
+			#{salesmanId},
+			#{dataSourceKey},
+			#{dataSourceName},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 查询父业务员 -->
+	<select id="queryParentSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			a.salesman_id AS salesmanId,
+			a.user_id AS userId,
+			a.user_account AS userAccount,
+			a.salesman_name AS salesmanName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag,
+			IFNULL(c.nick_name,'') AS nickName,
+			IF(ISNULL(c.user_account),'未绑定','已绑定') AS bindStatus,
+			IFNULL(c.open_id,'') AS openId,
+			COUNT(b.salesman_name_id) AS salesmanAmount
+		FROM
+			erp_sales a LEFT JOIN(
+				SELECT
+					salesman_id,
+					salesman_name_id
+				FROM
+					erp_sales_name
+				WHERE
+					alive_flag = '1'
+			) b ON (a.salesman_id = b.salesman_id)
+			 LEFT JOIN(
+			 	SELECT
+			 		user_account,
+			 		nick_name,
+			 		open_id
+			 	FROM
+			 		erp_weixin
+			 	WHERE
+			 		alive_flag = '1'
+			 ) c ON (c.user_account = a.user_account)
+		WHERE
+			a.alive_flag = '1'
+			<if test="salesmanName != null and salesmanName != ''">
+				AND a.salesman_name LIKE #{salesmanName}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+		GROUP BY
+			a.salesman_id
+
+	</select>
+	<!-- 查询子业务员 -->
+	<select id="querySubSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			salesman_name_id AS salesmanNameId,
+			salesman_name_sub AS salesmanNameSub,
+			salesman_id AS salesmanId,
+			data_source_key AS dataSourceKey,
+			data_source_name AS dataSourceName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_sales_name
+		WHERE
+				alive_flag = '1'
+			<if test="salesmanNameSub != null and salesmanNameSub != ''">
+				AND salesman_name_sub LIKE #{salesmanNameSub}
+			</if> 
+			<if test="dataSourceName != null and dataSourceName != ''">
+				AND data_source_name = #{dataSourceName}
+			</if>
+			<if test="salesmanId != null and salesmanId != ''">
+				AND salesman_id = #{salesmanId}
+			</if>
+	</select>
+	<!-- 删除子业务员 -->
+	<update id="deleteSubSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_sales_name
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+				alive_flag = '1'
+			<if test="salesmanNameId != null and salesmanNameId != ''">
+				AND salesman_name_id = #{salesmanNameId}
+			</if>
+			<if test="salesmanId != null and salesmanId != ''">
+				AND salesman_id = #{salesmanId}
+			</if>
+			
+	</update>
+	<!-- 删除父业务员 -->
+	<update id="deleteParentSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_sales
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+				alive_flag = '1'
+			<if test="salesmanId != null and salesmanId != ''">
+				AND salesman_id = #{salesmanId}
+			</if>
+	</update>
+	<!-- 添加父客户 -->
+	<insert id="addParentCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		INSERT INTO erp_custom(
+			customer_id,
+			customer_name,
+			phone_number,
+			password,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			#{customerId},
+			#{customerName},
+			#{phoneNumber},
+			#{password},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 添加客户和业务员关系 -->
+	<insert id="addCusSaleCorrelation" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		INSERT INTO erp_custom_sale_correlation(
+			correlation_id,
+			customer_id,
+			salesman_id,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUES
+		<foreach collection="salesmanIds" index="index" item="salesmanIds" separator=",">
+			(
+				UUID(),
+				#{customerId},
+				#{salesmanIds},
+				NOW(),
+				#{createUserId},
+				#{createUserName},
+				'1'
+			)
+		</foreach>
+	</insert>
+	<!-- 添加子客户 -->
+	<insert id="addSubCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		INSERT INTO erp_custom_name(
+			customer_name_id,
+			customer_name_sub,
+			customer_id,
+			data_source_key,
+			data_source_name,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{customerNameSub},
+			#{customerId},
+			#{dataSourceKey},
+			#{dataSourceName},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 查询父客户 -->
+	<select id="queryParentCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+				e.nickName,
+				e.openId,
+				IF(ISNULL(e.openId),'未绑定','已绑定') AS bindStatus,
+			<if test="salesmanName == null or salesmanName == ''">
+				e.customerId,
+				e.customerName,
+				e.phoneNumber,
+				e.salesmanName,
+				e.salesmanId,
+				e.createTimeStr,
+				e.count 
+			</if>
+			<if test="salesmanName != null and salesmanName != ''">
+				f.customerName,
+				f.phoneNumber,
+				<!-- f.salesmanId, -->
+				f.customerId,
+				f.createTimeStr,
+				MAX(f.salesmanName) AS salesmanName,
+				MAX(f.salesmanId) AS salesmanId,
+				COUNT(f.customerId) AS count
+			</if>
+		FROM
+		(
+		SELECT
+			c.customer_id AS customerId,
+			c.customer_name AS customerName,
+			c.phone_number AS phoneNumber,
+			c.createTimeStr AS createTimeStr,
+			c.nick_name AS nickName,
+			c.open_id AS openId,
+			d.salesman_id AS salesmanId,
+			d.salesman_name salesmanName,
+			
+			COUNT(c.customer_id) AS count
+		FROM
+			(
+				SELECT
+					a.customer_id,
+					a.customer_name,
+					a.phone_number,
+					b.salesman_id,
+					z.nick_name,
+					z.open_id,
+					DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr
+				FROM
+					erp_custom a
+				LEFT JOIN (
+					SELECT
+						customer_id,
+						salesman_id,
+						correlation_id
+					FROM
+						erp_custom_sale_correlation
+					WHERE
+						alive_flag = '1'
+				) b ON (
+					a.customer_id = b.customer_id
+				)
+				LEFT JOIN (
+					SELECT
+				 		phone_number,
+				 		nick_name,
+				 		open_id
+				 	FROM
+				 		erp_weixin
+				 	WHERE
+				 		alive_flag = '1'
+				) z ON z.phone_number = a.phone_number
+				WHERE
+					a.alive_flag = '1'
+					<if test="customerName != null and customerName != ''">
+						AND a.customer_name LIKE #{customerName}
+					</if>
+					<if test="phoneNumber != null and phoneNumber != ''">
+						AND a.phone_number = #{phoneNumber}
+					</if>
+			) AS c
+			<if test="salesmanName == null or salesmanName == ''">
+		LEFT JOIN
+		</if> 
+		<if test="salesmanName != null and salesmanName != ''">
+		INNER JOIN
+		</if>(
+			SELECT
+				salesman_id,
+				salesman_name
+			FROM
+				erp_sales
+			WHERE
+				alive_flag = '1'
+				<if test="salesmanName != null and salesmanName != ''">
+					AND salesman_name LIKE #{salesmanName}
+				</if>
+		) d ON(d.salesman_id = c.salesman_id)
+		GROUP BY
+			c.customer_id
+		) AS e
+		<if test="salesmanName == null or salesmanName == ''">
+		ORDER BY
+			e.createTimeStr DESC
+		</if>
+		<if test="salesmanName != null and salesmanName != ''">
+		LEFT JOIN(
+		SELECT
+			cc.customer_id AS customerId,
+			cc.customer_name AS customerName,
+			cc.phone_number AS phoneNumber,
+			dd.salesman_id AS salesmanId,
+			dd.salesman_name salesmanName,
+			cc.createTimeStr AS createTimeStr
+		FROM
+			(
+				SELECT
+					aa.customer_id,
+					aa.customer_name,
+					aa.phone_number,
+					bb.salesman_id,
+					DATE_FORMAT(aa.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr
+				FROM
+					erp_custom aa
+				LEFT JOIN (
+					SELECT
+						customer_id,
+						salesman_id,
+						correlation_id
+					FROM
+						erp_custom_sale_correlation
+					WHERE
+						alive_flag = '1'
+				) bb ON (
+					aa.customer_id = bb.customer_id
+				)
+				WHERE
+					aa.alive_flag = '1'
+			) AS cc
+		INNER JOIN (
+			SELECT
+				salesman_id,
+				salesman_name
+			FROM
+				erp_sales
+			WHERE
+				alive_flag = '1'
+		) dd ON(dd.salesman_id = cc.salesman_id)
+		) f ON(e.customerId = f.customerId)
+		GROUP BY
+			f.customerId
+		ORDER BY
+			f.createTimeStr
+			</if>
+	</select>
+	<select id="queryParentCustomerO" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			c.customer_name AS customerName,
+			c.phone_number AS phoneNumber,
+			d.salesman_name AS salesmanName,
+			d.salesman_id AS salesmanId,
+		    c.customer_id AS customerId
+		FROM
+			(
+				SELECT
+					a.customer_id,
+					a.customer_name,
+					a.phone_number,
+					b.salesman_id
+				FROM
+					erp_custom a
+				LEFT JOIN (
+					SELECT
+						customer_id,
+						salesman_id,
+						correlation_id
+					FROM
+						erp_custom_sale_correlation
+					WHERE
+						alive_flag = '1'
+						<if test="correlationId != null and correlationId != ''">
+							AND a.correlation_id = #{correlationId}
+						</if>
+				) b ON (
+					a.customer_id = b.customer_id
+				)
+				WHERE
+					a.alive_flag = '1'
+					<if test="customerName != null and customerName != ''">
+						AND a.customer_name LIKE #{customerName}
+					</if>
+					<if test="customerId != null and customerId != ''">
+						AND a.customer_Id = #{customerId}
+					</if>
+					<if test="phoneNumber != null and phoneNumber != ''">
+						AND a.phone_number = #{phoneNumber}
+					</if>
+			) as c
+		INNER JOIN (
+			SELECT
+				salesman_id,
+				salesman_name
+			FROM
+				erp_sales
+			WHERE
+				alive_flag = '1'
+				<if test="salesmanName != null and salesmanName != ''">
+					AND salesman_name LIKE #{salesmanName}
+				</if>
+		) d ON(d.salesman_id = c.salesman_id)
+	
+	</select>
+	<!-- 查询子客户 -->
+	<select id="querySubCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			customer_name_id AS customerNameId,
+			customer_name_sub AS customerNameSub,
+			customer_id AS customerId,
+			data_source_key AS dataSourceKey,
+			data_source_name AS dataSourceName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr, 
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_custom_name
+		WHERE
+				alive_flag = '1'
+			<if test="customerName != null and customerName != ''">
+				AND customer_name LIKE #{customerName}
+			</if>
+			<if test="customerNameSub != null and customerNameSub != ''">
+				AND customer_name_sub LIKE #{customerNameSub}
+			</if>
+			<if test="dataSourceName != null and dataSourceName != ''">
+				AND data_source_name = #{dataSourceName}
+			</if>
+			<if test="dataSourceKey != null and dataSourceKey != ''">
+				AND data_source_key = #{dataSourceKey}
+			</if>
+			<if test="customerId != null and customerId != ''">
+				AND customer_id = #{customerId}
+			</if>
+	</select>
+	<!-- 删除原来的业务员 -->
+	<update id="updateCusSaleCorrelation" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_custom_sale_correlation
+		SET
+			alive_flag = '0'
+		WHERE
+			alive_flag = '1'
+			AND customer_id = #{customerId}
+	</update>
+	
+	<!-- 修改业务员密码 -->
+	<update id="updateSalesmanPassword" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_sales a,
+			user_info b
+		SET
+			a.password = IF(a.user_account = #{userAccount} AND a.password = #{oldPassword},#{newPassword},a.password),
+			b.password = IF(b.user_account = #{userAccount} AND b.password = #{oldPassword},#{newPassword},b.password)
+		WHERE
+		a.alive_flag = '1'
+		AND b.alive_flag = '1'
+		AND(
+			(a.user_account = #{userAccount} AND a.password = #{oldPassword})
+			OR
+			(b.user_account = #{userAccount} AND b.password = #{oldPassword})
+		)
+	</update>
+	
+	<!-- 修改客户信息 -->
+	<update id="updateParentCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_custom
+		SET
+			<if test="customerName != null and customerName != ''">
+				customer_name = #{customerName},
+			</if>
+			<if test="phoneNumber != null and phoneNumber != ''">
+				phone_number = #{phoneNumber},
+			</if>
+			<if test="password != null and password != ''">
+				password = #{password},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND customer_id = #{customerId}
+	</update>
+	
+	<!-- 修改客户密码 -->
+	<update id="updateParentPassword" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_custom
+		SET
+			<if test="updateUserId != null and updateUserId != ''">
+				update_user_id = #{updateUserId},
+			</if>
+			<if test="updateUserName != null and updateUserName != ''">
+				update_user_name = #{updateUserName},
+			</if>
+			password = #{newPassword},
+			update_time = NOW()
+		WHERE
+			alive_flag = '1'
+			AND phone_number = #{phoneNumber}
+			AND password = #{oldPassword}
+	</update>
+	
+	<!-- 删除子客户 -->
+	<update id="deleteSubCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE	
+			erp_custom_name
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			<if test="customerNameId != null and customerNameId != ''">
+				AND customer_name_id = #{customerNameId}
+			</if>	
+			<if test="customerId != null and customerId != ''">
+				AND customer_id = #{customerId}
+			</if>	
+	</update>
+	<!-- 删除父客户 -->
+	<update id="deleteParentCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_custom
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			<if test="customerId != null and customerId != ''"> 
+				AND customer_id = #{customerId}
+			</if>
+	</update>
+	<!-- 查询关系 -->
+	<select id="queryCorrelation" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			correlation_id AS correlationId,
+			customer_id AS customerId,
+			salesman_id AS salesmanId,
+			text,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_custom_sale_correlation
+		WHERE
+			alive_flag = '1'
+			<if test="customerId != null and customerId != ''">
+				AND customer_id = #{customerId}
+			</if>
+			<if test="salesmanId != null and salesmanId != ''">
+				AND salesman_id = #{salesmanId}
+			</if>
+	</select>
+	<!-- 删除关系 -->
+	<update id="deleteCorrelation" parameterType="com.mdoa.erp.bo.ErpRegisterForm">
+		UPDATE
+			erp_custom_sale_correlation
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			<if test="customerId != null and customerId != ''">
+				AND customer_id = #{customerId}
+			</if>
+			<if test="salesmanId != null and salesmanId != ''">
+				AND salesman_id = #{salesmanId}
+			</if> 
+	</update>
+	<!-- 查询客户 -->
+	<select id="queryCustomerBySalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+	SELECT
+			customer_name AS customerName,
+			phone_number AS phoneNumber
+		FROM
+			erp_custom 
+		WHERE
+				alive_flag = '1'
+			<if test="customerName != null and customerName != ''">
+				AND customer_name LIKE #{customerName}
+			</if>
+			AND customer_id IN (
+				SELECT
+					b.customer_id
+				FROM
+					erp_sales a LEFT JOIN(
+						SELECT
+								customer_id,
+								salesman_id
+						FROM
+							erp_custom_sale_correlation
+						WHERE
+							alive_flag = '1'
+					) b ON (a.salesman_id = b.salesman_id)
+				WHERE
+					alive_flag = '1'
+					AND a.salesman_id = #{salesmanId}
+			)
+		<!-- SELECT
+			customer_name_sub AS customerNameSub,
+			phone_number AS phoneNumber
+		FROM
+			erp_custom_name c,
+			erp_custom d
+		WHERE
+			c.alive_flag = '1'
+			AND d.alive_flag = '1'
+			AND c.customer_id = d.customer_id
+			AND c.data_source_key = #{dataSourceKey}
+			AND c.customer_id IN (
+				SELECT
+					b.customer_id
+				FROM
+					erp_sales a LEFT JOIN(
+						SELECT
+								customer_id,
+								salesman_id
+						FROM
+							erp_custom_sale_correlation
+						WHERE
+							alive_flag = '1'
+					) b ON (a.salesman_id = b.salesman_id)
+				WHERE
+					alive_flag = '1'
+					AND a.salesman_id = #{salesmanId}
+			) -->
+	</select>
+	<select id="selectRepotAuthorityUser" resultType="com.mdoa.user.model.UserInfo" parameterType="com.mdoa.user.model.UserInfo">
+		SELECT
+			user_id AS userId,
+			user_name AS userName,
+			department_name AS departmentName,
+			sex AS sex,
+			qywx_user_id AS qywxUserId,
+			report_authority_flag AS reportAuthorityFlag
+		FROM
+			user_info
+		WHERE
+			qywx_user_id IS NOT NULL
+			<if test="userName != null and userName != ''">
+				AND user_name LIKE #{userName}
+			</if>
+	
+	</select>
+	<update id="updateReportAuthorityFlag" parameterType="java.lang.String">
+		UPDATE user_info
+		SET	
+			report_authority_flag = '1'
+		WHERE
+			user_id = #{userId}
+	</update>
+</mapper>

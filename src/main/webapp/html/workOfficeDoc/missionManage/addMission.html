@@ -1,0 +1,49 @@
+<div id="addMission" title="新建任务">
+	<div class="missionClass marginTop">
+		<div class="missionLabel" >
+			任务名称：
+		</div>
+			<input type="text" class="missionName"/>
+		<div class="missionLabel">
+			发起人：
+		</div>
+		<input type="text" class="launchUserName" readonly="readonly"/>
+		<input type="hidden" class="launchUserId">
+	</div>
+	<div class="missionClass marginTop">
+		<div class="missionLabel">
+			任务开始时间：
+		</div>
+		<input type="text" class="startTime" onclick="testShow(this);" readonly/>
+		<div class="missionLabel">
+			预计结束时间：
+		</div>
+		<input type="text" class="expectEndTime" onclick="testShow(this);" readonly/>
+	</div>
+	<div class="selArea marginTop">
+	<div class="missionLabel">
+			执行人：
+		</div>
+		<input type="text" class="headUserName" />
+		<input type="hidden" class="headUserId">
+		<input type="button" class="button selectHeadUserName" value="选择">
+		<div class="missionLabel">
+			抄送人：
+		</div>
+		<input type="text" class="userName" />
+		<input type="hidden" class="userId">
+		<input type="button" class="button selectUserName" value="选择">
+	</div>
+	
+	<div class="missionContent marginTop">
+		<div class="missionLabel">
+			任务描述：
+		</div>
+		<div class="missionUeditor">
+			<script type="text/plain" id="missionEditor"></script>	
+		</div>
+	</div>
+	<div class="btnArea">
+		<input type="button" class="button confirm" value="发起任务"/>
+	</div>
+</div>

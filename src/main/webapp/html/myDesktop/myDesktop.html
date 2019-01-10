@@ -1,0 +1,87 @@
+<div id="myDesktop">
+	<div class="maintop">
+		<div class="addDesktop">
+			<!-- <span class="maintopicon mainicon2"></span>
+			<span>添加模块</span> -->
+		</div>
+		<div style="margin-right:6px;">
+			<input type="button" value="返回" class="button back" />
+		</div>
+	</div>
+	<div class="desktopArea">
+		<div class="leftDesktop">
+		</div>
+		<div class="rightDesktop">
+		</div>
+	</div>
+	<div class="popup addDesktopWindow">
+		<h3>选择添加模块</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table>
+				<tr>
+					<td><label><input type="checkbox"/>流程中心模块</label></td>
+					<td><label><input type="checkbox"/>我的消息</label></td>
+				</tr>
+				<tr>
+					<td><label><input type="checkbox"/>新闻中心</label></td>
+					<td><label><input type="checkbox"/>我的会议</label></td>
+				</tr>
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center;">
+				<input type="button" class="button confirm" value="保存">
+				<input type="button" class="button cannel" value="关闭" style="margin-left:8px;">
+		</div>
+	</div>
+	<div class="desktopMoudleBox desktopMoveBox">
+		<h3>
+			我的计划
+			<span class="barblock closeDesktop"></span>
+			<span class="barblock fold"></span>
+		</h3>
+	</div>
+	<div class="editContractWd" style="overflow:auto; height: 772px;" >
+		<ul class="editArea" style="height: 650;display:block;">
+			<li>
+				<span>合同名称：</span>
+				<input type="text" class="contractName shortInput" disabled="disabled"/>
+				<input type="hidden" class="contractId shortInput" disabled="disabled"/>
+				<i></i>
+				<span>乙方姓名：</span>
+				<input type="text" class="secondName shortInput" disabled="disabled"/>
+			</li>
+			<li>
+				<span>合同金额：</span>
+				<input type="text" readonly="readonly" class="contractAmount shortInput" disabled="disabled"/>
+				<i></i>
+				<span>金额单位：</span>
+				<input type="text" readonly="readonly" class="unit shortInput" disabled="disabled"/>
+			</li>
+			<li>
+				<span>起始日期：</span>
+				<input type="text" class="startTime shortInput" onclick="testShowTime(this);" readonly disabled="disabled"/>
+				<i></i>
+				<span>结束日期：</span>
+				<input type="text" class="endTime shortInput" onclick="testShowTime(this);" readonly disabled="disabled"/>
+			</li>
+			<li>
+				<span>合同描述：</span>
+				<input type="text" class="contractDescribe langInput" disabled="disabled" />
+			</li>
+			<li>
+				<span>合同信息：</span>
+				<script type="text/plain" id="contractEditorThree"></script>
+			</li>
+			<li>
+				<span style="margin-top:4px;">跟单人：</span>
+				<input type="text" class="orderExecutorName" disabled/>
+				<input type="button" class="button selectOrderExecutorName" value="选择" disabled="disabled"/>
+				<i></i>
+				<span>部门：</span>
+				<input type="text" name="departmentName" style="width: 100px" disabled="disabled">	
+				<input type="button" class="button departmentChooseObj" value="选择" disabled="disabled"/>				
+			</li>
+		</ul>
+	</div>
+</div>

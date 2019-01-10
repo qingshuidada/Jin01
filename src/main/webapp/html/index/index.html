@@ -1,0 +1,839 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible"  content="IE=8,9,10,chrome=1" />
+	<title> oa协同办公</title>
+	<link rel="SHORTCUT ICON" href="../../img/index/Mender.ico"/>
+	<link rel="stylesheet" type="text/css" href="../../css/plug/jquery.resizableColumns.css">
+ 	<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../themes/icon.css"> 
+	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../css/personnel/invite.css">
+	<link rel="stylesheet" type="text/css" href="../../css/personnel/inviteflow.css">
+	<link rel="stylesheet" type="text/css" href="../../css/plug/jedate2.css">
+	<link rel="stylesheet" type="text/css" href="../../css/plug/yu.css">
+	<link rel="stylesheet" type="text/css" href="../../css/index/index.css">
+	<link rel="stylesheet" type="text/css" href="../../js/plugin/process/process-plugin.css">
+	<script type="text/javascript" src="../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../js/jquery/jquery.jedate2.min.js"></script>
+	<script type="text/javascript" src="../../js/index/index.js"></script>
+	<script type="text/javascript" src="../../js/plugin/upload.js"></script>
+	<script type="text/javascript" src="../../js/plugin/highcharts.js"></script>
+	<script type="text/javascript" src="../../js/plugin/jquery.jqprint-0.3.js"></script>
+	<script type="text/javascript" src="../../js/plugin/yu.js"></script>
+	<script type="text/javascript" src="../../js/plugin/store.js"></script>
+	<script type="text/javascript" src="../../js/plugin/jquery.resizableColumns.min.js"></script>
+	<script type="text/javascript" src="../../js/plugin/excel-plugin.js"></script>
+	<script type="text/javascript" src="../../js/plugin/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" src="../../js/plugin/ueditor/ueditor.all.js"></script>
+    <script type="text/javascript" src="../../js/plugin/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" src="../../js/plugin/process/process-plugin.js"></script>
+    <script type="text/javascript" src="../../js/plugin/process/process-function.js"></script>
+	<script type="text/javascript" src="../../js/plugin/mdPrint.js"></script>
+</head>
+<body>
+<div id="box" style="position:relative;">
+	<input id="saveDictionaryData" type="hidden">
+	<div id="topbar">
+		<div id="logo">
+			<img src="../../img/index/Mender.png" style="width:35px;height:56px;" alt="梦"/>
+			<img src="../../img/index/Mendertext.png" alt="孟德软件" style="width:76px;height:40px;" id="Mendertext"/>
+		</div>
+		<ul class="topbarMenu">
+			<li class="now personnel">人事管理</li>
+			<li class="repertory">五金仓库</li>
+			<li class="workOfficeDoc">协同办公</li>
+			<li class="erp">ERP</li>
+			<li class="processManage">流程管理</li>
+			<li class="systemSet">系统管理</li>
+		</ul>
+		<div class="companyPortal">
+			<span class="companyPortalIcon"></span>
+			公司主页
+		</div>
+		<div class="myDesktop">
+			<span class="myDesktopIcon"></span>
+			个人桌面
+		</div>
+		<!-- <div class="communication">
+			<span class="communicationIcon"></span>
+			实时通信
+		</div> -->
+		<div class="topbarRight">
+			<p id="time"></p>
+			<span style="margin-right:12px;">欢迎您,<span class="userAccount"></span></span>
+			<span id="punchCard">[请打卡]</span>
+			<span id="updatePassword">[修改密码]</span>
+			<span id="out">[退出]</span>
+		</div>
+	</div>
+	<div id="cut"></div>	
+	<div id="leftbar" title="侧边栏">
+		<div class="show" style="height: 100%">
+			<h2 class="showtop">
+				<img class="img_nav" src="../../img/index/icon1.png" alt="图片一" />
+				<span>导航</span>
+			</h2>
+			<div class="navarea">
+			</div>
+		</div>
+	</div>
+	<div id="main" title="主体">
+		<div id="loadarea" class="easyui-tabs">
+		</div>
+	</div>
+	<div id="bottombar">
+		<div class="bottomleft">
+			<div id="indexMessage">
+				<img src="../../img/index/iconly.png"/>
+				<span>消息 |</span>
+			</div>
+			<img src="../../img/index/iconbq.png"/>
+			<span>便签</span>
+		</div>
+		<div style="float:right;">杭州梦德软件有限公司办公协同管理系统 |技术支持：<a href="javascript:;">杭州梦德软件有限公司</a></div>
+	</div>
+	<div id="w" class="easyui-window" data-options="title:'提示',inline:true" >
+	</div>
+	
+	<div class="popups index-popups" style="text-align: left;">
+		<!-- 商品选择器（单选） -->
+		<div class="popup" id="chooseSupplies" style="height: 410px;width: 450px;z-index: 1000">
+			<h3>请选择商品(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 424px; height: 340px;">
+					<div style="float: left;height: 338x;width: 182px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择办公用品类型</div>
+						<div style="height: 311px;width:180px" class="suppliesType"></div>
+					</div>
+					<div style="float: right;height: 340px;width: 232px;">
+						<div class="queryForm">
+							物品名称：
+								<input name="suppliesName" style="width: 50px;"/>							
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 230px" class="supplies"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 车辆选择器（单选） -->
+		<div class="popup" id="chooseCar" style="height: 410px;width: 350px;z-index: 1000">
+			<h3>请选择供应商</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 424px; height: 340px;">
+					<div class="queryForm">
+						车牌号码：
+							<input name="carNo" style="width: 50px;"/>
+						车辆类型：
+							<input name="carType" style="width: 50px;"/>
+											
+						<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+					</div>
+					<table style="height: 340px;width: 324px" class="car"></table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 部门人员选择器（单选） -->
+		<div class="popup" id="chooseUser" style="height: 410px;width: 450px;z-index: 1000">
+			<h3>请选择员工(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 424px; height: 340px;">
+					<div style="float: left;height: 338x;width: 182px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择部门</div>
+						<div style="height: 311px;width:180px" class="dept"></div>
+					</div>
+					<div style="float: right;height: 340px;width: 232px;">
+						<div class="queryForm">
+							员工姓名：
+								<input name="peopleName" style="width: 50px;"/>							
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 230px" class="user"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 部门人员选择器（多选） -->
+		<div class="popup" id="chooseUsers" style="height: 410px;width: 500px;z-index: 1000">
+			<h3>请选择员工(多选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 474px; height: 340px;">
+					<div style="float: left;height: 338x;width: 182px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择部门</div>
+						<div style="height: 311px;width:180px" class="dept"></div>
+					</div>
+					<div style="float: right;height: 340px;width: 282px;">
+						<div class="queryForm">
+							员工姓名：
+								<input name="peopleName" style="width: 50px;"/>
+							部门：
+							<input name="departmentName" style="width: 50px;"/>
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 280px" class="user"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 部门人员选择器1（多选） -->
+		<div class="popup" id="chooseUsers1" style="height: 410px;width: 500px;z-index: 1000">
+			<h3>请选择员工(多选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 474px; height: 340px;">
+					<div style="float: left;height: 338x;width: 182px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择部门</div>
+						<div style="height: 311px;width:180px" class="dept"></div>
+					</div>
+					<div style="float: right;height: 340px;width: 282px;">
+						<div class="queryForm">
+							员工姓名：
+								<input name="peopleName" style="width: 50px;"/>
+							部门：
+							<input name="departmentName" style="width: 50px;"/>
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 280px" class="user"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 部门选择器（单选） -->
+		<div class="popup" id="chooseDept" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择部门(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: left;height: 338x;width: 272px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择部门</div>
+						<div style="height: 311px;width:270px" class="dept"></div>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 部门选择器（多选） -->
+		<div class="popup" id="chooseDepts" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择部门(多选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: left;height: 338x;width: 272px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择部门</div>
+						<div style="height: 311px;width:270px" class="dept"></div>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 岗位选择器（单选） -->
+		<div class="popup" id="choosePost" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择岗位(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: right;height: 340px;width: 282px;">
+						<div class="queryForm">
+							岗位名称：<input name="postName" style="width: 50px;"/>
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 272px" class="post"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 岗位选择器（多选） -->
+		<div class="popup" id="choosePosts" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择岗位(多选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: right;height: 340px;width: 282px;">
+						<div class="queryForm">
+							岗位名称：<input name="postName" style="width: 50px;"/>
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 272px" class="post"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		
+		<!-- 角色选择器（单选） -->
+		<div class="popup" id="chooseRole" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择角色(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: right;height: 340px;width: 282px;">
+						<div class="queryForm">
+							员工姓名：<input name="roleName" style="width: 50px;"/>
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 272px" class="role"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		
+		<!-- 角色选择器（多选） -->
+		<div class="popup" id="chooseRoles" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择角色(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: right;height: 340px;width: 282px;">
+						<div class="queryForm">
+							员工姓名：<input name="roleName" style="width: 50px;"/>
+							<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+						</div>
+						<table style="height: 340px;width: 272px" class="role"></table>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		
+		<!-- 权限选择器（多选） -->
+		<div class="popup" id="choosePowers" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择权限(多选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: left;height: 338x;width: 272px;border: 1px #95B8E7 solid">
+						<div class="title">选择权限（多选）</div>
+						<div style="height: 311px;width:280px;overflow:auto" class="power"></div>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 知识类别选择器（单选） -->
+		<div class="popup" id="chooseCatalog" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择知识类别(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: left;height: 338x;width: 272px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择知识类别</div>
+						<div style="height: 311px;width:270px" class="catalog"></div>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		
+		<!-- 物品类别选择器 -->
+		<div class="popup" id="chooseGoodsType" style="height: 410px;width: 300px;z-index: 1000">
+			<h3>请选择物品类别(单选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 282px; height: 340px;">
+					<div style="float: left;height: 338x;width: 272px;border: 1px #95B8E7 solid;overflow-y:auto;">
+						<div class="title">选择物品类别</div>
+						<div style="height: 311px;width:270px" class="goodsType"></div>
+					</div>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 供应商选择器（单选） -->
+		<div class="popup" id="chooseProvider" style="height: 410px;width: 350px;z-index: 1000">
+			<h3>请选择供应商</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 424px; height: 340px;">
+					<div class="queryForm">
+						
+						供应商编号：
+							<input name="providerCode" style="width: 50px;"/>
+						供应商名字：
+							<input name="providerName" style="width: 50px;"/>							
+						<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+					</div>
+					<table style="height: 340px;width: 324px" class="provider"></table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 入库流水选择器（单选） -->
+		<div class="popup" id="inBatchFlowCodeForm" style="height: 410px;width: 350px;z-index: 1000">
+			<h3>请选择入库流水号</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 424px; height: 340px;">
+					<div class="queryForm">
+						入库流水号：
+							<input name="inBatchFlowCode" style="width: 100px;"/><br/>
+						制单人：
+							<input name="createUserName" style="width:50px;"/>							
+						<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+					</div>
+					<table style="height: 340px;width: 324px" class="inBatchFlowCode"></table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!--  出库流水选择器（单选） -->
+		<div class="popup" id="outBatchFlowCodeForm" style="height: 410px;width: 350px;z-index: 1000">
+			<h3>请选择入库流水号</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div style="width: 424px; height: 340px;">
+					<div class="queryForm">
+						出库流水号：
+							<input name="outBatchFlowCode" style="width: 100px;"/><br/>
+						制单人：
+							<input name="createUserName" style="width:50px;"/>							
+						<input type="button" class="button" style="width: 40px" value="查询" name="query"/>
+					</div>
+					<table style="height: 340px;width: 324px" class="outBatchFlowCode"></table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 选择业务员 -->
+		<div class="popup chooseSalesman">
+			<h3>选择业务员(可多选)</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div class="invitetop">
+					业务员：<input type="text" class="salesmanName" style="width:54px;"/>
+					<input type="button" class="button queryBtn" value="查询"  style="width:40px;"/>
+				</div>
+				<div>
+					<table id="chooseSalesman1">
+					</table>
+				</div>	
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="保存"/>
+				<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<!-- 考勤打卡的弹窗 -->
+		<div class="popup punchCard">
+			<h3>打卡</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<p class="serverTime"></p>
+				<ul class="punchDetail">
+					<li>
+						<span>上班时间：</span>
+						<span class="onDutyTime"></span>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span>打卡时间：</span>
+						<span class="clockInTime"></span>
+						<span class="onPunchCardState" style="color:red;"></span>	
+					</li>
+					<li>
+						<span>下班时间：</span>
+						<span class="offDutyTime"></span>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span>打卡时间：</span>
+						<span class="clockOutTime"></span>
+						<span class="offPunchCardState" style="color:red;"></span>						
+					</li>
+				</ul>
+				<p class="clickPunchCard"></p>
+			</div>
+			<div class="btnarea"></div>
+		</div>
+		
+		<!-- 修改密码的弹窗 -->
+		<div class="popup updatePasswordWindow" style="height: 300px;width: 430px">
+			<h3>密码修改</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="overflow: hidden;padding:10px 36px;">
+					<table style="text-align: right;height:216px;">
+						<tr>
+							<td style="width: 108px">请输入原密码：</td>
+							<td style="width: 200px;"><input type="password" style="width:192px;" name="oldPassword"/></td>
+						</tr>
+						<tr>
+							<td>请输入新密码：</td>
+							<td>
+								<input type="password" style="width:192px;" name="newPassword"/>
+							</td>
+						</tr>
+						<tr>
+							<td>请再次输入新密码：</td>
+							<td>
+								<input type="password" style="width:192px;" name="newPasswordAgain"/>
+							</td>
+						</tr>
+					</table>
+				</div>
+			<div class="btnarea" style="text-align: center;">
+				<input type="button" class="button save" value="确定"/>
+				<input type="button" class="button cannel" value="关闭"/>
+			</div>
+		</div>
+		<!-- 打印信息弹窗 -->
+		<div class="popup" id="print-message" style="height: 500px;width: 900px">
+			<h3>打印信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width: 872px;padding:10px 36px;height: 430px;overflow:auto;">
+				<div class="loading">打印信息加载中...</div>
+				<div class="print-col-box">
+					<div id="print-col">请选择要打印的列：
+						<input type="checkbox"/><span contentEditable="true">序号</span>
+						<input type="checkbox"/><span contentEditable="true">编号</span>
+						<input type="checkbox"/><span contentEditable="true">姓名</span>
+						<input type="checkbox"/><span contentEditable="true">性别</span>
+						<input type="checkbox"/><span contentEditable="true">部门</span>
+						<input type="checkbox"/><span contentEditable="true">岗位</span>
+						<input type="checkbox"/><span contentEditable="true">电话</span>
+						<input type="checkbox"/><span contentEditable="true">身份证号</span>
+						<input type="checkbox"/><span contentEditable="true">入职时间</span>
+					</div>
+				</div>
+				<table class="print-message" style="border: 1px black solid;border-collapse: collapse;">
+					<tbody>
+						
+					</tbody>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center;">
+				<input type="button" class="button print" value="打印"/>
+				<input type="button" class="button cannel" value="关闭"/>
+			</div>
+			<ul>
+				<li>删除此列</li>
+			</ul>
+		</div>
+		<!-- 消息提示 -->
+		<div class="popup indexMessage">
+			<h3>消息提示</h3>
+			<span class="turnoff">
+			</span>
+			<div class="popuparea" style="width:500px;height:400px;">
+				<div class="invitetop">
+					状态：<select name="readFlag">
+						<option></option>
+						<option value="0">未读</option>
+						<option value="1">已读</option>
+					</select>
+					<!-- 发送人：<input type="text" name="sendUserName" style="width:100px;"/> -->
+					<input type="button" class="button queryMessage" value="查询" style="width:40px;"/>
+				</div>
+				<div>
+					<table id="messagedg"></table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center;">
+				<input type="button" class="button cannel" value="确定"/>
+				<input type="button" class="button cannel" value="关闭" style="margin-left:8px;"/>
+			</div>
+		</div>
+		<!-- 消息提示 -->
+		<!-- /*<div class="popup communicationBox">
+			<h3>欢迎您：</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div class="communicationArea">
+					<div class="chatArea">
+					</div>
+					<div class="chatEdit">
+						<script type="text/plain" id="chatEditor"></script>
+					</div>
+					<div class="sendArea">
+						<input class="send button" type="button" value="发送" />
+					</div>
+				</div>
+				<div class="onlinePeople">
+					<h4>在线用户</h4>
+					<div class="peopleArea">
+					</div>
+				</div>
+			</div>
+		</div>*/ -->
+		<div class="popup printWindow" >
+			<h3>打印样式确定</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width: 1200px; height: 360px;overflow:auto;" >
+				<div class="container" style="padding:20px 30px;">
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定并查看详情">
+				<input type="button" class="button cannel" value="关闭">
+			</div>
+		</div>
+		<div class="popup printLook" >
+			<h3>打印预览</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea">
+				<div class="printPopup">
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button" style="display:none;"/>
+				<input type="button" class="button confir" value="打印">
+				<input type="button" class="button cannel" value="关闭">
+			</div>
+		</div>
+	</div>
+	
+</div>
+<script type="text/javascript">
+	/*var userAccount = $('body').attr('userAccount');  // 获取userAccount
+	var userName = $('body').attr('userName');  // 获取userId
+	var user = userName +'('+userAccount+')';
+	var websocket;			//websocket对象
+	var wimadress="";		//即时聊天服务器IP和端口
+	var isQj = true;
+	var toUser="";
+	UE.getEditor('chatEditor', {
+	    theme:"default", //皮肤
+	    lang:'zh-cn',//语言
+	    autoHeightEnabled:false,  //不长高,出现滚动条
+	    initialFrameWidth:481,  //初始化编辑器宽度,默认1000
+	    initialFrameHeight:90, //初始化编辑器高度,默认320
+	    //elementPathEnabled : false,　　//是否启用元素路径，默认是true显示
+	    wordCount:false,          //是否开启字数统计
+	    enableAutoSave: false, 
+	    enableContextMenu: false,     //关闭右键菜单功能
+	    toolbars: [[
+                    'bold', 'italic', 'underline','forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'cleardoc', '|',
+                    'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase',
+                ]]
+	});		
+	$('#topbar .communication').click(function(){
+		if($('.communicationBox').css('display') == 'none'){
+			$('.communicationBox').css('display','block');
+			initWebSocket();
+		}		
+	});
+	$('.communicationBox .send').click(function(){
+		var content = UE.getEditor('chatEditor').getContent();
+		if(content){
+			var userAccount = $('body').attr('userAccount');  // 获取userAccount
+			var userName = $('body').attr('userName');  // 获取userId
+			var user = userName +'('+userAccount+')';
+			//var user = $('body').attr('username');
+			if(toUser != ""){
+				content = "fhadmin886"+toUser+"fhfhadmin888" + content;
+			}
+			var message = {
+				from : 	user,
+				content : content,
+				timestamp : new Date().getTime(),
+				type : 'message'
+			}
+			message = JSON.stringify(message);
+			websocket.send(message);
+			UE.getEditor('chatEditor').setContent('');
+		}
+	});
+	$('.communicationBox .turnoff').click(function(){
+		websocket.send('LeaveFHadminqq313596790');
+		isCreatw = false;
+	});
+	function initWebSocket() {
+		if (window.WebSocket) {
+			websocket = new WebSocket(encodeURI('ws://127.0.0.1:8887'));
+			websocket.onopen = function() {
+				//连接成功
+				var userAccount = $('body').attr('userAccount');  // 获取userId
+				var userName = $('body').attr('userName');  // 获取userId
+				$('.communicationBox h3').html('欢迎您：<i style="font-size:16px;">'+userName+'(已连接)   【现在全局对话】</i>');
+				websocket.send('FHadminqq313596790'+userName+'('+userAccount+')');
+				websocket.send('[join]'+userName+'('+userAccount+')');
+			}
+			websocket.onerror = function() {
+				//连接失败
+				//windowControl("连接错误");
+			}
+			websocket.onclose = function() {
+				//连接断开
+				//windowControl("连接断开");
+			}
+			//消息接收
+			websocket.onmessage = function(message) {
+				var str = message.data;
+				if(str.indexOf('}')>0){
+					var message = JSON.parse(message.data);
+				}else{
+					var message = message.data;
+				} 
+				//接收用户发送的消息
+				if (message.type == 'message') {
+					var messageDate = new Date(message.timestamp);
+					var h = messageDate.getHours();
+					var m = messageDate.getMinutes();
+					var s = messageDate.getSeconds();
+					if(h<10){
+						h = '0' + h;
+					}
+					if(m<10){
+						m = '0' + m;
+					}
+					if(s<10){
+						s = '0' + s;
+					}
+					var time = h +':'+ m +':'+ s;
+					var text = '<p class="userP">'+message.from+' '+time+'</p>';
+					text += '<div class="a">'+message.content+'</div>';
+					$('.communicationBox .chatArea').append(text);
+					$('.communicationBox .chatArea').scrollTop( $('.communicationBox .chatArea')[0].scrollHeight );
+					UE.getEditor('chatEditor').focus();
+				} else if (message.type == 'get_online_user') {
+					//获取在线用户列表
+					$('.communicationBox .onlinePeople .peopleArea').html(message.list);
+					$('.onlinePeople .peopleArea a').click(function(){
+						$(this).css('background','rgb(223, 232, 246)');
+						$(this).siblings('a').css('background','rgb(256, 256, 256)');
+					});
+				} else if (message.type == 'user_join') {
+					//用户上线
+					$('.communicationBox .onlinePeople .peopleArea').append(message.user);
+					$('.onlinePeople .peopleArea a').click(function(){
+						$(this).css('background','rgb(223, 232, 246)');
+						$(this).siblings('a').css('background','rgb(256, 256, 256)');
+					});
+				} else if (message.type == 'user_leave') {
+					//用户下线
+					var dom = document.getElementById(message.user);
+					dom.remove();
+				} 
+			} 
+		}
+	}; 
+	online();
+	 //加入在线列表
+	function online(){
+		if (window.WebSocket) {
+			websocket = new WebSocket(encodeURI('ws://127.0.0.1:8889')); //oladress在main.jsp页面定义
+			websocket.onopen = function() {
+				//连接成功
+				var user = $('body').attr('userId');  // 获取userId
+				websocket.send('[join]'+user);
+			};
+			websocket.onerror = function() {
+				//windowControl("连接错误");
+			};
+			websocket.onclose = function() {
+				//连接断开
+				//windowControl("连接断开");
+			};
+			//消息接收
+			websocket.onmessage = function(message) {
+				console.log(message);
+				/* var message = JSON.parse(message.data);
+					if(message.type == 'goOut'){
+					$("body").html("");
+					goOut("1");
+				}else if(message.type == 'thegoout'){
+					$("body").html("");
+					goOut("2");
+				}else if(message.type == 'senFhsms'){
+					fhsmsCount = Number(fhsmsCount)+1;
+					$("#fhsmsCount").html(Number(fhsmsCount));
+					$("#fhsmsobj").html('<audio style="display: none;" id="fhsmstsy" src="static/sound/'+TFHsmsSound+'.mp3" autoplay controls></audio>');
+					$("#fhsmstss").tips({
+						side:3,
+			            msg:'有新消息',
+			            bg:'#AE81FF',
+			            time:30
+			        });
+				} */
+		/*	};
+		}
+	}
+	function toUserMsg(toU){
+		var userAccount = $('body').attr('userAccount');  // 获取userAccount
+		var userName = $('body').attr('userName');  // 获取userId
+		var user = userName +'('+userAccount+')';
+		if((!isQj && toUser == toU) || toU == user){
+			$('.communicationBox h3').html('欢迎您：<i style="font-size:16px;">'+userName+'(已连接)   【现在全局对话】</i>');
+			isQj = true;
+			toUser = "";
+		}else{
+			$('.communicationBox h3').html('欢迎您：<i style="font-size:16px;">'+userName+'(已连接)   【现在单独与'+toU+'对话】</i>');
+			isQj = false;
+			toUser = toU;
+		}
+	} */
+</script>
+</body>
+<object classid="clsid:6D2088B7-1B97-4960-9535-5115614F29E0" id="WidControl"  codebase="WidControl.ocx" width="1" height="1" style="display:none;">
+</object>
+</html>

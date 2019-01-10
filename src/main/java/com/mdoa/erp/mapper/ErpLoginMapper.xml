@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.ErpLoginDao">
+
+	<!-- 客户登录查询 -->
+	<select id="customerLogin" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			customer_id AS customerId,
+			customer_name AS customerName,
+			phone_number AS phoneNumber,
+			password AS password,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr, 
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_custom
+		WHERE
+			alive_flag = '1'
+			<if test="phoneNumber != null and phoneNumber != ''">
+				AND phone_number = #{phoneNumber}
+			</if>
+	</select>
+	<!-- 查询父客户 -->
+	<select id="querySubCustomer" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			customer_name_id AS customerNameId,
+			customer_name_sub AS customerNameSub,
+			customer_id AS customerId,
+			data_source_key AS dataSourceKey,
+			data_source_name AS dataSourceName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr, 
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_custom_name
+		WHERE
+				alive_flag = '1'
+			<if test="customerName != null and customerName != ''">
+				AND customer_name LIKE #{customerName}
+			</if>
+			<if test="customerNameSub != null and customerNameSub != ''">
+				AND customer_name_sub LIKE #{customerNameSub}
+			</if>
+			<if test="dataSourceName != null and dataSourceName != ''">
+				AND data_source_name = #{dataSourceName}
+			</if>
+			<if test="customerId != null and customerId != ''">
+				AND customer_id = #{customerId}
+			</if>
+		ORDER BY
+			data_source_key
+	</select>
+	<!-- 业务员登录查询 -->
+	<select id="salesmanLogin" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			a.salesman_id AS salesmanId,
+			a.user_id AS userId,
+			a.user_account AS userAccount,
+			a.password AS password,
+			a.salesman_name AS salesmanName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag,
+			COUNT(b.salesman_name_id) AS salesmanAmount
+		FROM
+			erp_sales a LEFT JOIN(
+				SELECT
+					salesman_id,
+					salesman_name_id
+				FROM
+					erp_sales_name
+				WHERE
+					alive_flag = '1'
+			) b ON (a.salesman_id = b.salesman_id)
+		WHERE
+			a.alive_flag = '1'
+			<if test="salesmanName != null and salesmanName != ''">
+				AND a.salesman_name LIKE #{salesmanName}
+			</if>
+			<if test="userAccount != null and userAccount != ''">
+				AND a.user_account = #{userAccount}
+			</if>
+		GROUP BY
+			a.salesman_id
+	</select>
+	
+	<!-- 企业微信账号登录erp查询 -->
+	<select id="wxErpLogin" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			user_id AS salesmanId,
+			user_id AS userId,
+			user_account AS userAccount,
+			password AS password,
+			user_name AS salesmanName
+		FROM
+			user_info
+		WHERE
+			alive_flag = '1'
+		AND user_account = #{userAccount}
+	</select>
+	
+	<!-- 查询子业务员 -->
+	<select id="querySubSalesman" parameterType="com.mdoa.erp.bo.ErpRegisterForm" resultType="com.mdoa.erp.bo.ErpRegisterForm">
+		SELECT
+			salesman_name_id AS salesmanNameId,
+			salesman_name_sub AS salesmanNameSub,
+			salesman_id AS salesmanId,
+			data_source_key AS dataSourceKey,
+			data_source_name AS dataSourceName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_sales_name
+		WHERE
+				alive_flag = '1'
+			<if test="salesmanNameSub != null and salesmanNameSub != ''">
+				AND salesman_name_sub LIKE #{salesmanNameSub}
+			</if> 
+			<if test="dataSourceName != null and dataSourceName != ''">
+				AND data_source_name = #{dataSourceName}
+			</if>
+			<if test="salesmanId != null and salesmanId != ''">
+				AND salesman_id = #{salesmanId}
+			</if>
+		ORDER BY
+			data_source_key
+	</select>
+</mapper>

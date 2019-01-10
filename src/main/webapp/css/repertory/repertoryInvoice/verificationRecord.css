@@ -1,0 +1,82 @@
+#verificationRecord .imgBox{
+	width:40px;
+	margin:0 auto;
+}
+#verificationRecord .operate{
+	margin-right:6px;
+}
+#verificationRecord .detailBack{
+	margin-right:6px;
+	display:none;
+}
+#verificationRecord .invoicelistDetail{
+	display:none;
+}
+#verificationRecord .invoicelistDetail .invoiceDetail{
+	background-color:#f4f4f4;
+	border-bottom:1px solid #ddd;
+	padding-bottom:2px;
+	overflow: hidden;
+}
+#verificationRecord .invoiceDetail ul,
+#verificationRecord .invoiceDetail ul li,
+#verificationRecord .invoiceDetail button{
+	float:left;
+}
+#verificationRecord .invoiceDetail ul{
+	margin:5px 0 5px 10px;
+}
+#verificationRecord .invoiceDetail ul li{
+	width:25%;
+}
+#verificationRecord .invoiceDetail ul li span{
+	float:left;
+	width:60px;
+	line-height:25px;
+	margin:0 5px 0 8px;
+}
+#verificationRecord .invoiceDetail ul li input[type=text]{
+	float:left;
+	width: 150px;
+	height:19px;
+	padding-left:10px;
+	margin-top:2px;
+	border:1px solid #a9a9a9;
+}
+
+#verificationRecord .invoicelistDetail .listDetail{
+	float:left;
+	width:100%;
+	text-align:center;
+}
+#verificationRecord .invoicelistDetail .listDetail th,
+#verificationRecord .invoicelistDetail .listDetail td{
+	line-height:28px;
+	height:28px;
+	border-bottom:1px dotted #bbb;
+	border-left:1px dotted #bbb;
+	cursor:default;
+}
+#verificationRecord .invoicelistDetail .listDetail th{
+	font-weight:normal;
+	border-bottom:1px solid #ddd;
+	background-color:#f4f4f4;
+}
+#verificationRecord .invoicelistDetail .listDetail th:first-child,
+#verificationRecord .invoicelistDetail .listDetail td:first-child{
+	border-left:0px;
+}
+#verificationRecord .invoicelistDetail .listDetail th:last-child,
+#verificationRecord .invoicelistDetail .listDetail td:last-child{
+	border-right:1px dotted #bbb;
+}
+
+#verificationRecord .invoicelistDetail .listDetail th:hover,
+#verificationRecord .invoicelistDetail .listDetail tbody tr:hover{
+	background-color:#eaf2ff;
+}
+
+#verificationRecord .inTh,
+#verificationRecord .initTh{
+	display:none;
+}

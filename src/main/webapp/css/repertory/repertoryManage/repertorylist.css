@@ -1,0 +1,45 @@
+#repertorylist{
+	overflow:hidden;
+}
+#repertorylist .update .confirm{
+	margin-left:92px;
+}
+#repertorylist .update .cannel{
+	margin-left:8px;
+}
+#repertorylist .popups .popuparea table[name!=writetoexcel]{
+	padding:10px 20px;
+}
+#repertorylist .popups .del .confirm{
+	margin-left:92px;
+}
+#repertorylist .popups .del .cannel{
+	margin-left:8px;
+}
+#repertorylist .popups .writetoexcel table input[type="text"]{
+	border:1px #A9A9A9 solid;
+	width:144px;
+}
+#repertorylist .popups .writetoexcel table input[type="checkbox"]{
+	width:13px;
+}
+#repertorylist .popups .writetoexcel table input[type="button"]{
+	width:42px;
+	height:26px;
+	color:#444444;
+	background-color:#4DFFFF;
+	border-color:#4DFFFF;
+	border-radius:6px;
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-left:15px;
+	margin-right:15px;
+	text-align:center;
+}
+#repertorylist .popups .writetoexcel .hidden{
+	display:none;
+	width:0px;
+}
+#repertorylist .popups .writetoexcel .btnarea .button{
+	margin-left:8px;
+}

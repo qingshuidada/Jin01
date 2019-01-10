@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkBook xmlVersion="20151125" releaseVersion="8.0.0">
+<TableDataMap>
+<TableData name="ds1" class="com.fr.data.impl.DBTableData">
+<Parameters>
+<Parameter>
+<Attributes name="endTimeStr"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="startTimeStr"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+<Parameter>
+<Attributes name="providerName"/>
+<O>
+<![CDATA[]]></O>
+</Parameter>
+</Parameters>
+<Attributes maxMemRowCount="-1"/>
+<Connection class="com.fr.data.impl.NameDatabaseConnection">
+<DatabaseName>
+<![CDATA[oabase]]></DatabaseName>
+</Connection>
+<Query>
+<![CDATA[SELECT
+				a.provider_name AS providerName,
+				IFNULL(b.currentWriteAmount,0) AS currentWriteAmount,
+				IFNULL(o.currentTaxAmount,0) AS currentTaxAmount,
+				IFNULL(d.lastedWriteAmount,0) AS lastedWriteAmount,
+				IFNULL(e.lastedTaxAmount,0) AS lastedTaxAmount,
+				IFNULL(f.nowNoWriteAmount,0) AS nowNoWriteAmount,
+				IFNULL(a.init_amount,0) AS initAmount,
+				IFNULL(f.nowNoWriteAmount,0)-IFNULL(e.lastedTaxAmount,0)+IFNULL(d.lastedWriteAmount,0)+IFNULL(a.init_amount,0) AS currentNoWriteAmount,
+				IFNULL(f.nowNoWriteAmount,0)-IFNULL(e.lastedTaxAmount,0)+IFNULL(d.lastedWriteAmount,0)-IFNULL(c.currentTaxAmount,0)+IFNULL(b.currentWriteAmount,0)+IFNULL(a.init_amount,0) AS previousNoWriteAmount	
+		FROM
+			repertory_provider a
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(write_amount,0)) AS currentWriteAmount,
+				provider_code
+			FROM
+				repertory_goods_invoice_record
+			WHERE
+				alive_flag = '1'
+				AND !ISNULL(in_record_id) AND 
+				if('${startTimeStr}' is not null and '${startTimeStr}' != '',
+					create_time >= '${startTimeStr}',
+					TRUE) AND 
+				if('${endTimeStr}' is not null and '${endTimeStr}' != '',
+					create_time <= '${endTimeStr}',
+					TRUE)
+			GROUP BY
+				provider_code
+		) b ON (a.provider_code = b.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(tax_amount,0)) AS currentTaxAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1' AND 
+				if('${startTimeStr}' is not null and '${startTimeStr}' != '',
+					in_time >= '${startTimeStr}',
+					TRUE) AND 
+				if('${endTimeStr}' is not null and '${endTimeStr}' != '',
+					in_time <= '${endTimeStr}',
+					TRUE)
+			GROUP BY
+				provider_code
+		)c ON (a.provider_code = c.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(tax_amount,0)) AS currentTaxAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+				AND tax_amount >= 0 AND 
+				if('${startTimeStr}' is not null and '${startTimeStr}' != '',
+					in_time >= '${startTimeStr}',
+					TRUE) AND 
+				if('${endTimeStr}' is not null and '${endTimeStr}' != '',
+					in_time <= '${endTimeStr}',
+					TRUE)
+			GROUP BY
+				provider_code
+		)o ON (a.provider_code = o.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(write_amount,0)) AS lastedWriteAmount,
+				provider_code
+			FROM
+				repertory_goods_invoice_record
+			WHERE
+				alive_flag = '1'
+				AND !ISNULL(in_record_id) AND 
+				if('${endTimeStr}' is not null and '${endTimeStr}' != '',
+					 create_time > '${endTimeStr}',
+					TRUE)
+				AND create_time <= NOW()
+			GROUP BY
+				provider_code
+		) d ON (a.provider_code = d.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(tax_amount,0)) AS lastedTaxAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1' AND 
+				if('${endTimeStr}' is not null and '${endTimeStr}' != '',
+					 create_time > '${endTimeStr}',
+					TRUE) 
+				AND in_time <= NOW()
+			GROUP BY
+				provider_code
+		)e ON (a.provider_code = e.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(no_write_amount,0)) AS nowNoWriteAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+			GROUP BY
+				provider_code
+		)f ON(a.provider_code = f.provider_code)
+		WHERE
+			a.alive_flag = '1' AND 
+			if('${providerName}' is not null and '${providerName}' != '',
+				 a.provider_name LIKE '${providerName}%',
+				TRUE)
+		]]></Query>
+</TableData>
+</TableDataMap>
+<Report class="com.fr.report.worksheet.WorkSheet" name="sheet1">
+<ReportPageAttr>
+<HR/>
+<FR/>
+<HC/>
+<FC/>
+</ReportPageAttr>
+<ColumnPrivilegeControl/>
+<RowPrivilegeControl/>
+<RowHeight defaultValue="723900">
+<![CDATA[723900,723900,723900,723900,1143000,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900,723900]]></RowHeight>
+<ColumnWidth defaultValue="2743200">
+<![CDATA[2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200,2743200]]></ColumnWidth>
+<CellElementList>
+<C c="0" r="0">
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="2" r="4" s="0">
+<O>
+<![CDATA[供应商]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="3" r="4" s="0">
+<O>
+<![CDATA[上期未核销金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="4" r="4" s="0">
+<O>
+<![CDATA[本期入库金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="5" r="4" s="0">
+<O>
+<![CDATA[本期核销金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="6" r="4" s="0">
+<O>
+<![CDATA[本期未核销金额]]></O>
+<PrivilegeControl/>
+<Expand/>
+</C>
+<C c="2" r="5" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="providerName"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="3" r="5" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="previousNoWriteAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="4" r="5" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="currentTaxAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="5" r="5" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="currentWriteAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+<C c="6" r="5" s="0">
+<O t="DSColumn">
+<Attributes dsName="ds1" columnName="currentNoWriteAmount"/>
+<Complex/>
+<RG class="com.fr.report.cell.cellattr.core.group.FunctionGrouper"/>
+<Parameters/>
+</O>
+<PrivilegeControl/>
+<Expand dir="0"/>
+</C>
+</CellElementList>
+<ReportAttrSet>
+<ReportSettings headerHeight="0" footerHeight="0">
+<PaperSetting/>
+</ReportSettings>
+</ReportAttrSet>
+<PrivilegeControl/>
+</Report>
+<ReportParameterAttr>
+<Attributes showWindow="true" delayPlaying="true" windowPosition="1" align="0"/>
+<PWTitle>
+<![CDATA[参数]]></PWTitle>
+</ReportParameterAttr>
+<StyleList>
+<Style horizontal_alignment="0" imageLayout="1">
+<FRFont name="SimSun" style="0" size="72"/>
+<Background name="NullBackground"/>
+<Border>
+<Top style="1"/>
+<Bottom style="1"/>
+<Left style="1"/>
+<Right style="1"/>
+</Border>
+</Style>
+</StyleList>
+<DesignerVersion DesignerVersion="IAA"/>
+<PreviewType PreviewType="0"/>
+</WorkBook>

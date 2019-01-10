@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.system.dao.PortalDao">
+	
+	<!-- 插入门户信息、草稿 -->
+	<insert id="insertPortalInfo" parameterType="com.mdoa.system.bo.PortalForm">
+		INSERT INTO system_portal_info(
+			portal_info_id,
+			<if test="title != null and title != ''">
+				title,
+			</if>
+			<if test="text != null and text != ''">
+				text,
+			</if>
+			<if test="superType != null and superType != ''">
+				super_type,
+			</if>
+			<if test="subType != null and subType != ''">
+				sub_type,
+			</if>
+			<if test="draftFlag = '0'">
+				draft_flag,
+				publish_time,
+			</if>
+			<if test="draftFlag = '1'">
+				draft_flag,
+			</if>
+			create_user_id,
+			create_user_name,
+			create_time,
+			alive_flag
+		)
+		VALUES
+		(
+			UUID(),
+			<if test="title != null and title != ''">
+				#{title},
+			</if>
+			<if test="text != null and text != ''">
+				#{text},
+			</if>
+			<if test="superType != null and superType != ''">
+				#{superType},
+			</if>
+			<if test="subType != null and subType != ''">
+				#{subType},
+			</if>
+			<if test="draftFlag = '0'">
+				'0',
+				NOW(),
+			</if>
+			<if test="draftFlag = '1'">
+				'1',
+			</if>
+			#{createUserId},
+			#{createUserName},
+			#{createTime},
+			'1'
+		)
+	</insert>
+	
+	<!-- 删除 -->
+	<update id="deletePortalInfo" parameterType="com.mdoa.system.bo.PortalForm">
+		UPDATE system_portal_info
+		SET
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName},
+			alive_flag = '0'
+		WHERE
+			alive_flag = '1'
+		AND portal_info_id = #{portalInfoId}
+	</update>
+	
+	<!-- 更新草稿信息 -->
+	<update id="updatePortalDraft" parameterType="com.mdoa.system.bo.PortalForm">
+		UPDATE system_portal_info
+		SET
+			update_time = NOW(),
+			<if test="title != null and title != ''">
+				title=#{title},
+			</if>
+			<if test="text != null and text != ''">
+				text=#{text},
+			</if>
+			<if test="superType != null and superType != ''">
+				super_type=#{superType},
+			</if>
+			<if test="subType != null and subType != ''">
+				sub_type=#{subType},
+			</if>
+			<if test="draftFlag = '0'">
+				draftFlag = '0',
+				publish_time = NOW(),
+			</if>
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		AND draft_flag = '1'
+		AND portal_info_id = #{portalInfoId}
+	</update>
+	
+	<!-- 查询 -->
+	<select id="findPortalByCondition" parameterType="com.mdoa.system.bo.PortalForm" resultType="com.mdoa.system.model.PortalInfo">
+		SELECT
+			portal_info_id AS portalInfoId,
+			title AS title,
+			text AS text,
+			super_type AS superType,
+			sub_type AS subType,
+			draft_flag AS draftFlag,
+			publish_time AS publishTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			create_time AS createTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			update_time AS updateTime,
+			alive_flag AS aliveFlag
+		FROM
+			system_portal_info
+		WHERE
+			alive_flag = '1'
+			<if test="superType != null and superType != ''">
+				,super_type=#{superType}
+			</if>
+			<if test="subType != null and subType != ''">
+				,sub_type=#{subType}
+			</if>
+			<if test="draftFlag != null and draftFlag != ''">
+				,draftFlag = #{draftFlag}
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				,createUserId = #{createUserId}
+			</if>
+			<if test="createUserName != null and createUserName != ''">
+				,createUserName LIKE (${createUserName})
+			</if>
+		ORDER BY publishTime DESC
+	</select>
+		
+</mapper>

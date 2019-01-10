@@ -1,0 +1,150 @@
+<div id="sortManage" title="类别管理">
+	<div class="maintop">
+		<div style="margin-right:6px;">
+			<input type="button" value="返回" class="button back" />
+		</div>
+	</div>
+	<div class="list">
+		<div class="invitetop">
+		
+		</div>
+		<div>
+			<table id="sortManagedg"></table>	
+		</div>
+	</div>
+	<div class="popups" style="text-align: left;">
+		<div class="popup editSort" style="height: 300px;width: 400px;">
+			<h3>修改类别信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr  style="height:30px">
+						<td>类别名称:</td>
+						<td><input type="text" style="width:220px;" class="sortName"/>
+							<input type="hidden" class="sortId"/>
+						</td>
+					</tr>
+					<tr style="height:30px">
+						<td>类别描述:</td>
+						<td><input type="text" style="width:220px;" class="sortDescribe"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<div class="popup lookSort" style="height: 300px;width: 400px;">
+			<h3>类别信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: right;width: 300px;height: 210px">
+					<tr  style="height:30px">
+						<td>类别名称:</td>
+						<td><input type="text" style="width:220px;" class="sortName"/>
+							
+						<td>类别描述:</td>
+						<td><input type="text" style="width:220px;" class="sortDescribe"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<div class="popup editOrganization" style="height: 300px;width: 400px;">
+			<h3>组织架构</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 10px 36px;">
+				<table style="text-align: left;width: 300px;height: 210px">
+					<tr>
+						<td>
+							<img alt="" src="" class="organizationImage" style="height: 160px;width: 220px;">
+							<input type="hidden" class="sortId"/>
+						</td>
+						<td><span>当前图片</span></td>
+					</tr>
+					<tr style="height:30px">
+						<td><input type="file" style="width:220px;" class="imageFile"/></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="修改"/>
+				<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+	<div class="editAppCompony">
+		<ul class="editArea">
+			<li>
+				<span>公司标题</span>
+				<input type="text" class="companyTitle"/>
+				<input type="hidden" class="companyId">
+				<i></i>
+				<span>英文标题</span>
+				<input type="text" class="companyEnglishTitle"/>
+			</li>
+			<li>
+				<span>公司地址</span>
+				<input type="text" class="componyAddress"/>
+				<i></i>
+				<span>公司电话</span>
+				<input type="text" class="componyPhone"/>
+			</li>
+			<li>
+				<span>公司传真</span>
+				<input type="text" class="componyFax"/>
+				<i></i>
+				<span>公司邮箱</span>
+				<input type="text" class="componyEmail"/>
+			</li>
+			<li>
+				<span>公司经纬度</span>
+				<input type="text" class="coordinate"/>
+			</li>
+			<li>
+				<span>公司简介</span>
+				<script type="text/plain" id="appComponyAbstract"></script>
+			</li>
+			<li>
+				<span>公司图片</span>
+				<div>
+					<img alt="" src="" class="companyImage" style="height: 150px;width: 300px">
+				</div>
+			</li>
+			<li>
+				<span style="margin-top:4px;">上传图片</span>
+				<input type="text" class="fileName" readonly/>			
+				<input type="button" value="选择图片" class="button selectFile" />
+			</li>
+		</ul>
+		<input type="file" style="display: none;" class="inputFile">
+		<input type="button" class="button submit" value="提交修改">
+	</div>
+	<div class="editAppFirm">
+		<ul class="editArea">
+			<li>
+				<span>公司标题</span>
+				<input type="text" class="firmTitle"/>
+				<input type="hidden" class="firmId">
+				<i></i>
+				<span>股票代码</span>
+				<input type="text" class="firmStockCode"/>
+			</li>
+			<li>
+				<span>注册资金</span>
+				<input type="text" class="firmRegistFund"/>
+				<i></i>
+				<span>成立年份</span>
+				<input type="text" class="firmYear"/>
+			</li>
+			<li>
+				<span>公司简介</span>
+				<script type="text/plain" id="appFirmAbstract"></script>
+			</li>
+		</ul>
+		<input type="button" class="button submit" value="提交修改">
+	</div>
+</div>

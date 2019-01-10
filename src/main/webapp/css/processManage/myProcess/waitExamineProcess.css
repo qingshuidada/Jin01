@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+#waitExamineProcess .submit-button{
+	border-radius: 3px;
+	border: 1px gray solid;
+	background-color:  #EEEEEE;
+	width: 150px;
+	height: 29px;
+	cursor: pointer;
+}

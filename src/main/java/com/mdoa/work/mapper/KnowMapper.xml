@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.KnowDao" >
+
+	<!-- 查询一级类别 -->
+	<select id="queryFirstCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm" resultType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		SELECT
+			a.first_category_id AS firstCategoryId,
+			first_category_name AS firstCategoryName,
+			openness AS openness,
+			order_code AS orderCode,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag,
+			b.doc_id AS docId
+		FROM
+			work_office_know_first_category a
+			LEFT JOIN(
+				SELECT
+					first_category_id,
+					title_name,
+					doc_id
+				FROM
+					work_office_know_doc
+				WHERE
+					alive_flag = '1'
+		) b ON (b.first_category_id = a.first_category_id)
+		WHERE
+			alive_flag = '1'
+			<if test="openness != null and openness != ''">
+				AND openness = #{openness}
+			</if>
+		GROUP BY
+			a.first_category_id
+		ORDER BY
+			order_code,create_time DESC 
+			
+	</select>
+	<!-- 添加一级类别 -->
+	<insert id="addFirstCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		INSERT INTO work_office_know_first_category(
+			first_category_id,
+			first_category_name,
+			openness,
+			order_code,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{firstCategoryName},
+			#{openness},
+			#{orderCode},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 修改一级类别 -->
+	<update id="updateFirstCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		UPDATE
+			work_office_know_first_category
+		SET 
+			<if test="firstCategoryName != null and firstCategoryName != ''">
+				first_category_name = #{firstCategoryName},
+			</if>
+			<if test="openness != null and openness != ''">
+				openness = #{openness},
+			</if>
+			<if test="aliveFlag != null and aliveFlag != ''">
+				alive_flag = '0',
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				order_code = #{orderCode},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND first_category_id = #{firstCategoryId}
+	</update>
+	<!-- 保存文档 -->
+	<insert id="saveDoc" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		INSERT INTO work_office_know_doc(
+			doc_id,
+			title_name,
+			click_amount,
+			reply_amount,
+			second_category_id,
+			department_name,
+			department_url,
+			text,
+			first_category_id,
+			type_flag,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{titleName},
+			'0',
+			'0',
+			#{secondCategoryId},
+			#{departmentName},
+			#{departmentUrl},
+			#{text},
+			#{firstCategoryId},
+			#{typeFlag},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	
+	<!-- 修改文档 -->
+	<update id="updateDoc" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		UPDATE
+			work_office_know_doc
+		SET
+			<if test="titleName != null and titleName != ''">
+				title_name = #{titleName},
+			</if>
+			<if test="secondCategoryId != null and secondCategoryId != ''">
+				second_category_id = #{secondCategoryId},
+			</if>
+			<if test="text != null and text != ''">
+				text = #{text},
+			</if>
+			<if test="firstCategoryId != null and firstCategoryId != ''">
+				first_category_id = #{firstCategoryId},
+			</if>
+			<if test="typeFlag != null and typeFlag != ''">
+				type_flag = #{typeFlag},
+			</if>
+			<if test="clickFlag != null and clickFlag != ''">
+				click_amount = click_amount + 1,
+			</if>
+			<if test="replyFlag != null and replyFlag != ''">
+				reply_amount = reply_amount + 1,
+			</if>
+			<if test="departmentName != null and departmentName != ''">
+				department_name = #{departmentName},
+			</if>
+			<if test="departmentUrl != null and departmentUrl != ''">
+				department_url = #{departmentUrl},
+			</if>
+			<if test="aliveFlag != null and aliveFlag != ''">
+				alive_flag = #{aliveFlag},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND doc_id = #{docId}
+			
+	</update>
+	<!-- 查询文档 -->
+	<select id="queryDoc" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm" resultType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		SELECT
+			a.doc_id AS docId,
+			a.title_name AS titleName,
+			a.click_amount AS clickAmount,
+			a.reply_amount AS replyAmount,
+			a.second_category_id AS secondCategoryId,
+			a.text AS text,
+			a.department_name AS departmentName,
+			a.department_url AS departmentUrl,
+			a.first_category_id AS firstCategoryId,
+			a.type_flag AS typeFlag,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag,
+			b.second_category_name AS secondCategoryName,
+			c.first_category_name AS firstCategoryName
+		FROM
+			work_office_know_doc a,
+			work_office_know_second_category b,
+			work_office_know_first_category c
+		WHERE
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND c.alive_flag = '1'
+			AND a.second_category_id = b.second_category_id
+			AND b.first_category_id = c.first_category_id
+			<if test="titleName != null and titleName != ''">
+				AND a.title_name LIKE #{titleName}
+			</if>
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.update_time &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.update_time &lt;= #{endTimeStr}
+			</if>
+			<if test="secondCategoryId != null and secondCategoryId != ''">
+				AND a.second_category_id = #{secondCategoryId}
+			</if>
+			<if test="docId != null and docId != ''">
+				AND a.doc_id = #{docId}
+			</if>
+			<if test="typeFlag != null and typeFlag != ''">
+				AND a.type_flag = #{typeFlag}
+			</if>
+			<if test="createUserId != null and createUserId != ''">
+				AND a.create_user_id = #{createUserId}
+			</if>
+			<if test="departmentUrl != null and departmentUrl != ''">
+				AND a.department_url LIKE #{departmentUrl}
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	<!-- 提交评论 -->
+	<insert id="saveComment" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		INSERT INTO work_office_know_comment(
+			comment_id,
+			doc_id,
+			comment_user_id,
+			comment_user_name,
+			content,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{docId},
+			#{createUserId},
+			#{createUserName},
+			#{content},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 查询评论数据 -->
+	<select id="queyComment" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm" resultType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		SELECT
+			comment_id AS commentId,
+			doc_id AS docId,
+			comment_user_id AS commentUserId,
+			comment_user_name AS commentUserName,
+			content AS content,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			work_office_know_comment
+		WHERE
+			alive_flag = '1'
+			AND doc_id = #{docId}
+		ORDER BY
+			<!-- comment_user_name, -->create_time
+	</select>
+	<!-- 查询评论者 -->
+	<select id="queryGroupUser" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm" resultType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		SELECT
+			comment_id AS commentId,
+			doc_id AS docId,
+			comment_user_id AS commentUserId,
+			comment_user_name AS commentUserName,
+			content AS content,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			work_office_know_comment
+		WHERE
+			alive_flag = '1'
+			AND doc_id = #{docId}
+		GROUP BY
+			comment_user_id
+			
+	</select>
+	<!-- 查询二级分类 -->
+	<select id="querySecondCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm" resultType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		SELECT
+			a.second_category_id AS secondCategoryId,
+			second_category_name AS secondCategoryName,
+			first_category_id AS firstCategoryId,
+			order_code AS orderCode,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag,
+			b.doc_id AS docId,
+			b.title_name AS titleName
+		FROM
+			work_office_know_second_category a
+			LEFT JOIN(
+				SELECT
+					doc_id,
+					second_category_id,
+					title_name
+				FROM
+					work_office_know_doc
+				WHERE
+					alive_flag = '1'
+		) b ON (a.second_category_id = b.second_category_id)
+		WHERE
+			alive_flag = '1'
+			<if test="firstCategoryId != null and firstCategoryId != ''">
+				AND first_category_id = #{firstCategoryId}
+			</if>
+		GROUP BY
+			a.second_category_id
+		ORDER BY
+			order_code 
+	</select>
+	<!--  添加二级分类 -->
+	<insert id="addSecondCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		INSERT INTO work_office_know_second_category(
+			second_category_id,
+			second_category_name,
+			first_category_id,
+			order_code,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{secondCategoryName},
+			#{firstCategoryId},
+			#{orderCode},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 查询一级分类以及二级分类 -->
+	<select id="queryFirstAndSecondCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm" resultType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		SELECT
+			a.first_category_id AS firstCategoryId,
+			a.first_category_name AS firstCategoryName,
+			b.second_category_id AS secondCategoryId,
+			b.second_category_name AS secondCategoryName
+		FROM
+			work_office_know_first_category a,
+			work_office_know_second_category b
+		WHERE
+			a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND	a.first_category_id = b.first_category_id
+			<if test="openness != null and openness != ''">
+				AND a.openness = #{openness}
+			</if>
+		ORDER BY
+			a.order_code,b.order_code
+	</select>
+	<!-- 修改二级类别 -->
+	<update id="updateSecondCategory" parameterType="com.mdoa.work.bo.WorkOfficeKnowForm">
+		UPDATE 
+			work_office_know_second_category
+		SET
+			<if test="secondCategoryName != null and secondCategoryName != ''">
+				 second_category_name = #{secondCategoryName},
+			</if>
+			<if test="aliveFlag != null and aliveFlag != ''">
+				 alive_flag = #{aliveFlag},
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				 order_code = #{orderCode},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND second_category_id = #{secondCategoryId}
+	</update>
+</mapper>

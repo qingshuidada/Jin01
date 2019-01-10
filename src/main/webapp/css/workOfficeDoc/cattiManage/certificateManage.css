@@ -1,0 +1,52 @@
+#certificateManage .invitetop input[type=text]{
+	width:100px;
+}
+#certificateManage .imgBox{
+	width:60px;
+	margin:0 auto;
+}
+#certificateManage .maintop .back{
+	display:none;
+}
+#certificateManage .add{	
+	overflow:auto;
+	display:none;
+}
+#certificateManage .add ul.editArea{
+	min-width:1063px;
+	margin-top:40px;
+	padding:0 50px;
+}
+#certificateManage ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#certificateManage ul.editArea li span,
+#certificateManage ul.editArea li i,
+#certificateManage ul.editArea li input,
+#certificateManage ul.editArea li #certificateEditor{
+	float:left;
+}
+#certificateManage ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#certificateManage ul.editArea li span{
+	margin-right:15px;
+}
+#certificateManage ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#certificateManage ul.editArea li input.fileName{
+	width:820px;
+	height:21px;
+}
+#certificateManage ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#certificateManage .add > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}

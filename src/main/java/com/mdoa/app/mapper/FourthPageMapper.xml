@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.FourthPageDao">
+	<select id="selectNewProductBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppNewProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			sort_id AS sortId,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_new_product
+		WHERE
+			sort_id = #{sortId}
+	</select>
+	<select id="selectNewProductById" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppNewProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			sort_id AS sortId,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_new_product
+		WHERE
+			product_id = #{productId}
+	</select>
+	<!-- <select id="selectNewProductBySortIdJZH" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppNewProduct">
+		SELECT
+			product_id AS productId,
+			product_name AS productName,
+			product_number AS productNumber,
+			product_size AS productSize,
+			sort_id AS sortId,
+			product_describe AS productDescribe,
+			product_image_url AS productImageUrl
+		FROM
+			app_new_product
+		WHERE
+			product_id = #{productId} 
+	</select>-->
+	<insert id="addNewProduct" parameterType="com.mdoa.app.model.AppNewProduct">
+		INSERT INTO app_new_product(
+			product_id,
+			sort_id,
+			product_name,
+			product_number,
+			product_size,
+			product_describe,
+			product_image_url
+		)VALUE(
+			UUID(),
+			#{sortId},
+			#{productName},
+			#{productNumber},
+			#{productSize},
+			#{productDescribe},
+			#{productImageUrl}
+		)
+	</insert>
+	<delete id="deleteProductById" parameterType="com.mdoa.app.model.AppNewProduct">
+		DELETE 
+		FROM
+			app_new_product
+		WHERE
+			product_id = #{productId}
+	</delete>
+</mapper>

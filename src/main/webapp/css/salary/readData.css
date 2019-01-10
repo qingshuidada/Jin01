@@ -1,0 +1,143 @@
+.salaryTop{
+	background:rgba(120, 204, 204, 1);
+}
+.salaryHeader{
+	overflow:hidden;
+	margin-left:30px;
+	padding-top:10px;
+}
+.salaryHeader>div{
+	float:left;
+}
+
+.salaryHeader .logo img{
+	width:80px;
+	height:70px;
+}
+.salaryHeader .right{
+	float:right;
+	margin-right:60px;
+}
+.salaryHeader .right .debris{
+	font-size:14px;
+}
+.salaryHeader .right .debris .welcome{
+	margin-top:8px;
+}
+.salaryHeader .right .debris img{
+	margin-top:10px;
+	float:right;
+}
+.salaryHeader h1{
+	font-size: 24px;
+	font-weight:800;
+	height:58px;
+	line-height:50px;
+}
+.salaryHeader .right>div{
+	float:left;
+}
+.salaryHeader .QRCode{
+	margin-left:6px;
+}
+.salaryHeader .QRCode img{
+	width:70px;
+	height:70px;
+}
+.tabHeader{
+	height:35px;
+	background:rgba(170, 170, 170, 50);
+	padding:3px;
+}
+.tabHeader input[name=readFromExcel]{
+	height:25px;
+	float:left;
+	margin:3px;
+}
+.tabHeader input[name=writeToExcel]{
+	height:25px;
+	float:left;
+	margin:3px;
+}
+.tabHeader input[name=ensureData]{
+	height:25px;
+	float:left;
+	margin:3px;
+}
+.tabHeader input[name=deleteNotSureData]{
+	height:25px;
+	float:left;
+	margin:3px;
+}
+.tabHeader .printSalaryInfo input[name=printSalaryInfo]{
+	height:25px;
+	float:left;
+	margin:3px;
+}
+.salaryBottom{
+	padding-bottom:20px;
+}
+#readData .dataArea .dataTop{
+	background-color:#f4f4f4;
+	border-bottom:1px solid #ddd;
+	overflow: hidden;
+}
+#readData .dataArea .dataTop ul{
+	margin:5px 5px 5px 5px;
+}
+#readData .dataArea .dataTop ul li{
+	width:35%;
+	float:left;
+}
+
+#readData .popups .updateSalaryInfo .popuparea ul li{
+	width:100%;
+	float:left;
+	margin:2px;
+}
+
+#readData .popups .updateSalaryInfo .popuparea ul li span{
+	width:30%;
+	text-align:center;
+}
+
+#readData .popups .updateSalaryInfo .popuparea ul li input{
+	width:60%;
+	float:right;
+}
+#readData .popups .updateSalaryInfo .popuparea ul li[name=info] input[name=peopleName]{
+	width:117.6px;
+}
+#readData .dataArea .dataTop ul li[name=btnArea]{
+	width:30%;
+	float:left;
+}
+#readData .dataArea .dataTop ul li span{
+	float:left;
+	width:50px;
+	line-height:25px;
+	margin:0 2px 0 2px;
+}
+#readData .dataArea .dataTop ul li[name=info] span{
+	width:50px;
+	line-height:25px;
+	margin:0 2px 0 2px;
+}
+#readData .dataArea .dataTop ul li input[type=button]{
+	line-height:20px;
+	height:23px;
+	width:65px;
+	padding:0 5px;
+	cursor:pointer;
+	margin:0px 5px 0px 5px;
+	float:left;
+}
+#readData .dataArea .dataTop ul li select{
+	width: 171px;
+	float:left;
+	height:20px;
+	margin-top:2px;
+}
+
+
+

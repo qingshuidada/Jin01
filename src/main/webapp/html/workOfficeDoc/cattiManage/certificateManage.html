@@ -1,0 +1,71 @@
+<div id="certificateManage">
+	<div class="maintop">		
+		<div>
+			<input type="button" value="返回" class="button back" />
+		</div>
+	</div>
+	<div class="list">
+		<div class="invitetop" >
+			证书名称： <input type="text" class="certificateName"/>
+			&nbsp;&nbsp;有效日期： <input type="text" class="validStartTimeStr"  onblur="testDate(this)" onclick="testShow(this);"/>
+			~ 		<input type="text" class="validEndTimeStr"  onblur="testDate(this)" onclick="testShow(this);"/>
+			&nbsp;&nbsp;发证日期： <input type="text" class="publishStartTimeStr"  onblur="testDate(this)" onclick="testShow(this);"/>
+			~ 		<input type="text" class="publishEndTimeStr"  onblur="testDate(this)" onclick="testShow(this);"/>
+			&nbsp;&nbsp;证书类别:
+					<select class="certificateId"></select>
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" value="清空"/>
+		</div>
+		<div>
+			<table id="certificateManagedg" data-options="nowrap:false"></table>
+		</div>
+	</div>
+	
+	<!-- 添加证书  -->
+	<div class="add">
+		<input type="hidden" id="hInput"/>		
+		<ul class="editArea">
+			<li>
+				<span>证书名称</span>
+				<input type="text" class="certificateName"/>
+				<i></i>
+				<span>证书描述</span>
+				<input type="text" class="certificateDescribe"/>
+			</li>			
+			<li>
+				<span>有效日期</span>
+				<input type="text" class="effectiveTime" onclick="testShow(this);" readonly/>
+				<i></i>
+				<span>发证日期</span>
+				<input type="text" class="releaseTime" onclick="testShow(this);" readonly/>
+			</li>
+			<li>
+				<span>证书类别</span>
+				<select class="certificateId"></select>
+			</li>
+			<li>
+				<span>证书信息</span>
+				<div id="lookEditor" style="float:left;width:1000px;overflow:auto">
+				</div>
+				<script type="text/plain" id="certificateEditor"></script>
+			</li>
+			<li class="load" style="display:none;">
+				<span>文件下载</span>
+				<a>下载</a>
+			</li>
+			<li class="check" style="display:none;">
+				<span>预览证书</span>
+				<a target="_blank">查看</a>
+			</li>
+			<li>
+				<span style="margin-top:4px;">附件文件</span>
+				<input type="text" class="fileName" readonly/>
+				<input type="button" value="选择附件" class="button selectFile" />
+				<input type="button" value="上传附件" class="button submitFile" />			
+			</li>
+		</ul>
+		<input type="file" style="display:none;" class="inputFile"/>
+		<input type="button" value="提交证书" class="button submitCertificate" />
+	</div>
+	
+</div>

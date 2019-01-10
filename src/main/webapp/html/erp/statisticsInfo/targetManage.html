@@ -1,0 +1,56 @@
+<div id="targetManage" title="指标管理">
+	<div class="maintop">
+		<!-- <input type="button" class="button addtarget" value="添加车间"/> -->
+	</div>
+	<div  class="invitetop">
+		经济指标名称：
+			<input type="text" class="economicName" style="width:100px;"> 
+		<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+		<input type="button" value="清空"/>
+	</div>
+	<div>
+		<table id="targetManagedg"></table>	
+	</div>
+	<div class="popup updataTarget">
+		<h3>修改经济指标</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table style="padding:10px;line-height: 25px;">
+				<tr>
+					<td>经济指标名称：</td>
+					<td><input type="text" class="targetName" /></td>
+				</tr>
+				<tr>
+					<td>是否计算数率：</td>
+					<td>
+						<select class="countRate">
+							<option value="0">否</option>
+							<option value="1">是</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="保存"/>
+			<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+		</div>
+	</div>
+	<div class="popup addTarget">
+		<h3>添加经济指标</h3>
+		<span class="turnoff"></span>
+		<div class="popuparea">
+			<table style="padding:10px;line-height: 25px;">
+				<tr>
+					<td>经济指标名称：</td>
+					<td><input type="text" class="targetName" /></td>
+				</tr>				
+			</table>
+		</div>
+		<div class="btnarea" style="text-align: center">
+			<input type="button" class="button confirm" value="保存"/>
+			<input type="button" class="button cannel" value="关闭" style="margin-left: 20px;"/>
+		</div>
+	</div>
+	
+</div>

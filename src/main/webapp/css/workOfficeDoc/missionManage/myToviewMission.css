@@ -1,0 +1,48 @@
+#myToviewMission .lookToviewMission{	
+	overflow:auto;
+	display:none;
+	padding-top:20px;
+}
+#myToviewMission .maintop .back{
+	display:none;
+}
+#myToviewMission .lookToviewMission ul.editArea{
+	min-width:1063px;
+	padding:0 50px;
+}
+#myToviewMission ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#myToviewMission ul.editArea li span,
+#myToviewMission ul.editArea li i,
+#myToviewMission ul.editArea li input,
+#myToviewMission ul.editArea li #toviewMissionEditor{
+	float:left;
+}
+#myToviewMission ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#myToviewMission ul.editArea li span{
+	margin-right:15px;
+	font-weight:bold;
+}
+#myToviewMission ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#myToviewMission ul.editArea li input.langInput{
+	width:986px;
+}
+#myToviewMission ul.editArea li input.shortInput{
+	width:392px;
+}
+#myToviewMission ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#myToviewMission .lookToviewMission > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}

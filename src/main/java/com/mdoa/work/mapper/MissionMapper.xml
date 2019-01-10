@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.MissionDao">
+
+	 <!-- 获取UUID -->
+	 <select id="getuuid" resultType="java.lang.String">
+	 	select uuid() as uuid
+	 </select>
+	<!-- 添加任务 -->
+	<insert id="insertMission" parameterType="com.mdoa.work.model.Mission">
+		INSERT INTO work_office_mission(
+			mission_id,
+			mission_name,
+			start_time,
+			expect_end_time,
+			create_time,
+			launch_user_id,
+			launch_user_name,
+			mission_type,
+			mission_describe,
+			alive_flag
+		)VALUE(
+			#{missionId},
+			#{missionName},
+			#{startTime},
+			#{expectEndTime},
+			NOW(),
+			#{launchUserId},
+			#{launchUserName},
+			#{missionType},
+			#{missionDescribe},
+			'1'
+		)
+	</insert>
+	<!-- 添加任务的执行人 -->
+	<insert id="insertMissionHead" parameterType="com.mdoa.work.model.MissionHead">
+		INSERT INTO work_office_mission_head(
+			head_id,
+			mission_id,
+			head_user_id,
+			head_user_name,
+			mission_state,
+			reality_end_time,
+			reality_value,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{missionId},
+			#{headUserId},
+			#{headUserName},
+			'1',
+			#{realityEndTime},
+			'0',
+			'1'
+		)
+	</insert>
+	<!-- 添加任务的查看人 -->
+	<insert id="insertMissionUser" parameterType="com.mdoa.work.model.MissionUser">
+		INSERT INTO work_office_mission_user(
+			id,
+			user_id,
+			mission_id
+		)VALUE(
+			UUID(),
+			#{userId},
+			#{missionId}
+		)
+	</insert>
+	<update id="updateMission" parameterType="com.mdoa.work.model.Mission">
+		UPDATE
+			work_office_mission
+		SET
+			<if test="missionName != null and missionName != ''">
+				mission_name = #{missionName},
+			</if>
+			<if test="startTimeStr != null and startTimeStr != ''">        
+				start_time = #{startTimeStr},
+			</if>   
+			<if test="expectEndTimeStr != null and expectEndTimeStr != ''">
+				expect_end_time = #{expectEndTimeStr},
+			</if>
+			<if test="launchUserId != null and launchUserId != ''">
+				launch_user_id = #{launchUserId},
+			</if>
+			<if test="launchUserName != null and launchUserName != ''">
+				launch_user_name = #{launchUserName},
+			</if>
+			<if test="missionType != null and missionType != ''">
+				mission_type = #{missionType},
+			</if>
+			<if test="missionDescribe != null and missionDescribe != ''">
+				mission_describe = #{missionDescribe},
+			</if>
+			alive_flag = '1'
+		WHERE
+			alive_flag = '1'
+			AND mission_id = #{missionId}
+	</update>
+	<update id="updateMissionHead" parameterType="com.mdoa.work.model.Mission">
+		UPDATE
+			work_office_mission_head
+		SET
+			<if test="realityEndTimeStr != null and realityEndTimeStr != ''">
+				reality_end_time = #{realityEndTimeStr},
+			</if>
+			<if test="headUserId != null and headUserId != ''">
+				head_user_id = #{headUserId},
+			</if>
+			<if test="headUserName != null and headUserName != ''">
+				head_user_name = #{headUserName},
+			</if>
+			<if test="missionState != null and missionState != ''">
+				mission_state = #{missionState},
+			</if>
+			<if test="realityValue != null and realityValue != ''">
+				reality_value = #{realityValue},
+			</if>
+			alive_flag = '1'
+		WHERE
+			alive_flag = '1'
+			AND head_id = #{headId}
+	</update>
+	<update id="deleteMission" parameterType="com.mdoa.work.model.Mission">
+		UPDATE
+			work_office_mission
+		SET
+			alive_flag = '0'
+		WHERE
+			alive_flag = '1'
+			AND mission_id = #{missionId}
+	</update>
+	<!-- 查询所有的任务 -->
+	<select id="selectMission" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT
+			mission_id AS missionId,
+			mission_name AS missionName,
+			start_time AS startTimeStr,
+			expect_end_time AS expectEndTimeStr,
+			create_time AS createTimeStr,
+			launch_user_id AS launchUserId,
+			launch_user_name AS launchUserName,
+			mission_type AS missionType,
+			mission_describe AS missionDescribe
+		FROM
+			work_office_mission a
+		WHERE
+				alive_flag = '1'
+			<if test="missionId != null and missionId != ''">
+			AND mission_id = #{missionId}
+			</if>
+			<if test="missionName != null and missionName != ''">
+			AND mission_name LIKE #{missionName}
+			</if>
+			<if test="launchUserId != null and launchUserId != ''">
+			AND launch_user_id = #{launchUserId}
+			</if>
+			<if test="launchUserName != null and launchUserName != ''">
+			AND launch_user_name LIKE #{launchUserName}
+			</if>
+		ORDER BY
+			create_time
+		DESC
+	</select>
+	<!-- 根据missionId查询任务的详情 -->
+	<select id="selectMissionByMissionId" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT
+			a.mission_id AS missionId,
+			a.mission_name AS missionName,
+			a.start_time AS startTimeStr,
+			a.expect_end_time AS expectEndTimeStr,
+			b.reality_end_time AS realityEndTimeStr,
+			a.create_time AS createTimeStr,
+			a.launch_user_id AS launchUserId,
+			a.launch_user_name AS launchUserName,
+			b.head_user_id AS headUserId,
+			b.head_user_name AS headUserName,
+			b.mission_state AS missionState,
+			a.mission_type AS missionType,
+			a.mission_describe AS missionDescribe,
+			b.reality_value AS realityValue,
+			b.head_id AS headId
+		FROM
+			work_office_mission a,
+			work_office_mission_head b
+		WHERE
+				a.alive_flag = '1'
+			AND b.alive_flag = '1'
+			AND a.mission_id = b.mission_id
+			<if test="missionId != null and missionId != ''">
+			AND a.mission_id = #{missionId}
+			</if>
+			<if test="missionName != null and missionName != ''">
+			AND a.mission_name LIKE #{missionName}
+			</if>
+			<if test="launchUserId != null and launchUserId != ''">
+			AND a.launch_user_id = #{launchUserId}
+			</if>
+			<if test="launchUserName != null and launchUserName != ''">
+			AND a.launchUserName = #{launchUserName}
+			</if>
+			<if test="headUserId != null and headUserId != ''">
+			AND b.head_user_id = #{headUserId}
+			</if>
+			<if test="headUserName != null and headUserName != ''">
+			AND b.head_user_name = #{headUserName}
+			</if>
+		ORDER BY
+			a.create_time
+		DESC
+	</select>
+	<!-- 查询当前登录人执行的任务 -->
+	<select id="selectUserChargeMission" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT
+			a.mission_id AS missionId,
+			a.mission_name AS missionName,
+			a.start_time AS startTimeStr,
+			a.expect_end_time AS expectEndTimeStr,
+			a.create_time AS createTimeStr,
+			a.launch_user_id AS launchUserId,
+			a.launch_user_name AS launchUserName,
+			a.mission_type AS missionType,
+			a.mission_describe AS missionDescribe,
+			b.head_user_name AS headUserName,
+			b.head_user_id AS headUserId,
+			b.head_id AS headId,
+			b.mission_state AS missionState,
+			b.reality_value AS realityValue,
+			b.reality_end_time AS realityEndTimeStr
+		FROM
+			work_office_mission a,
+			work_office_mission_head b
+		WHERE
+				a.alive_flag = '1'
+			AND a.mission_id = b.mission_id
+			<if test="missionId != null and missionId != ''">
+			AND a.mission_id = #{missionId}
+			</if>
+			<if test="missionName != null and missionName != ''">
+			AND a.mission_name LIKE #{missionName}
+			</if>
+			<if test="launchUserId != null and launchUserId != ''">
+			AND a.launch_user_id = #{launchUserId}
+			</if>
+			<if test="launchUserName != null and launchUserName != ''">
+			AND a.launchUserName = #{launchUserName}
+			</if>
+			<if test="headUserId != null and headUserId != ''">
+			AND b.head_user_id = #{headUserId}
+			</if>
+			<if test="headUserName != null and headUserName != ''">
+			AND b.head_user_name = #{headUserName}
+			</if>
+		ORDER BY
+			a.create_time
+		DESC
+	</select>
+	<!-- 查询当前登录人可查看的任务 -->
+	<select id="selectUserToviewMission" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT
+			a.mission_id AS missionId,
+			a.mission_name AS missionName,
+			a.start_time AS startTimeStr,
+			a.expect_end_time AS expectEndTimeStr,
+			a.create_time AS createTimeStr,
+			a.launch_user_id AS launchUserId,
+			a.launch_user_name AS launchUserName,
+			a.mission_type AS missionType,
+			a.mission_describe AS missionDescribe
+		FROM
+			work_office_mission a,
+			work_office_mission_user b
+		WHERE
+				a.alive_flag = '1'
+			AND a.mission_id = b.mission_id
+			AND b.user_id = #{userId}
+			<if test="missionId != null and missionId != ''">
+			AND a.mission_id = #{missionId}
+			</if>
+			<if test="missionName != null and missionName != ''">
+			AND a.mission_name LIKE #{missionName}
+			</if>
+			<if test="launchUserId != null and launchUserId != ''">
+			AND a.launch_user_id = #{launchUserId}
+			</if>
+			<if test="launchUserName != null and launchUserName != ''">
+			AND a.launch_user_name LIKE #{launchUserName}
+			</if>
+		ORDER BY
+			a.create_time
+		DESC
+	</select>
+	<!-- 查询一个任务的可查看人员 -->
+	<select id="selectMissionUserName" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT 
+			a.user_name AS userName
+		FROM 
+			user_info a,
+		(SELECT
+			user_id
+		FROM
+			work_office_mission_user
+		WHERE
+			mission_id = #{missionId}) b
+		WHERE
+			a.user_id = b.user_id
+	</select>
+	<!-- 查询一个任务的执行人 -->
+	<select id="selectMissionHeadUser" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT 
+			a.user_name AS userName
+		FROM 
+			user_info a,
+		(SELECT
+			head_user_id
+		FROM
+			work_office_mission_head
+		WHERE
+			mission_id = #{missionId}) b
+		WHERE
+			a.user_id = b.head_user_id
+	</select>
+	<!-- 查询与我相关的流程 -->
+	<select id="selectMissionByUser" parameterType="com.mdoa.work.model.Mission" resultType="com.mdoa.work.model.Mission">
+		SELECT
+			a.mission_id AS missionId,
+			a.mission_name AS missionName,
+			a.start_time AS startTimeStr,
+			a.expect_end_time AS expectEndTimeStr,
+			b.reality_end_time AS realityEndTimeStr,
+			a.create_time AS createTimeStr,
+			a.launch_user_id AS launchUserId,
+			a.launch_user_name AS launchUserName,
+			b.head_user_id AS headUserId,
+			b.head_user_name AS headUserName,
+			b.mission_state AS missionState,
+			a.mission_type AS missionType,
+			a.mission_describe AS missionDescribe,
+			b.reality_value AS realityValue
+		FROM
+			work_office_mission a,
+			work_office_mission_user b
+		WHERE
+			a.launch_user_id = #{userId}  OR b.head_user_id = #{userId}
+			AND a.alive_flag = '1' 
+			AND b.alive_flag = '1' 
+		ORDER BY
+			a.create_time
+		DESC
+	</select>
+</mapper>

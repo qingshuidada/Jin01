@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+	<title>erp查询</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/erp/erpWX/erpQuery.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/plug/mdDataGrid.css"/>
+	<link rel="stylesheet" type="text/css" href="../../../css/plug/mobiscroll.custom-3.0.0-beta6.min.css"/>
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../../js/plugin/mdDataGrid.js"></script>
+	<script type="text/javascript" src="../../../js/qywx/erpWX/erpQuery.js"></script>
+	<script type="text/javascript" src="../../../js/jquery/mobiscroll.custom-3.0.0-beta6.min.js"></script>
+</head>
+<body>
+	<h1>查询条件</h1>
+	<div class="content">
+		<div class="dataArea">
+			<div class="queryArea">
+				<p><span>车间： </span> <select class="workshopSelect"></select></p>
+				<p class="kehuP"><span>客户： </span> <input type="text" class="kehu"/></p>
+				<p class="otherP"><span>开始： </span> <input type="text" id="startriqi" readonly/></p>
+				<p class="otherP"><span>结束： </span> <input type="text" id="endriqi" readonly/></p>
+				<p class="otherP"><span>订字： </span> <input type="text" class="dingzi"/></p>
+				<p class="otherP"><span>品名： </span> <input type="text" class="peiliao"/></p>
+			</div>
+			<div class="btn query">
+				查询
+			</div>
+			<div class="btn back">
+				返回
+			</div>
+			<div class="datagrid">
+				<div id="mdDateGrid">
+				</div>
+			</div>
+		</div>
+		<div class="datails" style="display:none;">
+			<p><a class="backData">&lt;&lt;&ensp;返回生产进度</a></p>
+			<div class="dataBar">
+				<p>
+					<span class="section">订单号：<span class="danhao"></span></span>
+					<span class="section">订单日期：<span class="ddriqi"></span></span>
+					<span class="section">品名规格：<span class="peiliao"></span></span>
+				</p>
+				<p>
+					<span class="section">流程卡号：<span class="kahao"></span></span>
+					<span class="section">开卡日期：<span class="kkriqi"></span></span>
+					<span class="section">加工类别：<span class="Pitem"></span></span>
+				</p>
+				<p>
+					<span class="section">花色号：<span class="sehao"></span></span>
+					<span class="section">颜色名称：<span class="yanse"></span></span>
+				</p>
+			</div>
+			<div class="dataTable">
+				<table>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

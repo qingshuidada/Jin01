@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>成品库存</title>
+<link rel="stylesheet" type="text/css" href="../../../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/erp/common.css">
+	<link rel="stylesheet" type="text/css" href="../../../css/plug/mdDataGrid.css"/>
+	<link rel="stylesheet" type="text/css" href="../../../css/erp/erpSelect.css">
+	<script type="text/javascript" src="../../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../../js/erp/common.js"></script>
+	<script type="text/javascript" src="../../../js/plugin/mdDataGrid.js"></script>
+	<script type="text/javascript" src="../../../js/erp/clientManage/productStock.js"></script>
+</head>
+<body>
+	<div id="erpTop">
+		<div class="w920 erpHeader">
+			<div class="logo">
+				<img src="../../../img/erp/logo.png" >
+			</div>
+			<div class="logoText">
+				<h1>杭州航民达美染整有限公司</h1>
+			</div>
+			<div class="right">
+				<div class="debris">
+					<div  class="welcome">
+						<span class="userAccount">欢迎您，</span>
+						<span>【退出登录】</span>
+					</div>
+					<div>
+						<img src="../../../img/erp/sweep.png">
+					</div>
+				</div>
+				<div class="QRCode">
+					<img src="../../../img/erp/QRCode.jpg">
+				</div>
+			</div>
+		</div>
+		<div class="nav">
+			<div class="w920">
+				<ul>
+					<li>主页</li>
+					<li>白坯入库明细</li>
+					<li>白坯库存</li>
+					<li>订单查询</li>
+					<li>生产进度</li>
+					<li>成品入库明细</li>
+					<li class="navOn">成品库存</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="dataArea">
+		<div class="w920">
+			<div class="dataSelect">
+				<h3>车间选择：</h3>
+				<ul class="workshopSelect">
+					
+				</ul>
+				<img alt="车间" src="../../../img/erp/workshop.png">
+			</div>
+			<div class="datagrid">
+				<div class="toolBar">
+					<!-- 客户：
+					<input type="text" class="kehu"/> -->
+					业务员：
+					<input type="text" class="ywman"/>
+					品名规格：
+					<input type="text" class="peiliao"/>
+					花色号：
+					<input type="text" class="sehao"/>
+					颜色：
+					<input type="text" class="yanse"/>
+					<br/>
+					入库日期：
+					<input type="text" class="startriqi" onblur="testDate(this)"/> ~
+					<input type="text" class="endriqi" onblur="testDate(this)"/>
+					订字：
+					<input type="text" class="dingzi"/>
+					<input type="button" class="button query" value="查询" /> 
+					<input type="button" class="button clean" value="清空" />
+				</div>
+				<div id="mdDateGrid">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

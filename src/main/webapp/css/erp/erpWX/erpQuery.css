@@ -1,0 +1,126 @@
+/*------------------------------reset--------------------------------*/
+html,body,ul,ol,li,dl,dt,dd,p,h1,h2,h3,h4,h5,h6,form,fieldset,legend,img,i,em,b,strong,figure{margin:0;padding:0;}
+h1,h2,h3,h4,h5,h6,b{font-weight:normal;}
+ul,li{list-style:none;}
+i{font-style:normal;}
+a{text-decoration:none;}
+html,body{
+	height:100%;
+	width:100%;
+}
+body{font:12px "宋体"}
+input,select{
+	margin:0;
+	padding:0;
+}
+/*----------------------------body--------------------------------------*/
+h1{
+	height:6.2%;
+	box-sizing:border-box;
+	background:#157fcb;
+	text-align:center;
+	font-size:.35rem;
+	color:#fff;
+	padding-left:20px;
+}
+.content{
+	padding:10px 20px;
+	border:2px solid #027cc7;
+	box-sizing:border-box;
+}
+.content .queryArea{
+	border:2px solid #147fd1;
+	box-sizing:border-box;
+	padding:3px 12px 15px;
+}
+.content .queryArea p{
+	line-height:20px;
+	height:20px;
+	font-size:18px;
+	margin-top:8px;
+	text-align:center;
+	padding:2px 0px;
+}
+.content .queryArea .kehuP{
+	display:none;
+}
+
+.content .queryArea p span{
+	display:inline-block;
+	width:23%;
+	vertical-align: middle;
+	margin-right:1%;
+}
+.content .queryArea p input{
+	width:70%;
+	border-width:1px;
+	height:20px;
+	line-height:20px;
+	font-size:1em;
+	vertical-align: middle;
+}
+.content .queryArea p select{
+	width:70%;
+	height:25px;
+	font-size:0.5em;
+	vertical-align: middle;
+}
+.content .queryArea p select option{
+	font-size:.5em;
+}
+.content .datagrid{
+	border:2px solid #147fd1;
+	box-sizing:border-box;
+	padding:10px 12px;
+	margin-top:10px;
+	overflow:hidden;
+}
+.content .btn{
+	margin-top:12px;
+	border:2px solid #16619a;
+	border-radius:6px;
+	height:35px;
+	font-size:24px;
+	line-height:35px;
+	color:#fff;
+	text-align:center;
+	background-image:linear-gradient(to top,#4b9fdd,#358dcd,#3d95d5);
+}
+.content .back{
+	margin-bottom:12px;
+}
+.content .datails{
+	display:none;
+}
+.content .datails .dataTable{
+	width:100%;
+	overflow:auto;
+}
+.content .datails .backData{
+	color: #169BD5;
+	margin-bottom:8px;
+}
+.content .datails .backData:hover{
+	text-decoration:underline;
+}
+.content .datails .dataBar,#dataArea .datails .dataTable{
+	background-color: rgba(255, 255, 255, 1);
+}
+.content .datails .dataBar{
+	padding:10px 28px;
+	border:1px solid rgba(204, 204, 204, 1);
+	line-height:24px;
+	margin-top:10px;
+}
+.content .datails .dataBar .section{
+	display:inline-block;
+	width:236px;
+}
+.content .dataTable table{
+	border-collapse:collapse;
+	text-align:center;
+	margin-top:10px;
+}
+.content .dataTable table tr,#dataArea .dataTable table th,#dataArea .dataTable table td{
+	border:1px solid rgba(204, 204, 204, 1);
+}

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.app.dao.AppSortDao">
+	
+	<select id="getSortBySuperId" parameterType="com.mdoa.app.model.AppSort" resultType="com.mdoa.app.model.AppSort">
+		SELECT
+			sort_id AS sortId,
+			title AS title,
+			sort_describe AS sortDescribe,
+			parent_sort_id AS parentSortId
+		FROM
+			app_sort
+		WHERE
+			parent_sort_id = #{sortId}
+	</select>
+	<select id="selectAllSort" resultType="com.mdoa.app.model.AppSort">
+		SELECT
+			sort_id AS sortId,
+			title AS title,
+			sort_describe AS sortDescribe,
+			parent_sort_id AS parentSortId
+		FROM
+			app_sort
+	</select>
+	<select id="selectSortsBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppSort">
+		SELECT
+			sort_id AS sortId,
+			title AS title,
+			sort_describe AS sortDescribe,
+			parent_sort_id AS parentSortId,
+			image_url AS imageUrl
+		FROM
+			app_sort
+		WHERE
+			parent_sort_id = #{sortId}
+	</select>
+	<select id="selectSortsBySortIdJ" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppSort">
+		SELECT
+			sort_id AS sortId,
+			title AS title,
+			sort_describe AS sortDescribe,
+			parent_sort_id AS parentSortId,
+			image_url AS imageUrl
+		FROM
+			app_sort
+		WHERE
+			sort_id = #{sortId}
+	</select>
+	<select id="selectSortBySortId" parameterType="java.lang.String" resultType="com.mdoa.app.model.AppSort">
+		SELECT
+			sort_id AS sortId,
+			title AS title,
+			image_url AS imageUrl,
+			sort_describe AS sortDescribe,
+			parent_sort_id AS parentSortId
+		FROM
+			app_sort
+		WHERE
+			sort_id = #{sortId}
+	</select>
+	<update id="editSortById" parameterType="com.mdoa.app.model.AppSort" >
+		UPDATE app_sort
+		SET
+		<if test="title != null and title != ''">
+			title = #{title},
+		</if>
+		<if test="sortDescribe != null and sortDescribe != ''">
+			sort_describe = #{sortDescribe},
+		</if>
+		sort_id = #{sortId}
+		WHERE
+			sort_id = #{sortId}
+	</update>
+	<select id="selectAppImage" parameterType="com.mdoa.app.model.AppImage" resultType="com.mdoa.app.model.AppImage">
+		SELECT
+			image_id AS imageId,
+			title AS title,
+			image_describe AS imageDescribe,
+			sort_id AS sortId,
+			image_url AS imageUrl
+		FROM
+			app_image
+		WHERE
+			sort_id = #{sortId}
+			
+	</select>
+	<insert id="addAppImage" parameterType="com.mdoa.app.model.AppImage">
+		INSERT INTO app_image(
+			image_id, 
+			title,
+			image_describe,
+			sort_id,
+			image_type,
+			image_url
+		)VALUE(
+			UUID(),
+			#{title},
+			#{imageDescribe},
+			#{sortId},
+			#{imageType},
+			#{imageUrl}
+		)
+	</insert>
+	<delete id="deleteImage" parameterType="com.mdoa.app.model.AppImage">
+		DELETE
+		FROM 
+			app_image
+		WHERE
+			image_id = #{imageId}
+	</delete>
+</mapper>

@@ -1,0 +1,147 @@
+<div id="checkInfoQuery">
+	<div class="listForm">
+		<div class="maintop">
+			<div style="margin-right:6px;">
+				<!-- <input type="button" value="导出查询结果到Excel" class="button write" /> -->
+			</div>
+		</div>
+		<div class="queryForm">
+			月份：
+				<select class="balanceMonth"  style="width:100px">
+					<option value="2017-05">2017-05</option>					
+				</select>
+			<br />
+			组名：
+				<select class="attendanceGroupId"  style="width:100px">
+					<option value=""></option>					
+				</select>
+			部门名：
+				<input type="text" name="departmentName" style="width:60px" readOnly="readonly"> 
+				<input type="hidden" name="departmentUrl">
+				<input type="button" class="button departmentChooseObj" value="选择"  style="width:55px"/> 
+			岗位名：
+				<input type="text" name="postName" style="width:60px" readOnly="readonly"> 
+				<input type="hidden" name="postId"> 
+				<input type="button" class="button postChooseObj" value="选择"  style="width:55px"/> 
+			姓名：
+				<input type="text" name="peopleName" style="width:60px">
+			身份证号：
+				<input type="text" name="idCard" style="width:120px">				
+				<span class="idCardIcon"></span>					
+			员工编号：
+				<input type="text" name="userAccount" style="width:60px">
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" value="清空" class="reset">
+		</div>
+		<div>
+			<table id="checkInfoQuerydg">
+			</table>
+		</div>
+	</div>
+	
+	<!-- 查看员工的具体考勤信息 -->
+	<div id="oneBodyCheckInfo" style="display:none;">
+	 	<div class="Calendar"></div>
+	 	<!-- 当天的考勤详细 -->
+	 	<div class="myCheckInfoDetail">
+	 		<dl class="belongGrounp">
+	 		</dl>
+	 		<div class="title">
+	 			
+	 		</div> 		
+	 		<ul>
+	 			<li>
+	 				<span>当日上班状态：</span>
+	 				<p class="leaveFlag"></p>
+	 			</li>
+	 			<li>
+	 				<span>上班时间：</span>
+	 				<p class="onDutyTime"></p>
+	 			</li>
+	 			<li> 				
+	 				<span>下班时间：</span>
+	 				<p class="offDutyTime"></p>
+	 			</li>
+	 			<li>
+	 				<span>上班打卡时间：</span>
+	 				<p class="clockInTime"></p>
+	 			</li>
+	 			<li> 				
+	 				<span>下班打卡时间：</span>
+	 				<p class="clockOutTime"></p>
+	 			</li>
+	 			<li>
+	 				<span>是否迟到：</span>
+	 				<p class="beLateFlag"></p>
+	 			</li>
+	 			<li>
+	 				<span>是否早退：</span>
+	 				<p class="leaveEarlyFlag"></p>
+	 			</li>
+	 		</ul> 		
+	 	</div>
+	 	<!-- 当月的考勤详细 -->
+	 	<div class="monthCheckInfoDetail">
+	 		<h2>本月考勤信息</h2>
+	 		<ul>
+	 			<li>
+	 				<span>出勤天数：</span>
+	 				<p class="attendanceDays"></p>
+	 				<p>天</p>
+	 			</li>
+	 			<li>
+	 				<span>休息天数：</span>
+	 				<p class="restDays"></p>
+	 				<p>天</p>
+	 			</li>
+	 			<li>
+	 				<span>迟到次数：</span>
+	 				<p class="lateTimes"></p>
+	 				<p>次</p>
+	 			</li>
+	 			<li>
+	 				<span>早退次数：</span>
+	 				<p class="earlyTimes"></p>
+	 				<p>次</p>
+	 			</li>
+	 			<li>
+	 				<span>缺卡次数：</span>
+	 				<p class="missTimes"></p>
+	 				<p>次</p>
+	 			</li>
+	 			<li>
+	 				<span>旷工天数：</span>
+	 				<p class="absentDays"></p>
+	 				<p>天</p>
+	 			</li>
+	 			<li>
+	 				<span>事假天数：</span>
+	 				<p class="businessLeaveDays"></p>
+	 				<p>天</p>
+	 			</li>
+	 			<li>
+	 				<span>病假天数：</span>
+	 				<p class="sickLeaveDays"></p>
+	 				<p>天</p>
+	 			</li>
+	 		</ul>
+	 	</div>
+	 	
+	</div>
+	 	
+	<div class="popups" style="text-align:left;">
+		<div class="popup writetoexcel" style="height:280px;width: 415px;">
+			<h3>导出数据到Excel表格</h3>
+			<div class="popuparea" style="overflow-y:auto;height:217px;">
+				
+			</div>
+			<div class="btnarea">
+				<input type="button" name="ensure" class="button" style="margin-left:130px;" value="导出">
+				<input type="button" name="reset" class="button" value="重置">
+				<input type="button" name="cancel" class="button" value="取消">
+			</div>
+		</div>
+	</div>
+	
+	
+</div>

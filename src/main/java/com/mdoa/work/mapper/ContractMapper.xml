@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.ContractDao">
+	<!-- 查询即将到合同 -->
+	<select id="findExpireContract" parameterType="com.mdoa.work.bo.ContractForm" resultType="com.mdoa.work.model.Contract">
+		SELECT 
+			contract_id AS contractId,
+			process_record_id AS processRecordId,
+			contract_name AS contractName,
+			second_name AS secondName,
+			contract_amount AS contractAmount,
+			unit AS unit,
+			spend_amount AS spendAmount,
+			unpaid_amount AS unpaidAmount,
+			invoice_amount AS invoiceAmount,
+			no_invoice_amount AS noInvoiceAmount,
+			contract_describe AS contractDescribe,
+			text AS text,
+			attachment_name AS attachmentName,
+			attachment_url AS attachmentUrl,
+			order_executor_id AS orderExecutorId,
+			order_executor_name AS orderExecutorName,
+			start_time AS startTime,
+			end_time AS endTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			create_time AS createTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			update_time AS updateTime,
+			contract_status AS contractStatus,
+			alive_flag AS aliveFlag,
+			department_name AS departmentName,
+			contract_sort AS contractSort
+		FROM 
+			 work_office_contract 
+		WHERE TO_DAYS(end_time) - TO_DAYS(now()) &lt;= 10 and TO_DAYS (end_time) - TO_DAYS(now()) &gt;= 0 
+		ORDER BY 
+			end_time DESC
+	</select>
+
+	<!-- 添加合同 -->
+	<insert id="insertContract" parameterType="com.mdoa.work.bo.ContractForm">
+		INSERT INTO work_office_contract(
+			contract_id,
+			process_record_id,
+			contract_name,
+			second_name,
+			contract_amount,
+			unit,
+			spend_amount,
+			unpaid_amount,
+			invoice_amount,
+			no_invoice_amount,
+			contract_describe,
+			text,
+			attachment_name,
+			attachment_url,
+			order_executor_id,
+			order_executor_name,
+			start_time,
+			<if test="endTimeStr != null and endTimeStr != ''">
+			end_time,
+			</if>
+			create_user_id,
+			create_user_name,
+			create_time,
+			contract_status,
+			alive_flag,
+			department_name,
+			contract_sort
+		)VALUE(
+			UUID(),
+			#{processRecordId},
+			#{contractName},
+			#{secondName},
+			#{contractAmount},
+			#{unit},
+			'0',
+			#{unpaidAmount},
+			'0',
+			#{noInvoiceAmount},
+			#{contractDescribe},
+			#{text},
+			#{attachmentName},
+			#{attachmentUrl},
+			#{orderExecutorId},
+			#{orderExecutorName},
+			#{startTimeStr},
+			<if test="endTimeStr != null and endTimeStr != ''">
+			#{endTimeStr},
+			</if>
+			#{createUserId},
+			#{createUserName},
+			NOW(),
+			'0',
+			'1',
+			#{departmentName},
+			#{contractSort}
+		)
+	</insert>
+	
+	<!-- 查询合同 -->
+	<select id="findContract" parameterType="com.mdoa.work.bo.ContractForm" resultType="com.mdoa.work.model.Contract">
+		SELECT
+			contract_id AS contractId,
+			process_record_id AS processRecordId,
+			contract_name AS contractName,
+			second_name AS secondName,
+			contract_amount AS contractAmount,
+			unit AS unit,
+			spend_amount AS spendAmount,
+			unpaid_amount AS unpaidAmount,
+			invoice_amount AS invoiceAmount,
+			no_invoice_amount AS noInvoiceAmount,
+			contract_describe AS contractDescribe,
+			text AS text,
+			attachment_name AS attachmentName,
+			attachment_url AS attachmentUrl,
+			order_executor_id AS orderExecutorId,
+			order_executor_name AS orderExecutorName,
+			start_time AS startTime,
+			end_time AS endTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			create_time AS createTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			update_time AS updateTime,
+			contract_status AS contractStatus,
+			alive_flag AS aliveFlag,
+			department_name AS departmentName,
+			contract_sort AS contractSort
+		FROM
+			work_office_contract
+		WHERE
+			alive_flag = '1'
+		<if test="contractId != null and contractId != ''">
+		AND	contract_id = #{contractId}
+		</if>
+		<if test="contractName != null and contractName != ''">
+		AND	contract_name LIKE ${contractName}
+		</if>
+		<if test="orderExecutorId != null and orderExecutorId != ''">
+		AND	order_executor_id = #{orderExecutorId}
+		</if>
+		<if test="orderExecutorName != null and orderExecutorName != ''">
+		AND	order_executor_name LIKE ${orderExecutorName}
+		</if>
+		<if test="contractStatus != null and contractStatus != ''">
+		AND	contract_status = #{contractStatus}
+		</if>
+		<if test="secondName != null and secondName != ''">
+		AND second_name LIKE '${secondName}%'
+		</if>
+		<if test="startTimeStr != null and startTimeStr != ''">
+		AND start_time &gt;= #{startTimeStr}
+		</if>
+		<if test="endTimeStr != null and endTimeStr != ''">
+		AND start_time &lt;= #{endTimeStr}
+		</if>
+		<if test="departmentName != null and departmentName != ''">
+		AND department_name LIKE ${departmentName}
+		</if>
+		<if test="contractSort != null and contractSort != ''">
+		AND contract_sort = #{contractSort}
+		</if>
+		ORDER BY 
+			start_time DESC
+	</select>
+	
+	<!-- 合同交单 -->
+	<update id="presentContract" parameterType="com.mdoa.work.bo.ContractForm">
+		UPDATE
+			work_office_contract
+		SET
+			contract_status = '1',
+			process_record_id = #{processRecordId},
+			update_user_id = #{userId},
+			update_user_name = #{userName},
+			update_time = NOW()
+		WHERE
+			alive_flag = '1'
+		AND contract_id = #{contractId}
+	</update>
+	
+	<!-- 关闭合同 -->
+	<update id="closeContract" parameterType="com.mdoa.work.bo.ContractForm">
+		UPDATE
+			work_office_contract
+		SET
+			contract_status = '2',
+			alive_flag = '0',
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName},
+			update_time = NOW()
+		WHERE
+			alive_flag = '1'
+		AND contract_id = #{contractId}
+	</update>
+	
+	<!-- 添加合同记录 -->
+	<insert id="insertContractRecord" parameterType="com.mdoa.work.bo.ContractRecordForm">
+		INSERT INTO work_office_contract_record(
+			record_id,
+			contract_id,
+			content,
+			order_executor_id,
+			record_time
+		)VALUE(
+			UUID(),
+			#{contractId},
+			#{content},
+			#{orderExecutorId},
+			NOW()
+		)
+	</insert>
+	
+	<!-- 查询合同记录 -->
+	<select id="findContractRecord" parameterType="com.mdoa.work.bo.ContractRecordForm" resultType="com.mdoa.work.model.ContractRecord">
+		SELECT
+			record_id AS recordId,
+			contract_id AS contractId,
+			order_executor_id AS orderExecutorId,
+			content AS content,
+			record_time AS recordTime
+		FROM
+			work_office_contract_record
+		WHERE
+			contract_id = #{contractId}
+		ORDER BY record_time DESC
+	</select>
+	<!-- 修改合同信息 -->
+	<update id="editContract" parameterType="com.mdoa.work.bo.ContractForm">
+		UPDATE
+			work_office_contract
+		<set>
+			<if test="contractName != null and contractName != ''">
+			contract_name = #{contractName},</if>
+			<if test="contractDescribe != null and contractDescribe != ''">
+			contract_describe = #{contractDescribe},</if>
+			<if test="text != null and text != ''">
+			text = #{text},</if>
+			<if test="orderExecutorId != null and orderExecutorId != ''">
+			order_executor_id = #{orderExecutorId},</if>
+			<if test="orderExecutorName != null and orderExecutorName != ''">
+			order_executor_name = #{orderExecutorName},</if>
+			<if test="startTimeStr != null and startTimeStr != ''">
+			start_time = #{startTimeStr},</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+			end_time = #{endTimeStr},</if>
+			<if test="secondName != null and secondName != ''">
+			second_name = #{secondName},</if>
+			<if test="contractAmount != null and contractAmount != ''">
+			contract_amount = #{contractAmount},</if>
+			<if test="spendAmount != null and spendAmount != ''">
+			spend_amount = #{spendAmount},</if>
+			<if test="unpaidAmount != null">
+			unpaid_amount = #{unpaidAmount},</if>
+			<if test="invoiceAmount != null and invoiceAmount != ''">
+			invoice_amount = #{invoiceAmount},</if>
+			<if test="noInvoiceAmount != null">
+			no_invoice_amount = #{noInvoiceAmount},</if>
+			<if test="updateUserId != null and updateUserId != ''">
+			update_user_id = #{updateUserId},</if>
+			<if test="updateUserName != null and updateUserName != ''">
+			update_user_name = #{updateUserName},</if>
+			<if test="departmentName != null and departmentName != ''">
+			department_name = #{departmentName},</if>
+			<if test="contractSort != null and contractSort != ''">
+			contract_sort = #{contractSort},</if>
+			update_time = NOW()
+		</set>
+		WHERE
+			alive_flag = '1'
+		AND contract_id = #{contractId}
+	</update>
+	<!-- 插入合同支付记录 -->
+	<insert id="insertContractPayRecord" parameterType="com.mdoa.work.bo.ContractForm">
+		INSERT INTO work_office_contract_payrecord(
+			payrecord_id,
+			contract_id,
+			pay_amount,
+			record_time,
+			pay_flag,
+			remark,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{contractId},
+			#{payAmount},
+			NOW(),
+			#{payFlag},
+			#{remark},
+			#{aliveFlag}
+		)
+	</insert>
+	<!-- 查询合同 -->
+	<select id="findContractById" parameterType="java.lang.String" resultType="com.mdoa.work.model.Contract">
+		SELECT
+			contract_id AS contractId,
+			process_record_id AS processRecordId,
+			contract_name AS contractName,
+			second_name AS secondName,
+			contract_amount AS contractAmount,
+			unit AS unit,
+			spend_amount AS spendAmount,
+			unpaid_amount AS unpaidAmount,
+			invoice_amount AS invoiceAmount,
+			no_invoice_amount AS noInvoiceAmount,
+			contract_describe AS contractDescribe,
+			text AS text,
+			attachment_name AS attachmentName,
+			attachment_url AS attachmentUrl,
+			order_executor_id AS orderExecutorId,
+			order_executor_name AS orderExecutorName,
+			start_time AS startTime,
+			end_time AS endTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			create_time AS createTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			update_time AS updateTime,
+			contract_status AS contractStatus,
+			alive_flag AS aliveFlag,
+			department_name AS departmentName,
+			contract_sort AS contractSort
+		FROM
+			work_office_contract
+		WHERE
+			alive_flag = '1'
+			AND	contract_id = #{contractId}
+	</select>
+	<!-- 查询支付记录 -->
+	<select id="findPayRecordById" parameterType="com.mdoa.work.bo.ContractForm" resultType="com.mdoa.work.model.ContractPayRecord">
+		SELECT
+			payrecord_id AS payrecordId,
+			contract_id AS contractId,
+			pay_amount AS payAmount,
+			pay_flag AS payFlag,
+			remark AS remark,
+			record_time AS recordTime,
+			alive_flag AS aliveFlag
+		FROM
+			work_office_contract_payrecord
+		WHERE
+			contract_id = #{contractId}
+			AND alive_flag = #{aliveFlag}
+		ORDER BY record_time DESC
+	</select>
+</mapper>

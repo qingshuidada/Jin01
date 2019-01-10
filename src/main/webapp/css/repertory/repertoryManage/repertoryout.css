@@ -1,0 +1,26 @@
+#repertoryout .popups .popup table [name!=writetoexcel]{
+	padding:20px 30px;
+}
+#repertoryout .popups .popup table textarea{
+	width:144px;
+}
+#repertoryout .update .confirm{
+	margin-left:94px;
+}
+#repertoryout .update .cannel{
+	margin-left:8px;
+}
+#repertoryout .materialsForm{
+	float:left;
+}
+#repertoryout .materialsForm .toolbar {
+    height: 30px;
+    background-color: #66CCCC;
+    padding-top: 4px;
+    padding-left: 10px;
+}
+#repertoryout .materialsForm .queryForm {
+    padding-left: 10px;
+    padding-top: 2px;
+    line-height: 30px;
+}

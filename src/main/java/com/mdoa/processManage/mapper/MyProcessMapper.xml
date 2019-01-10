@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.processManage.dao.MyProcessDao">
+	<select id="getProcessTask" parameterType="java.util.Map" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			b.task_id AS taskId,
+			b.process_id AS procesId,
+			b.executor_id AS executorId,
+			b.executor_name AS executorName,
+			b.task_type AS taskType,
+			b.order_number AS orderNumber,
+			b.create_time AS createTime
+		FROM
+			process a
+		INNER JOIN
+			process_task b
+		ON
+			(a.process_id = b.process_id)
+		WHERE
+			a.process_type_id = #{typeId}
+			AND a.user_id = #{userId}
+			AND task_type = '1'
+		ORDER BY 
+			orderNumber
+	</select>
+	
+	<select id="getProcessCopyToTask" parameterType="java.util.Map" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			b.task_id AS taskId,
+			b.process_id AS procesId,
+			b.executor_id AS executorId,
+			b.executor_name AS executorName,
+			b.task_type AS taskType,
+			b.order_number AS orderNumber,
+			b.create_time AS createTime
+		FROM
+			process a
+		INNER JOIN
+			process_task b
+		ON
+			(a.process_id = b.process_id)
+		WHERE
+			a.process_type_id = #{typeId}
+			AND a.user_id = #{userId}
+			AND task_type = '2'
+	</select>
+	
+	<select id="getProcessMustTask" parameterType="java.util.Map" 
+		resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			c.task_id AS taskId,
+			c.task_type AS taskType,
+			c.executor_id As executorId,
+			c.executor_name AS executorName,
+			c.group_id AS groupId,
+			c.process_type_id AS procesTypeId,
+			DATE_FORMAT(c.create_time,'%Y-%m-%d %h:%i:%s') AS createTime
+		FROM
+			process_group_task c,
+			process_group_user b
+		WHERE
+			c.process_type_id = #{typeId}
+			AND c.group_id = b.group_id
+			AND c.task_type = '1'
+			AND b.user_id = #{userId}
+		ORDER BY c.group_id , c.order_number
+	</select>
+	
+	<select id="getProcessMustCopyToTask" parameterType="java.util.Map" 
+		resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			c.task_id AS taskId,
+			c.task_type AS taskType,
+			c.executor_id As executorId,
+			c.executor_name AS executorName,
+			c.group_id AS groupId,
+			c.process_type_id AS procesTypeId,
+			DATE_FORMAT(c.create_time,'%Y-%m-%d %h:%i:%s') AS createTime
+		FROM
+			process_group_task c,
+			process_group_user b
+		WHERE
+			c.process_type_id = #{typeId}
+			AND c.group_id = b.group_id
+			AND c.task_type = '2'
+			AND b.user_id = #{userId}
+		ORDER BY c.group_id , c.order_number
+	</select>
+	
+	<select id="getProcessRecordTask" parameterType="java.util.Map" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			b.task_id AS taskId,
+			b.process_record_id AS procesRecordId,
+			b.executor_id AS executorId,
+			b.executor_name AS executorName,
+			b.task_type AS taskType,
+			b.order_number AS orderNumber,
+			b.create_time AS createTime
+		FROM
+			process_record a
+		INNER JOIN
+			process_task_record b
+		ON
+			(a.process_record_id = b.process_record_id)
+		WHERE
+			a.process_record_id = #{processRecordId}
+			AND task_type = '1'
+		ORDER BY
+			orderNumber
+	</select>
+	
+	<select id="getProcessRecordCopyToTask" parameterType="java.util.Map" resultType="com.zhou.myProcess.instance.TaskModel">
+		SELECT
+			b.task_id AS taskId,
+			b.process_record_id AS procesRecordId,
+			b.executor_id AS executorId,
+			b.executor_name AS executorName,
+			b.task_type AS taskType,
+			b.order_number AS orderNumber,
+			b.create_time AS createTime
+		FROM
+			process_record a
+		INNER JOIN
+			process_task_record b
+		ON
+			(a.process_record_id = b.process_record_id)
+		WHERE
+			a.process_record_id = #{processRecordId}
+			AND task_type = '2'
+	</select>
+	
+	<select id="getExamineIdea" parameterType="java.lang.String" resultType="com.mdoa.processManage.model.TaskRecord">
+		SELECT
+			task_id AS taskId,
+			process_record_id AS processRecordId,
+			examine_status AS examineStatus,
+			executor_id AS executorId,
+			executor_name AS executorName,
+			executor_idea AS executorIdea,
+			task_type AS taskType,
+			order_number AS orderNumber,
+			DATE_FORMAT(executor_time,'%Y-%m-%d %h:%i:%s') AS executorTime,
+			DATE_FORMAT(create_time,'%Y-%m-%d %h:%i:%s') AS createTime,
+			DATE_FORMAT(update_time,'%Y-%m-%d %h:%i:%s') AS updateTime
+		FROM
+			process_task_record
+		WHERE
+			process_record_id = #{processRecordId}
+			AND (examine_status = '1' OR examine_status = '2' OR examine_status = '3')
+			AND (task_type = '1')
+		ORDER BY
+			executor_time IS NULL , executor_time
+	</select>
+	
+	<select id="getCopyToProcessList" parameterType="com.mdoa.processManage.po.GetMyRelatedProcessForm" 
+		resultType="com.mdoa.processManage.model.ProcessMessage">
+		SELECT
+			a.process_record_id AS processRecordId,
+			a.process_id AS processId,
+			a.user_id AS userId,
+			a.title AS title,
+			a.process_type_id AS processTypeId,
+			a.execute_status AS executeStatus,
+			a.form_url AS formUrl,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %h:%i:%s') AS createTime,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %h:%i:%s') AS updateTime,
+			b.user_name AS userName,
+			b.department_name AS departmentName
+		FROM
+			process_record a
+		LEFT JOIN
+			user_info b
+		ON (a.user_id = b.user_id)
+		INNER JOIN
+			process_task_record c
+		ON (
+			a.process_record_id = c.process_record_id 
+			AND c.executor_id = #{userId} 
+			AND c.task_type = '2'
+			AND c.examine_status = '1'
+		)
+	    WHERE
+			1=1
+		<if test="createTimeEnd != null and createTimeEnd != ''">
+			AND a.create_time &lt; STR_TO_DATE(#{createTimeEnd},'%Y-%m-%d %h:%i:%s')
+		</if>
+		<if test="createTimeStart != null and createTimeStart != ''">
+			AND a.create_time &gt; STR_TO_DATE(#{createTimeStart},'%Y-%m-%d %h:%i:%s')
+		</if>
+		<if test="createUserName != null and createUserName != ''">
+			AND b.user_name LIKE(${createUserName})
+		</if>
+		<if test="processType != null and processType != ''">
+			AND a.process_type_id = #{processType}
+		</if>
+		<if test="sort == null or sort == ''">
+			ORDER BY a.create_time DESC
+		</if>
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort} ${order}
+		</if>
+	</select>
+	
+	<select id="getWaitExamineProcess" parameterType="com.mdoa.processManage.po.GetMyRelatedProcessForm" 
+		resultType="com.mdoa.processManage.model.ProcessMessage">
+		SELECT
+			a.process_record_id AS processRecordId,
+			a.process_id AS processId,
+			a.user_id AS userId,
+			a.title AS title,
+			a.process_type_id AS processTypeId,
+			a.execute_status AS executeStatus,
+			a.form_url AS formUrl,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %h:%i:%s') AS createTime,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %h:%i:%s') AS updateTime,
+			b.user_name AS userName,
+			b.department_name AS departmentName
+		FROM
+			process_record a
+		LEFT JOIN
+			user_info b
+		ON (a.user_id = b.user_id)
+		INNER JOIN
+			process_task_record c
+		ON (a.process_record_id = c.process_record_id 
+			AND c.executor_id = #{userId} 
+			AND c.examine_status = '1'
+			AND c.task_type = '1')
+	    WHERE
+			1=1
+		<if test="createTimeEnd != null and createTimeEnd != ''">
+			AND a.create_time &lt; STR_TO_DATE(#{createTimeEnd},'%Y-%m-%d %h:%i:%s')
+		</if>
+		<if test="createTimeStart != null and createTimeStart != ''">
+			AND a.create_time &gt; STR_TO_DATE(#{createTimeStart},'%Y-%m-%d %h:%i:%s')
+		</if>
+		<if test="createUserName != null and createUserName != ''">
+			AND b.user_name LIKE(${createUserName})
+		</if>
+		<if test="processType != null and processType != ''">
+			AND a.process_type_id = #{processType}
+		</if>
+		<if test="sort == null or sort == ''">
+			ORDER BY a.create_time DESC
+		</if>
+		<if test="sort != null and sort != ''">
+			ORDER BY ${sort} ${order}
+		</if>
+	</select>
+</mapper>

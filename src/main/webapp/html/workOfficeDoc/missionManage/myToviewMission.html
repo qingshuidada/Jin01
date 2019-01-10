@@ -1,0 +1,54 @@
+<div id="myToviewMission" title="抄送我的任务"> 
+	<div class="maintop">
+		<input type="button" value="返回" class="button back" />
+	</div>
+	<div class="list">
+		<div class="invitetop">
+			任务名称：
+			<input type="text" class="missionName">
+			发起人：
+			<input type="text" class="launchUserName">
+			<input class="select" type="button" value="查询" /> 
+			<input type="button" class="clean-query" value="清空" /> 
+		</div>
+		<div>
+			<table id="myToviewMissiondg"></table>
+		</div>
+	</div>
+	<!-- 查看 -->
+	<div class="lookToviewMission">
+		<ul class="editArea">
+			<li>
+				<span>&#12288;&#12288;任务名称：</span>
+				<input type="text" class="missionName shortInput" readonly="readonly"/>
+				<i></i>
+				<span>&#12288;&#12288;&#12288;发起人：</span>
+				<input type="text" class="launchUserName shortInput" readonly="readonly"/>
+			</li>
+			<li>
+				<span>&#12288;&#12288;&#12288;执行人：</span>
+				<input type="text" readonly="readonly" class="headUserName shortInput" readonly="readonly"/>
+				<i></i>
+				<span>&#12288;&#12288;&#12288;抄送人：</span>
+				<input type="text" readonly="readonly" class="userName shortInput" readonly="readonly"/>
+			</li>
+			<li>
+				<span>任务开始时间：</span>
+				<input type="text" class="startTime shortInput" onclick="testShowTime(this);" readonly/>
+				<i></i>
+				<span>预计结束时间：</span>
+				<input type="text" class="expectEndTime shortInput" onclick="testShowTime(this);" readonly/>
+			</li>
+			<li>
+				<span>&#12288;&#12288;任务描述：</span>
+				<script type="text/plain" id="toviewMissionEditor"></script>
+			</li>
+			<li>
+				<hr>
+				<span>任务完成进度：</span>
+				<table class="record">
+				</table>
+			</li>
+		</ul>
+	</div>
+</div>

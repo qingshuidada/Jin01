@@ -1,0 +1,111 @@
+<div id="carApplyFor">
+	<div class="maintop">
+		<div class="operate">
+			<input type="button" value="添加申请单" class="button addApply" />			
+		</div>
+	</div>
+	<div class="invitetop">
+		查询条件：		
+		车牌号码：
+			<input type="text" style="width:120px;" class="carNo" />
+		审批状态：
+			<select class="approvalStatus" style="width:120px;height:20px;line-height:20px;font-size:12px;">
+				<option value=""></option>
+				<option value="0">审批中</option>
+				<option value="1">审批通过</option>
+				<option value="2">审批不通过</option>
+			</select>
+		<input class="select" type="button" value="查询" /> 
+		<input type="button" class="clean-query" value="清空" /> 
+	</div>
+	<div>
+		<table id="carApplyFordg"></table>
+	</div>
+	
+	<div class="popups" style="text-align:left;">	
+		<!-- 添加 申请单 -->
+		<div class="popup addApply" style="height:340px;width:465px;">
+			<h3>添加申请单</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width:425px;height:275px;margin:0 auto;">
+				<table style="height: 150px;padding: 8px;text-align:right;">
+					<tr>
+						<td>车牌号码:</td>
+						<td>
+							<input name="carNo" style="width:60%;float:left" type="text" readonly="readonly"/>
+							<input type="text" name="selectCar" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>用车部门:</td>
+						<td>
+							<input name="department" style="width:60%;float:left" type="text" readonly="readonly"/>
+							<input type="text" name="selectDepartment" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>用车人:</td>
+						<td>
+							<input type="text" name="userFullName" style="width:60%;float:left" readonly="readonly"/>
+							<input type="text" name="selectUserFullName" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>申请人:</td>
+						<td>
+							<input type="text" name="proposer" style="width:60%;float:left" readonly="readonly"/>
+							<input type="text" name="selectProposer" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>申请日期:</td>
+						<td>
+							<input name="applyDate" style="width:100%" type="text" onclick="testShow(this)" readonly="readonly"/>
+						</td>
+					</tr>
+					<tr>
+						<td>申请原因:</td>
+						<td>
+							<input name="reason" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>开始日期:</td>
+						<td>
+							<input name="startTime" style="width:100%" type="text" onclick="testShow(this)" readonly="readonly"/>
+						</td>
+					</tr>
+					<tr>
+						<td>结束日期:</td>
+						<td>
+							<input name="endTime" style="width:100%" type="text" onclick="testShow(this)" readonly="readonly"/>
+						</td>
+					</tr>			
+					<tr>
+						<td>里程:</td>
+						<td>
+							<input name="mileage" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>油耗:</td>
+						<td>
+							<input name="oilUse" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td>
+							<input type="text" name="notes" style="width:100%" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button comfirm" value="确定">
+				<input type="button" class="button cannel" value="取消">
+			</div>
+		</div>
+	</div>
+	
+</div>

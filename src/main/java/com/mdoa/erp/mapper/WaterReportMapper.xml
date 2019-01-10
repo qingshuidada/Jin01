@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.WaterReportDao">
+	
+	<insert id="insertWaterReport" parameterType="com.mdoa.erp.model.WaterReport">
+		INSERT INTO water_detect_report(
+			report_id,
+			report_date,
+			ph_value,
+			hardness,
+			alkalinity,
+			chlorine_root,
+			report_name,
+			text,
+			type_flag
+		)VALUE(
+			UUID(),
+			#{reportDate},
+			#{phValue},
+			#{hardness},
+			#{alkalinity},
+			#{chlorineRoot},
+			#{reportName},
+			#{text},
+			#{typeFlag}
+		)
+	</insert>
+	<!-- 删除报告 -->
+	<delete id="deleteWaterReport" parameterType="java.lang.String">
+		DELETE FROM 
+			water_detect_report 
+		WHERE 
+			report_id = #{reportId} 
+	</delete>
+	<!-- 修改报告 -->
+	<update id="updateWaterReport" parameterType="com.mdoa.erp.model.WaterReport">
+		UPDATE water_detect_report
+		<set>
+			<if test="reportDateStr != null and reportDateStr != ''">
+				report_date = #{reportDateStr},
+			</if>
+			<if test="phValue != null and phValue != ''">
+				ph_value = #{phValue},
+			</if>
+			<if test="hardness != null and hardness != ''">
+				hardness = #{hardness},
+			</if>
+			<if test="alkalinity != null and alkalinity != ''">
+				alkalinity = #{alkalinity},
+			</if>
+			<if test="chlorineRoot != null and chlorineRoot != ''">
+				chlorine_root = #{chlorineRoot},
+			</if>
+			<if test="reportName != null and reportName != ''">
+				report_name = #{reportName},
+			</if>
+			<if test="text != null and text != ''">
+				text = #{text},
+			</if>
+			<if test="typeFlag != null and typeFlag != ''">
+				type_flag = #{typeFlag}
+			</if>
+		</set>
+		WHERE
+			report_id = #{reportId} 
+	</update>
+	<select id="selectWaterReport" parameterType="com.mdoa.erp.model.WaterReport" resultType="com.mdoa.erp.model.WaterReport">
+		SELECT
+			report_id AS reportId,
+			DATE_FORMAT(report_date,'%Y-%m-%d') AS reportDateStr,
+			ph_value AS phValue,
+			hardness AS hardness,
+			alkalinity AS alkalinity,
+			chlorine_root AS chlorineRoot,
+			report_name AS reportName,
+			text AS text,
+			type_flag AS typeFlag
+		FROM
+			water_detect_report
+		<where>
+			1=1
+			<if test="reportId != null and reportId != ''">
+				AND report_id = #{reportId},
+			</if>
+			<if test="reportDateStr != null and reportDateStr != ''">
+				AND report_date &gt;= #{reportDateStr}
+			</if>
+			<if test="reportEndTimeStr != null and reportEndTimeStr != ''">
+				AND report_date &lt;= #{reportEndTimeStr}
+			</if>
+		</where>
+			ORDER BY
+				report_date
+			DESC
+	</select>
+</mapper>

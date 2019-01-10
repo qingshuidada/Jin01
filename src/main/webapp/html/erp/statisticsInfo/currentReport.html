@@ -1,0 +1,22 @@
+<div id="currentReport">
+	<div class="outPut">
+		<input type="button" value="导出查询结果到excel" class="button write" style="margin:4px 0 0 10px;"/>
+	</div>
+	<div class="listBody" style="overflow:auto">
+		<div class="filtCondition">
+			<ul>
+				<li>
+					<span>选择日期:</span>					
+					<input class="jqdate" type="text" name="reportFormsDate" readonly="readonly" onclick="YMD(this);">
+				</li>				
+			</ul>
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;margin:6px 0 0 10px;">查询</a>
+			<span class="currentDate"></span>
+			<span>的报表</span>
+		</div>
+		<table border="0" cellspacing="0" cellpadding="0" class="list" id="currentReportList">
+			
+		</table>
+		<div class="rigthH"></div>
+	</div>
+</div>

@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.personnel.dao.ClockDao" >
+	
+	<!-- 对today表迟到早退标志位做处理 -->
+	<update id="dealToday">
+		UPDATE
+			personnel_attendance_today
+		SET
+			be_late_flag = IF(STR_TO_DATE(clock_in_time,'%H:%i:%s') > STR_TO_DATE(on_duty_time,'%H:%i:%s'),'1','0'),
+			leave_early_flag = IF(STR_TO_DATE(clock_out_time,'%H:%i:%s') &lt; STR_TO_DATE(off_duty_time,'%H:%i:%s'),'1','0'),
+			be_late_flag = IF(ISNULL(clock_in_time) OR clock_in_time = '','2',be_late_flag),
+			leave_early_flag = IF(ISNULL(clock_out_time) OR clock_out_time = '','2',leave_early_flag)
+		WHERE
+			leave_flag = '0'
+	</update>
+	
+	<!-- 将today表记录转存进record表 -->
+	<insert id="saveRecordFromToday">
+		INSERT INTO personnel_attendance_record
+		(
+			record_id,
+			user_id,
+			record_date,
+			on_duty_time,
+			off_duty_time,
+			clock_in_time,
+			clock_out_time,
+			leave_flag,
+			be_late_flag,
+			leave_early_flag,
+			create_user_id,
+			create_user_name,
+			create_time,
+			on_duty_out_address,
+			off_duty_out_address,
+			on_duty_out_location,
+			off_duty_out_location,
+			on_duty_wifi_id,
+			off_duty_wifi_id,
+			on_duty_wifi_name,
+			off_duty_wifi_name,
+			alive_flag
+		)
+		SELECT
+			UUID(),
+			user_id,
+			date,
+			on_duty_time,
+			off_duty_time,
+			clock_in_time,
+			clock_out_time,
+			leave_flag,
+			be_late_flag,
+			leave_early_flag,
+			'admin',
+			'超级管理员',
+			NOW(),
+			on_duty_out_address,
+			off_duty_out_address,
+			on_duty_out_location,
+			off_duty_out_location,
+			on_duty_wifi_id,
+			off_duty_wifi_id,
+			on_duty_wifi_name,
+			off_duty_wifi_name,
+			'1'
+		FROM
+			personnel_attendance_today
+	</insert>
+	
+	<!-- 删除前一天today表记录 -->
+	<delete id="truncateToday">
+		TRUNCATE personnel_attendance_today;
+	</delete>
+	
+	<!-- 测试 -->
+	<delete id="truncateGoOutApply">
+		TRUNCATE personnel_go_out_apply;
+	</delete>
+	
+	<!-- 测试 -->
+	<delete id="truncateGoOutStream">
+		TRUNCATE personnel_go_out_stream;
+	</delete>
+	
+	<!-- 当考勤组没有班次时按默认时间插入班次 -->
+	<insert id="insertClassByDefault">
+		INSERT INTO personnel_attendance_class (
+			class_id,
+			group_id,
+			class_date,
+			work_flag,
+			on_duty_time,
+			off_duty_time,
+			create_user_id,
+			create_user_name,
+			create_time,
+			alive_flag
+		) 
+		SELECT
+			UUID(),
+			a.group_id,
+			DATE_FORMAT(NOW(), '%Y-%m-%d'),
+			'1',
+			a.default_on_time,
+			a.default_off_time,
+			'admin',
+			'超级管理员',
+			NOW(),
+			'1'
+		FROM
+			personnel_attendance_group a
+		LEFT JOIN personnel_attendance_class b ON (
+			b.alive_flag = '1'
+			AND a.group_id = b.group_id
+			AND b.class_date = DATE_FORMAT(NOW(), '%Y-%m-%d')
+		)
+		WHERE
+			a.alive_flag = '1'
+		AND ISNULL(b.class_id)
+	</insert>
+	
+	<!-- 插入新的today预备记录 -->
+	<insert id="insertPreToday">
+		INSERT INTO personnel_attendance_today (
+			today_id,
+			user_id,
+			date,
+			on_duty_time,
+			off_duty_time,
+			leave_flag,
+			be_late_flag,
+			leave_early_flag
+		)
+		SELECT
+			UUID(),
+			b.user_id,
+			a.class_date,
+			a.on_duty_time,
+			a.off_duty_time,
+			IF(a.work_flag = '1', '0', '4'),
+			IF(a.work_flag = '1', NULL, '0'),
+			IF(a.work_flag = '1', NULL, '0')
+		FROM
+			personnel_attendance_class a
+		LEFT JOIN user_info b ON (
+			a.group_id = b.attendance_group_id
+			AND b.alive_flag = '1'
+		)
+		WHERE
+			a.alive_flag = '1'
+		AND DATE_FORMAT(a.class_date, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
+	</insert>
+	
+	<!-- 对新的today leave_flag标志位处理 -->
+	<update id="dealTodayLeaveFlag">
+		UPDATE 
+			personnel_attendance_today a,
+			 (
+				SELECT
+					a.user_id,
+					COUNT(b.user_id) AS counts,
+					b.start_time,
+					b.end_time
+				FROM
+					personnel_attendance_today a
+				LEFT JOIN personnel_leave_record b ON (a.user_id = b.user_id)
+				GROUP BY
+					a.user_id,
+					b.leave_record_id
+			) b,
+			 (
+				SELECT
+					a.user_id,
+					COUNT(b.user_id) AS counts,
+					b.start_time,
+					b.end_time
+				FROM
+					personnel_attendance_today a
+				LEFT JOIN personnel_out_business_record b ON (a.user_id = b.user_id)
+				GROUP BY
+					a.user_id,
+					b.out_business_record_id
+			) c
+		SET
+			a.leave_flag =IF (a.user_id = b.user_id AND b.counts = 1,'1',IF (a.user_id = c.user_id AND c.counts = 1,'3','0'))
+		WHERE
+			a.leave_flag = '0'
+		AND (
+			(
+				a.user_id = b.user_id
+				AND (
+					DATE_FORMAT(a.date, '%Y-%m-%d') = DATE_FORMAT(b.end_time, '%Y-%m-%d')
+					OR DATE_FORMAT(a.date, '%Y-%m-%d') BETWEEN DATE_FORMAT(b.start_time, '%Y-%m-%d') AND DATE_FORMAT(b.end_time, '%Y-%m-%d')
+				)
+			)
+			OR (
+				a.user_id = c.user_id
+				AND (
+					DATE_FORMAT(a.date, '%Y-%m-%d') = DATE_FORMAT(c.end_time, '%Y-%m-%d')
+					OR DATE_FORMAT(a.date, '%Y-%m-%d') BETWEEN DATE_FORMAT(c.start_time, '%Y-%m-%d') AND DATE_FORMAT(c.end_time, '%Y-%m-%d')
+				)
+			)
+		)
+	</update>
+	
+	<!-- 条件查询today表记录 -->
+	<select id="findTodayByCondition" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.model.AttendanceToday">
+		SELECT
+			today_id AS todayId,
+			user_id AS userId,
+			date AS date,
+			on_duty_time AS onDutyTime,
+			off_duty_time AS offDutyTime,
+			clock_in_time AS clockInTime,
+			clock_out_time AS clockOutTime,
+			leave_flag AS leaveFlag,
+			be_late_flag AS beLateFlag,
+			<if test="isPhone != null and isPhone !=''">
+			on_duty_out_address AS onDutyOutAddress,
+			on_duty_out_location AS onDutyOutLocation,
+			on_duty_wifi_id AS onDutyWifiId,
+			on_duty_wifi_name AS onDutyWifiName,
+			off_duty_out_address AS offDutyOutAddress,
+			off_duty_out_location AS offDutyOutLocation,
+			off_duty_wifi_id AS offDutyWifiId,
+			off_duty_wifi_name AS offDutyWifiName,
+			</if>
+			leave_early_flag AS leaveEarlyFlag
+		FROM
+			personnel_attendance_today
+		<where>
+			<if test="todayId != null and todayId != ''">
+				AND today_id = #{todayId}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND user_id = #{userId}
+			</if>
+			<if test="dateStr != null and dateStr != ''">
+				AND DATE_FORMAT(date,'%Y-%m-%d') = #{dateStr}
+			</if>
+			<if test="leaveFlag != null and leaveFlag != ''">
+				AND leave_flag = #{leaveFlag}
+			</if>
+			<if test="beLateFlag != null and beLateFlag != ''">
+				AND be_late_flag = #{beLateFlag}
+			</if>
+			<if test="leaveEarlyFlag != null and leaveEarlyFlag != ''">
+				AND leave_early_flag = #{leaveEarlyFlag}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 打卡 -->
+	<update id="clock" parameterType="com.mdoa.personnel.bo.ClockForm">
+		
+		
+	</update>
+	
+	<!-- 正常上班打卡 -->
+	<update id="clockIn" parameterType="com.mdoa.personnel.bo.ClockForm">
+		UPDATE
+			personnel_attendance_today
+		SET
+			clock_in_time = #{clockTime}
+			<if test="leaveFlag != null and leaveFlag != ''">
+				<if test="leaveFlag == '0'">
+					,be_late_flag = '0'
+				</if>
+			</if>
+			<if test="isPhone == 1">
+				<if test="wifiId == null or wifiId == ''">
+					,on_duty_out_location = #{outLocation}
+					,on_duty_out_address = #{outAddress}
+				</if>
+				<if test="wifiId != null and wifiId != ''">
+					,on_duty_wifi_id = #{wifiId}
+					,on_duty_wifi_name = #{wifiName}
+				</if>
+			</if>
+		WHERE
+			user_id = #{userId}
+	</update>
+	
+	<!-- 迟到上班打卡 -->
+	<update id="clockInLate" parameterType="com.mdoa.personnel.bo.ClockForm">
+		UPDATE
+			personnel_attendance_today
+		SET
+			clock_in_time = #{clockTime}
+			<if test="leaveFlag != null and leaveFlag != ''">
+				<if test="leaveFlag = '0'">
+					,be_late_flag = '1'
+				</if>
+			</if>
+			<if test="isPhone == 1">
+				<if test="wifiId == null or wifiId == ''">
+					,on_duty_out_location = #{outLocation}
+					,on_duty_out_address = #{outAddress}
+				</if>
+				<if test="wifiId != null and wifiId != ''">
+					,on_duty_wifi_id = #{wifiId}
+					,on_duty_wifi_name = #{wifiName}
+				</if>
+			</if>
+		WHERE
+			user_id = #{userId}
+	</update>
+	
+	<!-- 正常下班打卡 -->
+	<update id="clockOut" parameterType="com.mdoa.personnel.bo.ClockForm">
+		UPDATE
+			personnel_attendance_today
+		SET
+			clock_out_time = #{clockTime}
+			<if test="leaveFlag != null and leaveFlag != ''">
+				<if test="leaveFlag = '0'">
+					,leave_early_flag = '0'
+				</if>
+			</if>
+			<if test="isPhone == 1">
+				<if test="wifiId == null or wifiId == ''">
+					,off_duty_out_location = #{outLocation}
+					,off_duty_out_address = #{outAddress}
+				</if>
+				<if test="wifiId != null and wifiId != ''">
+					,off_duty_wifi_id = #{wifiId}
+					,off_duty_wifi_name = #{wifiName}
+				</if>
+			</if>
+		WHERE
+			user_id = #{userId}
+	</update>
+	
+	<!-- 早退下班打卡 -->
+	<update id="clockOutEarly" parameterType="com.mdoa.personnel.bo.ClockForm">
+		UPDATE
+			personnel_attendance_today
+		SET
+			clock_out_time = #{clockTime}
+			<if test="leaveFlag != null and leaveFlag != ''">
+				<if test="leaveFlag = '0'">
+					,leave_early_flag = '1'
+				</if>
+			</if>
+			<if test="isPhone == 1">
+				<if test="wifiId == null or wifiId == ''">
+					,off_duty_out_location = #{outLocation}
+					,off_duty_out_address = #{outAddress}
+				</if>
+				<if test="wifiId != null and wifiId != ''">
+					,off_duty_wifi_id = #{wifiId}
+					,off_duty_wifi_name = #{wifiName}
+				</if>
+			</if>
+		WHERE
+			user_id = #{userId}
+	</update>
+	
+	<!-- 获取考勤月份 -->
+	<select id="getBalanceMonth" resultType="java.lang.String">
+		SELECT
+			DATE_FORMAT(record_date,'%Y-%m') AS recordDate
+		FROM
+			personnel_attendance_record
+		GROUP BY recordDate
+		ORDER BY recordDate DESC
+	</select>
+	
+	<!-- 获取以月为单位每日打卡简略信息 -->
+	<select id="findDayFormByMonth" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.bo.ClockDayForm">
+		SELECT
+			record_date AS recordDate,
+			be_late_flag AS beLateFlag,
+			leave_early_flag AS leaveEarlyFlag,
+			leave_flag AS leaveFlag,
+			clock_in_time AS clockInTime,
+			clock_out_time AS clockOutTime,
+			off_duty_wifi_name AS offDutyWifiName,
+			off_duty_out_address AS offDutyOutAddress,
+			on_duty_wifi_name AS onDutyWifiName,
+			on_duty_out_address AS onDutyOutAddress
+		FROM
+			personnel_attendance_record
+		WHERE
+			alive_flag = '1'
+		AND user_id = #{userId}
+		AND DATE_FORMAT(record_date,'%Y-%m') = #{balanceMonth}
+		ORDER BY record_date
+	</select>
+	
+	<!-- 获取以月为单位打卡汇总信息 -->
+	<select id="findBalanceFormByMonth" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.bo.ClockMonthBalanceForm">
+		SELECT
+			SUM(IF(leave_flag = '0' AND (be_late_flag != '2' OR leave_early_flag != '2'),1,0)) AS attendanceDays,
+			SUM(IF(leave_flag = '4',1,0)) AS restDays,
+			SUM(IF(leave_flag = '0' AND be_late_flag = '1',1,0)) AS lateTimes,
+			SUM(IF(leave_flag = '0' AND leave_early_flag = '1',1,0)) AS earlyTimes,
+			SUM(IF(leave_flag = '0' AND ((be_late_flag = '2' AND leave_early_flag != '2')OR(be_late_flag != '2' AND leave_early_flag = '2')),1,0)) AS missTimes,
+			SUM(IF(leave_flag = '0' AND be_late_flag = '2' AND leave_early_flag = '2',1,0)) AS absentDays,
+			SUM(IF(leave_flag = '1',1,0)) AS businessLeaveDays,
+			SUM(IF(leave_flag = '2',1,0)) AS sickLeaveDays,
+			SUM(IF(leave_flag = '1',1,0)) AS leaveDays,
+			SUM(IF(leave_flag = '3',1,0)) AS outBusinessDays,
+			SUM(IF(off_duty_wifi_id IS NULL,1,0)) + SUM(IF(on_duty_wifi_id IS NULL,1,0)) AS outCount
+		FROM
+			personnel_attendance_record
+		WHERE
+			alive_flag = '1'
+		AND user_id = #{userId}
+		AND DATE_FORMAT(record_date,'%Y-%m') = #{balanceMonth}
+	</select>
+	
+	<!-- 条件查询record表记录 -->
+	<select id="findRecordByCondition" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.model.AttendanceRecord">
+		SELECT
+			record_id AS recordId,
+			user_id AS userId,
+			record_date AS recordDate,
+			on_duty_time AS onDutyTime,
+			off_duty_time AS offDutyTime,
+			clock_in_time AS clockInTime,
+			clock_out_time AS clockOutTime,
+			leave_flag AS leaveFlag,
+			be_late_flag AS beLateFlag,
+			leave_early_flag AS leaveEarlyFlag,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			create_time AS createTime,
+			update_user_id AS updateUserId,
+			update_user_name AS update_user_name,
+			update_time AS updateTime,
+			on_duty_out_address AS onDutyOutAddress,
+			on_duty_out_location AS onDutyOutLocation,
+			on_duty_wifi_id AS onDutyWifiId,
+			on_duty_wifi_name AS onDutyWifiName,
+			off_duty_out_address AS offDutyOutAddress,
+			off_duty_out_location AS offDutyOutLocation,
+			off_duty_wifi_id AS offDutyWifiId,
+			off_duty_wifi_name AS offDutyWifiName
+		FROM
+			personnel_attendance_record
+		WHERE
+			alive_flag = '1'
+			<if test="recordId != null and recordId != ''">
+				AND record_id = #{recordId}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND user_id = #{userId}
+			</if>
+			<if test="recordDateStr != null and recordDateStr != ''">
+				AND DATE_FORMAT(record_date,'%Y-%m-%d') = #{recordDateStr}
+			</if>
+			<if test="leaveFlag != null and leaveFlag != ''">
+				AND leave_flag = #{leaveFlag}
+			</if>
+			<if test="beLateFlag != null and beLateFlag != ''">
+				AND be_late_flag = #{beLateFlag}
+			</if>
+			<if test="leaveEarlyFlag != null and leaveEarlyFlag != ''">
+				AND leave_early_flag = #{leaveEarlyFlag}
+			</if>
+	</select>
+	
+	<!-- 查询请假信息 -->
+	<select id="findLeaveApply" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.model.LeaveRecord">
+		SELECT
+			leave_record_id AS leaveRecordId,
+			process_record_id AS processRecordId,
+			user_id AS userId,
+			user_name AS userName,
+			leave_type AS leaveType,
+			start_time AS startTime,
+			end_time AS endTime,
+			reason AS reason,
+			create_time AS createTime
+		FROM
+			personnel_leave_record
+		WHERE
+			user_id = #{userId}
+		AND (
+			DATE_FORMAT(end_time,'%Y-%m-%d') = #{recordDateStr}
+			OR #{recordDateStr} BETWEEN DATE_FORMAT(start_time, '%Y-%m-%d') AND DATE_FORMAT(end_time, '%Y-%m-%d')
+		)
+	</select>
+	
+	<!-- 查询外出信息 -->
+	<select id="findOutBusinessRecords" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.model.OutBusinessRecord">
+		SELECT
+			out_business_record_id AS outBusinessRecordId,
+			process_record_id AS processRecordId,
+			user_id AS userId,
+			user_name AS userName,
+			reason AS reason,
+			start_time AS startTime,
+			end_time AS endTime,
+			create_time AS createTime,
+			location_time AS locationTime,
+			out_address AS outAddress,
+			out_location AS outLocation
+		FROM
+			personnel_out_business_record
+		WHERE
+			user_id = #{userId}
+		AND (
+			DATE_FORMAT(end_time,'%Y-%m-%d') = #{recordDateStr}
+			OR #{recordDateStr} BETWEEN DATE_FORMAT(start_time, '%Y-%m-%d') AND DATE_FORMAT(end_time, '%Y-%m-%d')
+		)
+	</select>
+	
+	<!-- 查询月考勤汇总信息 -->
+	<select id="getMonthFormByCondition" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.bo.ClockMonthBalanceForm">
+		SELECT
+			a.user_id AS userId,
+			a.user_name AS userName,
+			a.sex AS sex,
+			a.user_account AS userAccount,
+			a.id_card AS idCard,
+			a.department_name AS departmentName,
+			a.post_name AS postName,
+			c.group_name AS attendanceGroupName,
+			SUM(IF(b.leave_flag = '0' AND (b.be_late_flag != '2' OR b.leave_early_flag != '2'),1,0)) AS attendanceDays,
+			SUM(IF(b.leave_flag = '4',1,0)) AS restDays,
+			SUM(IF(b.leave_flag = '0' AND b.be_late_flag = '1',1,0)) AS lateTimes,
+			SUM(IF(b.leave_flag = '0' AND b.leave_early_flag = '1',1,0)) AS earlyTimes,
+			SUM(IF(b.leave_flag = '0' AND ((b.be_late_flag = '2' AND b.leave_early_flag != '2')OR(b.be_late_flag != '2' AND b.leave_early_flag = '2')),1,0)) AS missTimes,
+			SUM(IF(b.leave_flag = '0' AND b.be_late_flag = '2' AND b.leave_early_flag = '2',1,0)) AS absentDays,
+			SUM(IF(b.leave_flag = '1',1,0)) AS businessLeaveDays,
+			SUM(IF(b.leave_flag = '2',1,0)) AS sickLeaveDays
+		FROM
+			user_info a
+		LEFT JOIN personnel_attendance_record b ON(b.alive_flag = '1' AND a.user_id = b.user_id)
+		LEFT JOIN personnel_attendance_group c ON(a.attendance_group_id = c.group_id AND c.alive_flag = '1')
+		WHERE
+			a.alive_flag = '1'
+		AND !ISNULL(a.attendance_group_id)
+		AND DATE_FORMAT(b.record_date,'%Y-%m') = #{balanceMonth}
+		<if test="attendanceGroupId != null and attendanceGroupId != ''">
+			AND a.attendance_group_id = #{attendanceGroupId}
+		</if>
+		<if test="postId != null and postId != ''">
+			AND a.post_id = #{postId}
+		</if>
+		<if test="departmentUrl != null and departmentUrl != ''">
+			AND a.department_url LIKE (${departmentUrl})
+		</if>
+		<if test="userName != null and userName != ''">
+			AND a.user_name LIKE (${userName})
+		</if>
+		<if test="idCard != null and idCard != ''">
+			AND a.id_card = #{idCard}
+		</if>
+		<if test="userAccount != null and userAccount != ''">
+			AND a.user_account = #{userAccount}
+		</if>
+		GROUP BY a.user_id,a.attendance_group_id
+	</select>
+	
+	<!-- 查询考勤WIFI -->
+	<select id="getWifi" parameterType="com.mdoa.personnel.bo.ClockForm" resultType="com.mdoa.personnel.model.AttendanceWifi">
+		SELECT
+			wifi_id AS wifiId,
+			wifi_name AS wifiName,
+			android_ips AS androidIps,
+			ios_ips AS iosIps,
+			DATE_FORMAT(create_time,'%y-%m-%d %H:%i:%s') AS createTime,
+			create_user_id AS createUser,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%y-%m-%d %H:%i:%s') AS updateTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName
+		FROM
+			personnel_attendance_wifi
+		WHERE
+			alive_flag = '1'
+		<if test="wifiId != null and wifiId != ''">
+		AND wifi_id = #{wifiId}
+		</if>
+		<if test="phoneType == 1">
+		AND	android_ips = #{ips}
+		</if>
+		<if test="phoneType == 2">
+		AND	ios_ips = #{ips}
+		</if>
+	</select>
+	
+	<!-- 设置考勤WIFI -->
+	<insert id="setWifi" parameterType="com.mdoa.personnel.bo.ClockForm">
+		INSERT INTO personnel_attendance_wifi (
+			wifi_id,
+			wifi_name,
+			<if test="phoneType == 1">
+			android_ips,
+			</if>
+			<if test="phoneType == 2">
+			ios_ips,
+			</if>
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)
+		VALUES
+			(
+				UUID(),
+				#{wifiName},
+				#{ips},
+				NOW(),
+				#{createUserId},
+				#{createUserName},
+				'1'
+			)
+	</insert>
+	
+	<!-- 更新考勤WIFI -->
+	<update id="updateWifi" parameterType="com.mdoa.personnel.bo.ClockForm">
+		UPDATE
+			personnel_attendance_wifi
+		SET
+			<if test="ips != null and ips !=''">
+				<if test="phoneType == 1">
+				android_ips = #{ips},
+				</if>
+				<if test="phoneType == 2">
+				ios_ips = #{ips},
+				</if>
+			</if>
+			<if test="wifiName != null and wifiName !=''">
+				wifi_name = #{wifiName},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		AND wifi_id = #{wifiId}
+	</update>
+	
+	<!-- 删除考勤WIFI -->
+	<update id="deleteWifi" parameterType="com.mdoa.personnel.bo.ClockForm">
+		UPDATE
+			personnel_attendance_wifi
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		AND wifi_id = #{wifiId}
+	</update>
+	
+	<!-- 请假申请通过后，修改today表leave字段 -->
+	<update id="updateTodayForLeave" parameterType="com.mdoa.personnel.bo.ProcessClockForm">
+		UPDATE 
+			personnel_attendance_today
+		SET
+			leave_flag = '1'
+		WHERE
+			leave_flag = '0'
+		AND user_id = #{userId}
+		AND (
+			DATE_FORMAT(date, '%Y-%m-%d') = DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+			OR DATE_FORMAT(date, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{startTime}, '%Y-%m-%d') AND DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+		)
+	</update>
+	
+	<!-- 请假申请通过后，修改record表leave字段 -->
+	<update id="updateRecordForLeave" parameterType="com.mdoa.personnel.bo.ProcessClockForm">
+		UPDATE 
+			personnel_attendance_record
+		SET
+			leave_flag = '1',
+			update_user_id = #{userId},
+			update_user_name = #{userName},
+			update_time = NOW()
+		WHERE
+			alive_flag = '1'
+		AND	leave_flag = '0'
+		AND user_id = #{userId}
+		AND (
+			DATE_FORMAT(record_date, '%Y-%m-%d') = DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+			OR DATE_FORMAT(record_date, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{startTime}, '%Y-%m-%d') AND DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+		)
+	</update>
+	
+	<!-- 公出申请通过后，修改today表leave字段 -->
+	<update id="updateTodayForOutBusiness" parameterType="com.mdoa.personnel.bo.ProcessClockForm">
+		UPDATE 
+			personnel_attendance_today
+		SET
+			leave_flag = '3'
+		WHERE
+			leave_flag = '0'
+		AND user_id = #{userId}
+		AND (
+			DATE_FORMAT(date, '%Y-%m-%d') = DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+			OR DATE_FORMAT(date, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{startTime}, '%Y-%m-%d') AND DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+		)
+	</update>
+	
+	<!-- 公出申请通过后，修改record表leave字段 -->
+	<update id="updateRecordForOutBusiness" parameterType="com.mdoa.personnel.bo.ProcessClockForm">
+		UPDATE 
+			personnel_attendance_record
+		SET
+			leave_flag = '3',
+			update_user_id = #{userId},
+			update_user_name = #{userName},
+			update_time = NOW()
+		WHERE
+			alive_flag = '1'
+		AND	leave_flag = '0'
+		AND user_id = #{userId}
+		AND (
+			DATE_FORMAT(record_date, '%Y-%m-%d') = DATE_FORMAT(#{startTime}, '%Y-%m-%d')
+			OR DATE_FORMAT(record_date, '%Y-%m-%d') BETWEEN DATE_FORMAT(#{startTime}, '%Y-%m-%d') AND DATE_FORMAT(#{endTime}, '%Y-%m-%d')
+		)
+	</update>
+	
+	<!-- 插入补卡记录 -->
+	<insert id="insertClockReplace" parameterType="com.mdoa.personnel.bo.ProcessClockForm">
+		INSERT INTO personnel_attendance_clock_replace (
+			clock_replace_id,
+			user_id,
+			replace_record_date,
+			replace_type,
+			replace_time,
+			create_time
+		)
+		VALUES
+			(
+				UUID(),
+				#{userId},
+				STR_TO_DATE(#{replaceRecordDate},'%Y-%m-%d'),
+				#{replaceType},
+				#{replaceTime},
+				NOW()
+			)
+	</insert>
+	
+	<!-- 补卡申请通过时修改record表 -->
+	<update id="updateRecordForClockReplace" parameterType="com.mdoa.personnel.bo.ProcessClockForm">
+		UPDATE 
+			personnel_attendance_record
+		SET
+			<if test="replaceType == 1">
+				clock_in_time = #{replaceTime},
+				be_late_flag = '0',
+			</if>
+			<if test="replaceType == 2">
+				clock_out_time = #{replaceTime},
+				leave_early_flag = '0',
+			</if>
+			update_user_id = #{userId},
+			update_user_name = #{userName},
+			update_time = NOW()
+		WHERE
+			alive_flag = '1'
+		AND	leave_flag = '0'
+		AND user_id = #{userId}
+		AND DATE_FORMAT(record_date, '%Y-%m-%d') = DATE_FORMAT(#{replaceRecordDate}, '%Y-%m-%d')
+	</update>
+	
+</mapper>

@@ -1,0 +1,59 @@
+#myLaunchMission .maintop .back{
+	display:none;
+}
+#myLaunchMission .lookLaunchMission{	
+	overflow:auto;
+	padding-top:20px;
+	z-index: 1;
+}
+#myLaunchMission .lookLaunchMission ul.editArea{
+	min-width:1063px;
+	padding:0 50px;
+}
+#myLaunchMission .editLaunchMission ul.editArea{
+	min-width:1063px;
+	padding:0 50px;
+}
+#myLaunchMission ul.editArea li{
+	width:100%;
+	margin-bottom:20px;
+	overflow:hidden;
+}
+#myLaunchMission ul.editArea li span,
+#myLaunchMission ul.editArea li i,
+#myLaunchMission ul.editArea li input,
+#myLaunchMission ul.editArea li #launchMissionEditor{
+	float:left;
+}
+#myLaunchMission ul.editArea li i{
+	width:30px;
+	height:1px;
+}
+#myLaunchMission ul.editArea li span{
+	margin-right:15px;
+	font-weight:bold;
+}
+#myLaunchMission ul.editArea li input[type=text]{
+	width:430px;
+	padding-left:20px;
+}
+#myLaunchMission ul.editArea li input.langInput{
+	width:986px;
+}
+#myLaunchMission ul.editArea li input.shortInput{
+	width:392px;
+}
+#myLaunchMission ul.editArea li input[type=button]{
+	margin:1px 0 0 10px;
+}
+#myLaunchMission .lookLaunchMission > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}
+#myLaunchMission .editLaunchMission > input[type=button]{
+	margin:10px 0 0 550px;
+	width:115px;
+}
+#myLaunchMission .record .pointer{
+	cursor: pointer;	 
+}

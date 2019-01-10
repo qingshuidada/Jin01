@@ -1,0 +1,40 @@
+<div id="officeGoodsAudit">
+	<div class="maintop">
+		<div class="operate">
+		</div>
+	</div>
+	<div class="invitetop">
+		查询条件：		
+		商品名称：
+			<input type="text" style="width:120px;" class="suppliesName" />
+		申请号：
+			<input type="text" style="width:120px;" class="applyNo" />
+		申请人：
+			<input type="text" style="width:120px;" class="proposer" />
+		<input class="select" type="button" value="查询" /> 
+		<input type="button" class="clean-query" value="清空" /> 
+	</div>
+	<div>
+		<table id="officeGoodsAuditdg"></table>
+	</div>
+	
+	<div class="popups" style="text-align:left;">	
+		<!-- 审批 申请单 -->
+		<div class="popup addAudit" style="height:125px;width:215px;">
+			<h3>审批申请单</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width:175px;height:50px;margin:10px auto 0;padding:8px;">
+				<span style="float:left;width:20%;line-height:25px;">审批:</span>
+				<select name="approvalStatus" style="float:right;width:79%;height:25px;line-height:25px;">
+					<option value="1">审批通过</option>
+					<option value="2">审批不通过</option>
+				</select>							 
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button comfirm" value="确定">
+				<input type="button" class="button cannel" value="取消">
+			</div>
+		</div>
+	</div>
+	
+</div>

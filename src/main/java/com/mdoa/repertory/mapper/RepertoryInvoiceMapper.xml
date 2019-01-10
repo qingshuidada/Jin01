@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.repertory.dao.RepertoryInvoiceDao">
+
+	<!-- 获取ID -->
+	<select id="getuuid" resultType="java.lang.String">
+		select uuid() as uuid
+	</select>
+	
+	<!-- 保存发票信息 -->
+ 	<insert id="saveInvoiceMessage" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceEntity">
+		INSERT INTO repertory_goods_invoice(
+			invoice_id,
+			provider_code,
+			invoice_number,
+			open_date,
+			invoice_amount,
+			text,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			#{invoiceId},
+			#{providerCode},
+			#{invoiceNumber},
+			#{openDateStr},
+			#{invoiceAmount},
+			#{text},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert> 
+	<!-- 保存发票记录 -->
+	<insert id="saveInvoiceRecord" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceEntity">
+		INSERT INTO repertory_goods_invoice_record(
+			invoice_record_id,
+			invoice_id,
+			provider_code,
+			in_record_id,
+			write_amount,
+			should_write_amount,
+			no_write_amount,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUES
+		<foreach collection="list" item="list" separator=",">
+			(
+				UUID(),
+				#{invoiceId},
+				#{providerCode},
+				#{list.inRecordId},
+				#{list.writeAmount},
+				#{list.shouldWriteAmount},
+				#{list.noWriteAmount},
+				NOW(),
+				#{createUserId},
+				#{createUserName},
+				'1'
+			)
+		</foreach>
+	</insert>
+	<!-- 修改入库记录 -->
+	<update id="updateInRecord" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+			UPDATE 
+				repertory_in_record
+			SET
+				no_write_amount = #{noWriteAmount},
+				invoice_id = #{invoiceId},
+				update_time = NOW(),
+				update_user_id = #{updateUserId},
+				update_user_name = #{updateUserName}
+			WHERE
+				in_record_id = #{inRecordId}
+	</update>
+	<!-- 修改供应商表的未核销金额 -->
+	<update id="updateProvider" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceEntity">
+		UPDATE
+			repertory_provider
+		SET
+			no_write_amount = no_write_amount - #{writeAmountSum},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND	provider_code = #{providerCode}
+	</update>
+	<!-- 查询发票 -->
+	<select id="queryInvoice" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm" resultType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		SELECT
+			IFNULL(c.redAmount,0) AS redAmount,
+			d.invoiceId AS invoiceId,
+			d.providerCode AS providerCode,
+			d.invoiceNumber AS invoiceNumber,
+			DATE_FORMAT(d.openDateStr, '%Y-%m-%d') AS openDateStr,
+			d.invoiceAmount AS invoiceAmount,
+			d.text AS text,
+			DATE_FORMAT(
+				d.createTimeStr,
+				'%Y-%m-%d %H:%i:%s'
+			) AS createTimeStr,
+			d.createUserId AS createUserId,
+			d.createUserName AS createUserName,
+			DATE_FORMAT(
+				d.updateTimeStr,
+				'%Y-%m-%d %H:%i:%s'
+			) AS updateTimeStr,
+			d.updateUserId AS updateUserId,
+			d.updateUserName AS updateUserName,
+			d.aliveFlag AS aliveFlag,
+			d.providerName AS providerName
+		FROM
+		(SELECT
+				a.invoice_id AS invoiceId,
+				a.provider_code AS providerCode,
+				a.invoice_number AS invoiceNumber,
+				DATE_FORMAT(a.open_date, '%Y-%m-%d') AS openDateStr,
+				a.invoice_amount AS invoiceAmount,
+				a.text,
+				DATE_FORMAT(
+					a.create_time,
+					'%Y-%m-%d %H:%i:%s'
+				) AS createTimeStr,
+				a.create_user_id AS createUserId,
+				a.create_user_name AS createUserName,
+				DATE_FORMAT(
+					a.update_time,
+					'%Y-%m-%d %H:%i:%s'
+				) AS updateTimeStr,
+				a.update_user_id AS updateUserId,
+				a.update_user_name AS updateUserName,
+				a.alive_flag AS aliveFlag,
+				b.provider_name AS providerName
+			FROM
+				repertory_goods_invoice a,
+				repertory_provider b
+			WHERE
+				a.alive_flag = '1'
+				AND b.alive_flag = '1'
+			AND a.provider_code = b.provider_code
+			<if test="invoiceNumber != null and invoiceNumber != ''">
+				AND a.invoice_number = #{invoiceNumber}
+			</if>
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.open_date &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.open_date &lt;= #{endTimeStr}
+			</if>
+			<if test="invoiceAmount != null and invoiceAmount != ''">
+				AND a.invoice_amount = #{invoiceAmount}
+			</if>
+			<if test="providerName != null and providerName != ''">
+				AND	b.provider_name LIKE #{providerName}
+			</if>
+			<if test="invoiceId != null and invoiceId != ''">
+				AND	a.invoice_id = #{invoiceId}
+			</if>
+		) d 
+		LEFT JOIN (
+			SELECT
+				SUM(no_write_amount) AS redAmount,
+				invoice_id
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+				AND !ISNULL(red_id)
+			GROUP BY
+				invoice_id
+		) c ON (d.invoiceId = c.invoice_id)
+		
+	</select>
+	<!-- 发票详情查询 -->
+	<select id="queryInvoiceDetail" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm" resultType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		SELECT
+			invoice_record_id AS invoiceRecordId,
+			a.invoice_id AS invoiceId,
+			provider_code AS providerCode,
+			in_record_id AS inRecordId,
+			write_amount AS writeAmount,
+			should_write_amount AS shouldWriteAmount,
+			no_write_amount AS noWriteAmount,
+			create_time AS createTime,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			update_time AS updateTime,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag,
+			b.goodsName AS goodsName,
+			b.goodsSize As goodsSize,
+			b.inTimeStr AS inTimeStr,
+			b.taxAmount AS taxAmount,
+			b.inNumber AS inNumber,
+			b.taxAverPrice AS taxAverPrice,
+			b.redId AS redId,
+			b.invoice_id AS invoiceIds
+		FROM
+			repertory_goods_invoice_record a
+			LEFT JOIN(
+				SELECT
+					bb.goods_name AS goodsName,
+					aa.in_record_id AS inRecordId,
+					DATE_FORMAT(aa.in_time,'%Y-%m-%d %H:%i:%s') AS inTimeStr,
+					aa.tax_amount AS taxAmount,
+					aa.in_number AS inNumber,
+					bb.goods_size AS goodsSize,
+					aa.tax_aver_price AS taxAverPrice,
+					aa.red_id AS redId,
+					aa.invoice_id
+				FROM
+					repertory_in_record aa,
+					repertory_goods bb
+				WHERE
+					aa.alive_flag = '1'
+					AND bb.alive_flag = '1'
+					AND aa.goods_id = bb.goods_id
+					<if test="inRecordId != null and inRecordId != ''">
+						AND aa.in_record_id = #{inRecordId}
+					</if>
+		) b ON (a.in_record_id = b.inRecordId)
+		WHERE
+			a.alive_flag = '1'
+			<if test="invoiceId != null and invoiceId != ''">
+				AND a.invoice_id = #{invoiceId}
+			</if>
+			<if test="invoiceRecordId != null and invoiceRecordId != ''">
+				AND a.invoice_record_id = #{invoiceRecordId}
+			</if>
+	</select>
+	<!-- 查询入库信息 -->
+	<select id="queryInRecord" parameterType="com.mdoa.repertory.model.RepertoryInRecord" resultType="com.mdoa.repertory.model.RepertoryInRecord">
+	SELECT
+			in_record_id AS inRecordId,
+			repertory_id AS repertoryId,
+			repertory_name AS repertoryName,
+			goods_position_id AS goodsPositionId,
+			goods_position_name AS goodsPositionName,
+			in_number AS inNumber,
+			pretax_amount AS pretaxAmount,
+			pretax_aver_price AS pretaxAverPrice,
+			tax_rate AS taxRate,
+			tax_amount AS taxAmount,
+			tax_aver_price AS taxAverPrice,
+			operate_user_id AS operateUserId,
+			operate_user_name AS operateUserName,
+			DATE_FORMAT(in_time,'%Y-%m-%d %H:%i:%s') AS strInTime,
+			put_user_id AS putUserId,
+			put_user_name AS putUserName,
+			record AS record,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS strCreateTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS strUpdateTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			provider_code AS providerCode,
+			no_write_amount AS noWriteAmount,
+			invoice_id AS invoiceId
+		FROM
+			repertory_in_record
+		WHERE
+			alive_flag = '1'
+	</select>
+	<!-- 未核销记录查询 -->
+	<select id="queryNoInvoiceRecord" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm" resultType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		<if test="sumFlag != null and sumFlag == 1">
+			SELECT
+	SUM(zz.noWriteAmount) AS noWriteAmountTotal,
+	SUM(zz.taxAmount) AS taxAmountTotal
+FROM
+	(	</if>
+		SELECT
+			a.in_record_id AS inRecordId,
+			a.goods_id AS goodsId,
+			a.repertory_id AS repertoryId,
+			a.repertory_name AS repertoryName,
+			a.goods_position_id AS goodsPositionId,
+			a.goods_position_name AS goodsPositionName,
+			a.in_number AS inNumber,
+			a.pretax_amount AS pretaxAmount,
+			a.pretax_aver_price AS pretaxAverPrice,
+			a.tax_rate AS taxRate,
+			a.tax_amount AS taxAmount,
+			a.tax_aver_price AS taxAverPrice,
+			a.operate_user_id AS operateUserId,
+			a.operate_user_name AS operateUserName,
+			DATE_FORMAT(a.in_time,'%Y-%m-%d %H:%i:%s') AS inTimeStr,
+			a.put_user_id AS putUserId,
+			a.put_user_name AS putUserName,
+			a.record AS record,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTimeStr,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTimeStr,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag,
+			a.provider_code AS providerCode,
+			a.no_write_amount AS noWriteAmount,
+			a.red_id AS redId,
+			a.invoice_id AS invoiceId,
+			b.goods_name AS goodsName,
+			b.goods_size AS goodsSize,
+			c.provider_name AS providerName
+		FROM
+			repertory_goods b,
+			repertory_provider c,
+			repertory_in_record a
+		WHERE
+			a.alive_flag = '1'
+			AND c.alive_flag = '1'
+			AND c.provider_code = a.provider_code
+			AND a.no_write_amount != 0
+			AND a.goods_id = b.goods_id
+			AND ISNULL(a.red_id)
+			<if test="startTimeStr != null and startTimeStr != ''">
+				AND a.in_time &gt;= #{startTimeStr}
+			</if>
+			<if test="endTimeStr != null and endTimeStr != ''">
+				AND a.in_time &lt;= #{endTimeStr}
+			</if>
+			<if test="goodsName != null and goodsName != ''">
+				AND b.goods_name LIKE #{goodsName}
+			</if>
+			<if test="inRecordId != null and inRecordId != ''">
+				AND in_record_id = #{inRecordId}
+			</if>
+			<if test="inRecordId != null and inRecordId != ''">
+				AND in_record_id = #{inRecordId}
+			</if>
+			<if test="providerCode != null and providerCode != ''">
+				AND c.provider_code = #{providerCode}
+			</if>
+			<if test="sumFlag != null and sumFlag == 1">
+			) AS zz
+			</if>
+	</select>
+	<!-- 汇总 -->
+	<select id="gatherInvoiceAmount" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm" resultType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		<if test="sumFlag != null and sumFlag == 1">
+			SELECT
+		SUM(zz.previousNoWriteAmount) AS previousNoWriteAmountTotal,
+		SUM(zz.currentTaxAmount) AS currentTaxAmountTotal,
+		SUM(zz.currentWriteAmount) AS currentWriteAmountTotal,
+		SUM(zz.currentNoWriteAmount) AS currentNoWriteAmountTotal
+	FROM
+		(	</if>
+		SELECT
+				IFNULL(a.provider_name,'总计') AS providerName,
+				IFNULL(b.currentWriteAmount, 0) AS currentWriteAmount,
+				IFNULL(o.currentTaxAmount, 0) AS currentTaxAmount,
+				IFNULL(d.lastedWriteAmount, 0) AS lastedWriteAmount,
+				IFNULL(e.lastedTaxAmount, 0) AS lastedTaxAmount,
+				IFNULL(f.nowNoWriteAmount, 0) AS nowNoWriteAmount,
+				IFNULL(a.init_amount, 0) AS initAmount,
+				IFNULL(f.nowNoWriteAmount, 0) - IFNULL(e.lastedTaxAmount, 0) + IFNULL(d.lastedWriteAmount, 0) + IFNULL(a.init_amount, 0) AS currentNoWriteAmount,
+				IFNULL(f.nowNoWriteAmount, 0) - IFNULL(e.lastedTaxAmount, 0) + IFNULL(d.lastedWriteAmount, 0) - IFNULL(c.currentTaxAmount, 0) + IFNULL(b.currentWriteAmount, 0) + IFNULL(a.init_amount, 0) AS previousNoWriteAmount
+			FROM
+			repertory_provider a
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(write_amount,0)) AS currentWriteAmount,
+				provider_code
+			FROM
+				repertory_goods_invoice_record
+			WHERE
+				alive_flag = '1'
+				AND !ISNULL(in_record_id)
+				<if test="startTimeStr != null and startTimeStr != ''">
+					AND create_time >= #{startTimeStr}
+				</if>
+				<if test="endTimeStr != null and endTimeStr != ''">
+					AND create_time &lt;= #{endTimeStr}
+				</if>
+			GROUP BY
+				provider_code
+		) b ON (a.provider_code = b.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(tax_amount,0)) AS currentTaxAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+				<if test="startTimeStr != null and startTimeStr != ''">
+					AND in_time >= #{startTimeStr}
+				</if>
+				<if test="endTimeStr != null and endTimeStr != ''">
+					AND in_time &lt;= #{endTimeStr}
+				</if>
+			GROUP BY
+				provider_code
+		)c ON (a.provider_code = c.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(tax_amount,0)) AS currentTaxAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+				AND tax_amount >= 0
+				<if test="startTimeStr != null and startTimeStr != ''">
+					AND in_time >= #{startTimeStr}
+				</if>
+				<if test="endTimeStr != null and endTimeStr != ''">
+					AND in_time &lt;= #{endTimeStr}
+				</if>
+			GROUP BY
+				provider_code
+		)o ON (a.provider_code = o.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(write_amount,0)) AS lastedWriteAmount,
+				provider_code
+			FROM
+				repertory_goods_invoice_record
+			WHERE
+				alive_flag = '1'
+				AND !ISNULL(in_record_id)
+				<if test="endTimeStr != null and endTimeStr != ''">
+					AND create_time > #{endTimeStr}
+				</if>
+				AND create_time &lt;= NOW()
+			GROUP BY
+				provider_code
+		) d ON (a.provider_code = d.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(tax_amount,0)) AS lastedTaxAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+				<if test="endTimeStr != null and endTimeStr != ''">
+					AND in_time > #{endTimeStr}
+				</if>
+				AND in_time &lt;= NOW()
+			GROUP BY
+				provider_code
+		)e ON (a.provider_code = e.provider_code)
+		LEFT JOIN(
+			SELECT
+				SUM(IFNULL(no_write_amount,0)) AS nowNoWriteAmount,
+				provider_code
+			FROM
+				repertory_in_record
+			WHERE
+				alive_flag = '1'
+			GROUP BY
+				provider_code
+		)f ON(a.provider_code = f.provider_code)
+		WHERE
+			a.alive_flag = '1'
+			<if test="providerName != null and providerName != ''">
+				AND a.provider_name LIKE #{providerName}
+			</if>
+		<if test="sumFlag != null and sumFlag == 1">
+			) AS zz
+			</if>
+		
+	</select>
+	<!-- 冲红 -->
+	<update id="updateInRecordForRed" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE 
+			repertory_in_record
+		SET
+			red_id = #{redId},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND in_record_id = #{inRecordId}	
+	</update>
+	<insert id="insertInRecordForRed" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		INSERT INTO repertory_in_record(
+			in_record_id,
+			tax_amount,
+			in_time,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag,
+			no_write_amount,
+			provider_code
+		)VALUE(
+			#{redId},
+			#{noWriteAmount},
+			NOW(),
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1',
+			#{noWriteAmount},
+			#{providerCode}
+		)
+	</insert>
+	<update id="updateProviderForRed" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_provider
+		SET
+			no_write_amount = no_write_amount + #{noWriteAmount},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		  	AND provider_code = #{providerCode}
+	</update>
+	
+	<!-- 根据发票找出所有与该发票有关的入库记录 -->
+	<select id="queryInRecordByInvoiceRecord" parameterType="java.lang.String" resultType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		SELECT
+			a.in_record_id AS inRecordId,
+			a.red_id AS redId,
+			a.invoice_id AS invoiceId,
+			a.no_write_amount AS noWriteAmount,
+			b.write_amount AS writeAmount,
+			b.provider_code AS providerCode,
+			b.invoice_record_id AS invoiceRecordId
+		FROM
+			repertory_in_record a 
+			LEFT JOIN(
+				SELECT
+					in_record_id,
+					write_amount,
+					provider_code,
+					invoice_record_id
+				FROM
+					repertory_goods_invoice_record
+				WHERE
+					alive_flag = '1'
+					AND invoice_id = #{invoiceId}
+		) b ON (a.in_record_id = b.in_record_id)
+		WHERE
+			a.alive_flag = '1'
+			AND	a.in_record_id IN(
+				SELECT
+					in_record_id
+				FROM
+					repertory_goods_invoice_record
+				WHERE
+					alive_flag = '1'
+					AND	invoice_id = #{invoiceId}
+		)
+	</select>
+	<!-- 删除发票 -->
+	<update id="deleteInvoice" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_goods_invoice
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			invoice_id = #{invoiceId}
+	</update>
+	<!--  入库记录金额撤回(没有冲红过) -->
+	<update id="backInRecordAmount" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_in_record
+		SET
+			no_write_amount = no_write_amount+#{writeAmount},
+			invoice_id = #{pInvoiceId},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND in_record_id = #{inRecordId}
+	</update>	
+	<update id="updateProviderForNoRed" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_provider
+		SET
+			no_write_amount = no_write_amount + #{writeAmount},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		  	AND provider_code = #{providerCode}
+	</update>
+	<update id="updateProviderForHaveRed" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_provider
+		SET
+			no_write_amount = no_write_amount + #{writeAmount} + #{redAmount},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		  	AND provider_code = #{providerCode}
+	</update>
+	<update id="backInRecordAmountNo" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_in_record
+		SET
+			no_write_amount = no_write_amount+#{writeAmount},
+			red_id = NULL,
+			invoice_id = #{pInvoiceId},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND in_record_id = #{inRecordId}
+	</update>	
+	<!-- 删除冲红记录 -->
+	<update id="deleteRedRecord" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_in_record
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			in_record_id = #{redId}
+	</update>
+	<!-- 删除发票记录 -->
+	<update id="deleteInvoiceRecord" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_goods_invoice_record
+		SET	
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			invoice_id = #{invoiceId}
+	</update>
+	<!-- 初始金额核销 -->
+	<insert id="initVerificationRecord" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		INSERT INTO repertory_goods_invoice_record(
+			invoice_record_id,
+			invoice_id,
+			provider_code,
+			write_amount,
+			should_write_amount,
+			no_write_amount,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{invoiceId},
+			#{providerCode},
+			#{invoiceAmount},
+			#{initAmount},
+			#{initAmount}-#{invoiceAmount},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<insert id="initVerificationInvoice" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		INSERT INTO repertory_goods_invoice(
+			invoice_id,
+			provider_code,
+			invoice_number,
+			open_date,
+			invoice_amount,
+			text,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			#{invoiceId},
+			#{providerCode},
+			#{invoiceNumber},
+			#{openDate},
+			#{invoiceAmount},
+			#{text},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<update id="updateProviderInitAmount" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		UPDATE
+			repertory_provider
+		SET
+			init_amount = init_amount - #{invoiceAmount},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND provider_code = #{providerCode}
+	</update>
+	<!-- 查询删除当前发票的上一张发票的ID -->
+	<select id="queryPrevoiusInvoice" parameterType="com.mdoa.repertory.bo.RepertoryInvoiceForm" resultType="com.mdoa.repertory.bo.RepertoryInvoiceForm">
+		SELECT
+			invoice_id AS invoiceId
+		FROM
+			repertory_goods_invoice_record
+		WHERE
+			alive_flag = '1'
+			AND	in_record_id = #{inRecordId}
+		ORDER BY
+			create_time DESC
+	</select>
+</mapper>

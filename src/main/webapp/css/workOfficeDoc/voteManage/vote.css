@@ -1,0 +1,62 @@
+#vote{
+	padding:30px 4% 0 5%;
+}
+#vote .drawArea{
+	float:left;
+	height:400px;
+}
+#vote .voteArea{
+	float:left;
+	width:360px;
+	height:400px;
+	padding-left:10px;
+}
+#vote .voteArea .radioArea{
+	padding:21px 0;
+	padding-left:10px;
+}
+#vote .voteArea .voteBtn{
+	margin-left:15px;
+}
+#vote .voteArea .radioArea .space{
+	width:42px;
+	display:inline-block;
+	vertical-align: middle;
+}
+#vote .dataArea{
+	float:left;
+	overflow:hidden;
+	width:100%;
+}
+#vote .blod{
+	font-weight:800;
+}
+#vote .dataArea .detail{
+	text-indent:2em;
+	margin:20px 0;
+}
+#vote .dataArea .chores{
+	border-top:1px solid #797979;
+	padding-top:20px;
+}
+#vote .dataArea .chores .amount{
+	padding-right:30px;
+}
+#vote .dataArea .chores .red{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	border:1px solid #797979;
+	background:#ff0000;
+	vertical-align: middle;
+	margin-left:10px;
+}
+#vote .dataArea .chores .green{
+	display:inline-block;
+	width:15px;
+	height:15px;
+	border:1px solid #797979;
+	background:green;
+	vertical-align:middle;
+	margin-left:10px;
+}

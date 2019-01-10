@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>客户登录</title>
+	<link rel="stylesheet" type="text/css" href="../../css/reset.css">
+	<link rel="stylesheet" type="text/css" href="../../css/erp/common.css">
+	<link rel="stylesheet" type="text/css" href="../../css/erp/clientLogin.css">
+	<script type="text/javascript" src="../../js/jquery/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../js/erp/loginCommon.js"></script>
+	<script type="text/javascript" src="../../js/erp/clientLogin.js"></script>
+</head>
+<body>
+	<div id="clientLogin">
+		<div class="loginTop w980">
+			<div class="logoArea">
+				<div class="logo">
+					<img src="../../img/erp/logo.png" />
+				</div>
+				<div class="logoText">
+					<img src="../../img/erp/logoText.png" />
+				</div>
+				<div class="title">
+					ERP查询系统
+				</div>
+			</div>
+		</div>
+		<div class="loginBg">
+			<img src="../../img/erp/erpLoginBg.jpg" />
+			<div class="loginMiddle w980">
+				<div class="loginArea">
+					<h1 class="loginTitle">
+						客户登录
+					</h1>
+					<div class="loginContent">
+						<p>
+							<span class="loginIcon loginAccentIcon"></span>
+							<input type="text" class="loginAccent" placeholder="手机号/账号"/>
+						</p>
+						<p>
+							<span class="loginIcon loginPasswordIcon"></span>
+							<input type="password" class="loginPassword" placeholder="密码"/>
+						</p>
+						<p>
+							<input type="text" class="verificationCode" placeholder="请输入验证码"/>
+							<span class="verificationCodeArea">
+								<img src="" />
+							</span>
+							<span class="loginIcon refreshIcon" alt="点击更换验证码" onclick="getVerify(this)">
+							</span>
+						</p>
+						<p>
+							<input type="radio" class="auto"/>
+							<span class="zzz">下次自动登录</span>
+							<span class="errortishi"><img src="../../img/erp/error.png" style="width:13px;height:13px;"><span style="color:red" class="errorWords">账号或密码错误</span></span>
+						</p>
+						<p>
+							<span class="Login">登录</span>
+						</p>
+						<!-- <p class="switch">
+							<a href="salesmanLogin.html">切换到业务员登录</a><span class="arrow"></span>
+						</p> -->
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="grey">
+			<div class="loginButtom  w980">
+				<div class="block">
+					<div class="bigIcon bigIcon1">
+					</div>
+					<div class="iconText">
+						<h4>信息化管理</h4>
+						<p>多种方式快速修改密码，及时取回账号</p>
+					</div>
+				</div>
+				<div class="block">
+					<div class="bigIcon bigIcon2">
+					</div>
+					<div class="iconText">
+						<h4>便捷操作</h4>
+						<p>多种方式快速修改密码，及时取回账号</p>
+					</div>
+				</div>
+				<div class="block">
+					<div class="bigIcon bigIcon3">
+					</div>
+					<div class="iconText">
+						<h4>联系客服</h4>
+						<p>快速联系官方客服，及时解决账号问题</p>
+					</div>
+				</div>
+				<p style="text-align:center;margin-top:64px;float:left;width:100%;">版权所有 ©1997-2017</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

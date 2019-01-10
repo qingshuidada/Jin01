@@ -1,0 +1,48 @@
+#findgoods{
+	overflow:hidden;
+}
+#findgoods ._op{
+	margin-left:2px;
+}
+#findgoods ._op:hover{
+	color:blue;
+}
+#findgoods .popup .btnarea{
+	text-align:center;
+}
+#findgoods .popup .btnarea .cannel{
+	margin-left:8px;
+}
+#findgoods .rightarea .lump{
+	overflow-y:auto;
+}
+#findgoods .popups .popup table[name!=writetoexcel]{
+	padding:10px 20px;
+}
+#findgoods .popups .writetoexcel table input[type="text"]{
+	border:1px #A9A9A9 solid;
+	width:144px;
+}
+#findgoods .popups .writetoexcel table input[type="checkbox"]{
+	width:13px;
+}
+#findgoods .popups .writetoexcel table input[type="button"]{
+	width:42px;
+	height:26px;
+	color:#444444;
+	background-color:#4DFFFF;
+	border-color:#4DFFFF;
+	border-radius:6px;
+	margin-top:5px;
+	margin-bottom:5px;
+	margin-left:15px;
+	margin-right:15px;
+	text-align:center;
+}
+#findgoods .popups .writetoexcel .hidden{
+	display:none;
+	width:0px;
+}
+#findgoods .popups .writetoexcel .btnarea .button{
+	margin-left:8px;
+}

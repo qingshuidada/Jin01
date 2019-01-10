@@ -1,0 +1,107 @@
+<div id="myChargeMission" title="我执行的任务"> 
+	<div class="maintop">
+		<input type="button" value="返回" class="button back" />
+	</div>
+	<div class="list">
+		<div class="invitetop">
+			任务名称：
+			<input type="text" class="missionName">
+			<input class="select" type="button" value="查询" /> 
+			<input type="button" class="clean-query" value="清空" /> 
+		</div>
+		<div>
+			<table id="myChargeMissiondg"></table>
+		</div>
+	</div>
+	<!-- 查看 -->
+	<div class="lookChargeMission" style="overflow:auto; height: 772px;" >
+		<ul class="editArea">
+			<li>
+				<span>&#12288;&#12288;任务名称：</span>
+				<input type="text" class="missionName shortInput" readonly="readonly"/>
+				<i></i>
+				<span>&#12288;&#12288;&#12288;发起人：</span>
+				<input type="text" class="launchUserName shortInput" readonly="readonly"/>
+			</li>
+			
+			<li>
+				<span>&#12288;&#12288;&#12288;执行人：</span>
+				<input type="text" readonly="readonly" class="headUserName shortInput" readonly="readonly"/>
+				<i></i>
+				<span>&#12288;&#12288;&#12288;抄送人：</span>
+				<input type="text" readonly="readonly" class="userName shortInput" readonly="readonly"/>
+			</li>
+			<li>
+				<span>任务开始时间：</span>
+				<input type="text" class="startTime shortInput" onclick="testShowTime(this);" readonly/>
+				<i></i>
+				<span>预计结束时间：</span>
+				<input type="text" class="expectEndTime shortInput" onclick="testShowTime(this);" readonly/>
+			</li>
+			<li>
+				<span>实际结束时间：</span>
+				<input type="text" class="realityEndTime shortInput" onclick="testShowTime(this);" readonly/>
+				<i></i>
+				<span>预计完成进度：</span>
+				<div id="chargeOne" class="easyui-progressbar" style="height:15px; width:200px;"></div>
+			</li>
+			<li>
+				<span>实际完成进度：</span>
+				<div id="chargeTwo" class="easyui-progressbar" style="height:15px; width:200px;"></div>
+			</li>
+			<li>
+				<span>&#12288;&#12288;任务描述：</span>
+				<script type="text/plain" id="chargeMissionEditor"></script>
+			</li>
+		</ul>
+	</div>
+	<div class="popup editRealityValue" style="height: 270px;width: 400px; ">
+			<h3>填写进度值</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:60px 35px 60px;">
+				<div class="btnbutton">
+					<table>
+						<tr>
+							<td>任务进度值:</td>
+							<td>
+								<input type="hidden" class="id">
+								<input type="text" class="realityValue"/>
+							</td>
+						</tr>
+						<h6 style="color: red">
+							注：此任务进度值的范围为1-100,根据实际情况填写,当输入的值为100时则默认此任务为已完成，交由发起人审批!
+						</h6>
+					</table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+	</div>
+	<div class="popup submitFile" style="height: 250px;width: 400px; ">
+			<h3>上传附件</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:60px 35px 60px;">
+				<div class="btnbutton">
+					<table>
+						<tr>
+							<td>附件文件：</td>
+							<td>
+								<input type="file" class="missionFile"/>
+								<input type="hidden" class="headId"/>
+							</td>
+						</tr>
+						<h6 style="color: red">
+							注：此文件只能上传一次，文件的类型必须是Word文档!
+						</h6>
+						<tr>
+					</table>
+				</div>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+	</div>
+</div>

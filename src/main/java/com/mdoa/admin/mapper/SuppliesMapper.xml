@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.admin.dao.SuppliesDao">
+	<!-- 增加办公用品 -->
+	<insert id="insertOfficeSupplies" parameterType="com.mdoa.admin.model.OfficeSupplies">
+		INSERT INTO admin_office_supplies(		
+			supplies_id,
+			supplies_type_id,
+			supplies_type_url,
+			supplies_name,
+			supplies_no,
+			specifications,
+			unit,
+			is_warning,
+			notes,
+			stock_counts,
+			warn_counts,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{suppliesTypeId},
+			#{suppliesTypeUrl},
+			#{suppliesName},
+			#{suppliesNo},
+			#{specifications},
+			#{unit},
+			#{isWarning},
+			#{notes},
+			#{stockCounts},
+			#{warnCounts},
+			'1'
+		)
+	</insert>
+	
+	<!-- 删除办公用品 -->
+	<update id="deleteOfficeSupplies" parameterType="com.mdoa.admin.model.OfficeSupplies">
+		UPDATE admin_office_supplies
+		SET
+			alive_flag = '0'
+		WHERE
+			supplies_id = #{suppliesId}
+	</update>
+	<!-- 修改办公用品 -->
+	<update id="updateOfficeSupplies" parameterType="com.mdoa.admin.model.OfficeSupplies">
+		UPDATE admin_office_supplies
+		<set>
+			<if test="suppliesTypeId != null and suppliesTypeId != ''">
+			supplies_type_id = #{suppliesTypeId},</if>
+			<if test="suppliesTypeUrl != null and suppliesTypeUrl != ''">
+			supplies_type_url = #{suppliesTypeUrl},</if>
+			<if test="suppliesName != null and suppliesName != ''">
+			supplies_name = #{suppliesName},</if>
+			<if test="suppliesNo != null and suppliesNo != ''">
+			supplies_no = #{suppliesNo},</if>
+			<if test="specifications != null and specifications != ''">
+			specifications = #{specifications},</if>
+			<if test="unit != null and unit != ''">
+			unit = #{unit},</if>
+			<if test="isWarning != null and isWarning != ''">
+			is_warning = #{isWarning},</if>
+			<if test="notes != null and notes != ''">
+			notes = #{notes},</if>
+			<if test="stockCounts != null and stockCounts != ''">
+			stock_counts = #{stockCounts},</if>
+			<if test="warnCounts != null and warnCounts != ''">
+			warn_counts = #{warnCounts}</if>
+		</set>
+		WHERE
+			supplies_id = #{suppliesId}
+	</update>
+	<!-- 查询办公用品 -->
+	<select id="selectOfficeSupplies" parameterType="com.mdoa.admin.model.OfficeSupplies" resultType="com.mdoa.admin.model.OfficeSupplies">
+		SELECT
+			a.supplies_id AS suppliesId,
+			a.supplies_type_id AS suppliesTypeId, 
+			b.supplies_type_name AS suppliesTypeName,
+			a.supplies_type_url AS suppliesTypeUrl,
+			a.supplies_name AS suppliesName,
+			a.supplies_no AS suppliesNo,
+			a.specifications AS specifications,
+			a.unit AS unit,
+			a.is_warning AS isWarning,
+			a.notes AS notes,
+			a.stock_counts AS stockCounts,
+			a.warn_counts AS warnCounts
+		FROM
+			admin_office_supplies a,
+			admin_office_supplies_type b
+		<where>
+			a.alive_flag = '1'
+			AND a.supplies_type_id = b.supplies_type_id
+			<if test="suppliesId != null and suppliesId != ''">
+			AND a.supplies_id = #{suppliesId}</if>
+			<if test="suppliesName != null and suppliesName != ''">
+			AND a.supplies_name LIKE ('${suppliesName}')</if>
+			<if test="suppliesTypeName != null and suppliesTypeName != ''">
+			AND b.supplies_type_name LIKE ('${suppliesTypeName}')</if>
+			<if test="suppliesTypeUrl != null and suppliesTypeUrl != ''">
+			AND b.supplies_type_url LIKE ('${suppliesTypeUrl}')</if>
+		</where>
+	</select>
+	<!-- 根据id查询办公用品 -->
+	<select id="selectOfficeSuppliesById" parameterType="java.lang.String" resultType="com.mdoa.admin.model.OfficeSupplies">
+		SELECT
+			supplies_id AS suppliesId,
+			supplies_type_id AS suppliesTypeId, 
+			supplies_type_url AS suppliesTypeUrl,
+			supplies_name AS suppliesName,
+			supplies_no AS suppliesNo,
+			specifications AS specifications,
+			unit AS unit,
+			is_warning AS isWarning,
+			notes AS notes,
+			stock_counts AS stockCounts,
+			warn_counts AS warnCounts
+		FROM
+			admin_office_supplies
+		WHERE
+			alive_flag = '1'
+			AND supplies_id = #{suppliesId}
+	</select>
+	<!-- 添加办公用品的入库单 -->
+	<insert id="addInStock" parameterType="com.mdoa.admin.model.InStockModel">
+		INSERT INTO admin_in_stock(
+			buy_id,
+			supplies_id,
+			provider_name,
+			stock_no,
+			price,
+			in_counts,
+			amount,
+			in_date,
+			buyer,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{suppliesId},
+			#{providerName},
+			#{stockNo},
+			#{price},
+			#{inCounts},
+			#{amount},
+			str_to_date(#{inDateStr}, '%Y-%m-%d %H:%i:%s'),
+			#{buyer},
+			'1'
+		)	
+	</insert>
+	<update id="deleteInStock" parameterType="com.mdoa.admin.model.InStockModel">
+		UPDATE admin_in_stock
+		SET
+			alive_flag = '0'
+		WHERE
+			buy_id = #{buyId}
+	</update>
+	<!-- 修改入库单 -->
+	<update id="updateInStock" parameterType="com.mdoa.admin.model.InStockModel">
+		UPDATE admin_in_stock
+		<set>
+			<if test="suppliesId != null and suppliesId != ''">
+			supplies_id = #{suppliesId},</if>
+			<if test="providerName != null and providerName != ''">
+			provider_name = #{providerName},</if>
+			<if test="stockNo != null and stockNo != ''">
+			stock_no = #{stockNo},</if>
+			<if test="price != null and price != ''">
+			price = #{price},</if>
+			<if test="inCounts != null and inCounts != ''">
+			in_counts = #{inCounts},</if>
+			<if test="amount != null and amount != ''">
+			amount = #{amount},</if>
+			<if test="inDateStr != null and inDateStr != ''">
+			in_date = #{inDateStr},</if>
+			<if test="buyer != null and buyer != ''">
+			buyer = #{buyer}</if>
+		</set>
+		WHERE
+			buy_id = #{buyId}
+	</update>
+	<!-- 查询入库单 -->
+	<select id="selectInStock" parameterType="com.mdoa.admin.model.InStockModel" resultType="com.mdoa.admin.model.InStockModel">
+		SELECT
+			a.buy_id AS buyId,
+			a.supplies_id AS suppliesId,
+			b.supplies_name AS suppliesName,
+			a.provider_name AS providerName,
+			a.stock_no AS stockNo,
+			a.price AS price,
+			a.in_counts AS inCounts,
+			a.amount AS amount,
+			a.in_date AS inDate,
+			DATE_FORMAT(a.in_date,'%Y-%m-%d') AS inDateStr,
+			a.buyer AS buyer,
+			c.user_name AS userName
+		FROM
+			admin_in_stock a,
+			admin_office_supplies b,
+			user_info c
+		<where>
+			a.alive_flag = '1'
+			AND a.supplies_id = b.supplies_id
+			AND a.buyer = c.user_id 
+			<if test="buyId != null and buyId != ''">
+			AND a.buy_id = #{buyId}</if>
+			<if test="suppliesName != null and suppliesName != ''">
+			AND b.supplies_name LIKE ('${suppliesName}')</if>
+			<if test="providerName != null and providerName != ''">
+			AND a.provider_name LIKE ('${providerName}')</if>
+			<if test="userName != null and userName != ''">
+			AND c.user_name LIKE ('${userName}')</if>
+		</where>	
+	</select>
+	<select id="selectInStockById" parameterType="java.lang.String" resultType="com.mdoa.admin.model.InStockModel">
+		SELECT
+			buy_id AS buyId,
+			supplies_id AS suppliesId,
+			provider_name AS providerName,
+			stock_no AS stockNo,
+			price AS price,
+			in_counts AS inCounts,
+			amount AS amount,
+			in_date AS inDate,
+			DATE_FORMAT(in_date,'%Y-%m-%d') AS inDateStr,
+			buyer AS buyer
+		FROM
+			admin_in_stock
+		WHERE
+			alive_flag = '1'
+			AND buy_id = #{buyId}
+	</select>
+	<!-- 添加办公用品申请单 -->
+	<insert id="addSuppliesApply" parameterType="com.mdoa.admin.model.SuppliesApply">
+		INSERT INTO admin_supplies_apply(
+			apply_id,
+			supplies_id,
+			apply_date,
+			apply_no,
+			use_counts,
+			user_id,
+			proposer,
+			notes,
+			approval_status,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{suppliesId},
+			str_to_date(#{applyDateStr}, '%Y-%m-%d %H:%i:%s'),
+			#{applyNo},
+			#{useCounts},
+			#{userId},
+			#{proposer},
+			#{notes},
+			'0',
+			'1'
+		)
+	</insert>
+	<update id="updateSuppliesApply" parameterType="com.mdoa.admin.model.SuppliesApply">
+		UPDATE admin_supplies_apply
+		<set>
+			<if test="aliveFlag != null and aliveFlag != ''">
+			alive_flag = '0',</if>
+			<if test="approvalStatus != null and approvalStatus != ''">
+			approval_status = #{approvalStatus}</if>		
+		</set>
+		WHERE
+			apply_id = #{applyId}	
+	</update>
+	<select id="selectSuppliesApply" parameterType="com.mdoa.admin.model.SuppliesApply" resultType="com.mdoa.admin.model.SuppliesApply">
+		SELECT
+			a.apply_id AS applyId,
+			a.supplies_id AS suppliesId,
+			b.supplies_name AS suppliesName,
+			a.apply_date AS applyDate,
+			DATE_FORMAT(a.apply_date,'%Y-%m-%d') AS applyDateStr,
+			a.apply_no AS applyNo,
+			a.use_counts AS useCounts,
+			a.user_id AS userId,
+			c.user_name AS userName,
+			a.proposer AS proposer,
+			a.notes AS notes,
+			a.approval_status AS approvalStatus
+		FROM
+			admin_supplies_apply a,
+			admin_office_supplies b,
+			user_info c
+		<where>
+			a.alive_flag = '1'
+			AND a.supplies_id = b.supplies_id
+			AND a.user_id = c.user_id
+			<if test="applyId != null and applyId != ''">
+			AND a.apply_id = #{applyId}</if>
+			<if test="suppliesName != null and suppliesName != ''">
+			AND b.supplies_name LIKE ('${suppliesName}')</if>
+			<if test="applyNo != null and applyNo != ''">
+			AND a.apply_no LIKE ('${applyNo}')</if>
+			<if test="userName != null and userName != ''">
+			AND c.user_name LIKE ('${userName}')</if>
+		</where>	
+	</select>
+	<select id="selectSuppliesApplyById" parameterType="java.lang.String" resultType="com.mdoa.admin.model.SuppliesApply">
+		SELECT
+			apply_id AS applyId,
+			supplies_id AS suppliesId,
+			apply_no AS applyNo,
+			use_counts AS useCounts,
+			user_id AS userId,
+			proposer AS proposer,
+			notes AS notes,
+			approval_status AS approvalStatus
+		FROM
+			admin_supplies_apply
+		<where>
+			alive_flag = '1'
+			AND apply_id = #{applyId}
+		</where>	
+	</select>
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.RainWaterReportDao">
+
+	<insert id="insertRainWaterReport" parameterType="com.mdoa.erp.model.RainWaterReport">
+		INSERT INTO rain_water_report(
+			rain_id,
+			report_date,
+			ph_value,
+			cod_value,
+			sampling_point,
+			report_name,
+			text
+		)VALUE(
+			UUID(),
+			#{reportDate},
+			#{phValue},
+			#{codValue},
+			#{samplingPoint},
+			#{reportName},
+			#{text}
+		)
+	</insert>
+	<!-- 删除报告 -->
+	<delete id="deleteRainWaterReport" parameterType="java.lang.String">
+		DELETE FROM 
+			rain_water_report 
+		WHERE 
+			rain_id = #{rainId} 
+	</delete>
+	<!-- 修改报告 -->
+	<update id="updateRainWaterReport" parameterType="com.mdoa.erp.model.RainWaterReport">
+		UPDATE rain_water_report
+		<set>
+			<if test="reportDateStr != null and reportDateStr != ''">
+				report_date = #{reportDateStr},
+			</if>
+			<if test="phValue != null and phValue != ''">
+				ph_value = #{phValue},
+			</if>
+			<if test="codValue != null and codValue != ''">
+				cod_value = #{codValue},
+			</if>
+			<if test="samplingPoint != null and samplingPoint != ''">
+				sampling_point = #{samplingPoint},
+			</if>
+			<if test="reportName != null and reportName != ''">
+				report_name = #{reportName},
+			</if>
+			<if test="text != null and text != ''">
+				text = #{text}
+			</if>
+		</set>
+		WHERE
+			rain_id = #{rainId} 
+	</update>
+	<select id="selectRainWaterReport" parameterType="com.mdoa.erp.model.RainWaterReport" resultType="com.mdoa.erp.model.RainWaterReport">
+	SELECT
+		rain_id AS rainId,
+		DATE_FORMAT(report_date,'%Y-%m-%d') AS reportDateStr,
+		ph_value AS phValue,
+		cod_value AS codValue,
+		sampling_point AS samplingPoint,
+		report_name AS reportName,
+		text AS text
+	FROM
+		rain_water_report
+	<where>
+		1=1
+		<if test="rainId != null and rainId != ''">
+			AND rain_id = #{rainId},
+		</if>
+		<if test="reportDateStr != null and reportDateStr != ''">
+			AND report_date &gt;= #{reportDateStr}
+		</if>
+		<if test="reportEndTimeStr != null and reportEndTimeStr != ''">
+			AND report_date &lt;= #{reportEndTimeStr}
+		</if>
+	</where>
+		ORDER BY
+			report_date
+		DESC
+	</select>
+</mapper>

@@ -1,0 +1,212 @@
+<div id="officeGoodsManage">
+	<div class="treearea">
+		<h3 style="height:32px;line-height:32px;font-size:14px;">办公用品类型</h3>
+		<div style="margin-top:5px;">
+			<input type="hidden" id="suppliesTypeUrl"/>
+			<ul id="suppliesTypetg" data-options="region:'center',border: true" class="easyui-tree tree">
+			</ul>
+		</div>
+	</div>
+	<div id="addSuppliesType" class="easyui-menu" style="width:120px;">
+		<div onclick="addSuppliesType()" data-options="iconCls:'icon-add'">添加</div>
+	</div>
+	<div id="editSuppliesType" class="easyui-menu" style="width:120px;">
+		<div onclick="addSuppliesType()" data-options="iconCls:'icon-add'">添加</div>
+		<div onclick="editSuppliesType()" data-options="iconCls:'icon-edit'">修改</div>
+		<div onclick="deleteSuppliesType()" data-options="iconCls:'icon-remove'">删除</div>
+	</div>
+	<div class="listForm">
+		<div class="maintop" style="height:32px;">
+			<div class="operate">
+				<input type="button" value="添加办公用品" class="button addSupplies" />			
+			</div>
+		</div>
+		<div class="invitetop">
+			物品名称:
+				<input type="text" name="suppliesName" style="width:120px;"/>
+			所属分类:
+				<input type="text" name="suppliesTypeName" style="width:120px;"/>
+			<input class="select" type="button" value="查询" />
+			<input type="button" class="clean-query" value="清空" />  
+		</div>
+		<div>
+			<table id="officeGoodsManagedg"></table>
+		</div>
+	</div>
+	<div class="popups" style="text-align:left;">
+		<!--添加办公用品类型-->
+		<div class="addSuppliesType popup">
+			<h3>办公用品分类详情</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:20px;">
+				<table>
+					<tr>
+						<td>分类名称：</td>
+						<td><input type="text" class="suppliesTypeName"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+		<!--修改资产类型-->
+		<div class="editSuppliesType popup">
+			<h3>资产分类详情</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:20px;">
+				<table>
+					<tr>
+						<td>分类名称：</td>
+						<td><input type="text" class="suppliesTypeName"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+		<!--删除资产类型-->
+		<div class="removeSuppliesType popup">
+			<h3>删除物品信息</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:20px;">
+				你确定要删除该用品分类吗?	
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定"/>
+				<input type="button" class="button cannel" value="取消" />
+			</div>
+		</div>
+			
+		<!-- 添加办公用品 -->
+		<div class="popup addSupplies">
+			<h3>添加办公用品</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:10px 15px;text-align:right;">
+				<table style="height:25px;line-height:25px;">
+					<tr>
+						<td>物品编号:</td>
+						<td>
+							<input type="text" readonly="readonly" class="suppliesNo" style="width:104px;" />
+							<input type="button" class="button sysgen" value="生成"  />
+						</td>
+						<td>计量单位:</td>
+						<td>
+							<input type="text" class="unit" />
+						</td>						
+					</tr>
+					<tr>
+						<td>物品名称:</td>
+						<td>
+							<input type="text" class="suppliesName" />
+						</td>
+						<td>库存总数:</td>
+						<td>
+							<input type="text" class="stockCounts" />
+						</td>
+					</tr>
+					<tr>
+						<td>所属分类：</td>
+						<td>
+							<input type="text" readonly="readonly" class="suppliesType" />
+						</td>
+						<td>是否启用库存警示:</td>
+						<td>
+							<select class="isWarning">
+								<option value="0">否</option>
+								<option value="1">是</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>规格:</td>
+						<td>
+							<input type="text" class="specifications" />
+						</td>
+						<td>警报库存数:</td>
+						<td>
+							<input type="text" class="warnCounts" />
+						</td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td colspan="3">
+							<textarea class="notes"></textarea>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align:center">
+				<input type="button" class="button confirm" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+		<!-- 修改办公用品 -->
+		<div class="popup editSupplies">
+			<h3>修改办公用品</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding:10px 15px;text-align:right;">
+				<table style="height:25px;line-height:25px;">
+					<tr>
+						<td>物品编号:</td>
+						<td>
+							<input type="text" readonly="readonly" class="suppliesNo" style="width:104px;" />
+							<input type="button" class="button sysgen" value="生成"  />
+						</td>
+						<td>计量单位:</td>
+						<td>
+							<input type="text" class="unit" />
+						</td>						
+					</tr>
+					<tr>
+						<td>物品名称:</td>
+						<td>
+							<input type="text" class="suppliesName" />
+						</td>
+						<td>库存总数:</td>
+						<td>
+							<input type="text" class="stockCounts" />
+						</td>
+					</tr>
+					<tr>
+						<td>所属分类：</td>
+						<td>
+							<input type="text" readonly="readonly" class="suppliesType" />
+						</td>
+						<td>是否启用库存警示:</td>
+						<td>
+							<select class="isWarning">
+								<option value="0">否</option>
+								<option value="1">是</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>规格:</td>
+						<td>
+							<input type="text" class="specifications" />
+						</td>
+						<td>警报库存数:</td>
+						<td>
+							<input type="text" class="warnCounts" />
+						</td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td colspan="3">
+							<textarea class="notes"></textarea>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="确定">
+				<input type="button" class="button cannel" value="取消" style="margin-left: 8px;">
+			</div>
+		</div>
+		
+	</div>
+</div>

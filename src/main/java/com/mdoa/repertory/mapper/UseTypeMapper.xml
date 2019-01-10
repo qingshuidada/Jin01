@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.repertory.dao.UseTypeDao" >
+	
+	<!-- 插入用途 -->
+	<insert id="insertUseType" parameterType="com.mdoa.repertory.bo.UseTypeForm">
+		INSERT INTO repertory_use_type (
+			use_type_id,
+			use_type_name,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)
+		VALUES(
+			UUID(),
+			#{useTypeName},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	
+	<!-- 删除用途 -->
+	<update id="deleteUseType" parameterType="com.mdoa.repertory.bo.UseTypeForm">
+		UPDATE
+			repertory_use_type
+		SET 
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			use_type_id = #{useTypeId}
+	</update>
+	
+	<!-- 修改用途名称 -->
+	<update id="updateUseTypeName" parameterType="com.mdoa.repertory.bo.UseTypeForm">
+		UPDATE
+			repertory_use_type
+		SET 
+			use_type_name = #{useTypeName},
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+		AND	use_type_id = #{useTypeId}
+	</update>
+	
+	<!-- 查询用途 -->
+	<select id="findUseType" parameterType="com.mdoa.repertory.bo.UseTypeForm" >
+		SELECT
+			use_type_id AS useTypeId,
+			use_type_name AS useTypeName,
+			create_time AS createTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			update_time AS update_time,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM 
+			repertory_use_type
+		WHERE
+			alive_flag = '1'
+			<if test="useTypeId != null and useTypeId != ''">
+			AND use_type_id = #{useTypeId}
+			</if>
+			<if test="useTypeName != null and useTypeName != ''">
+			AND use_type_name = (${useTypeName})
+			</if>
+	</select>	
+</mapper>

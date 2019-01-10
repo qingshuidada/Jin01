@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.erp.dao.ErpStatisticsDao" >
+
+	<!-- 添加经济指标 -->
+	<insert id="addEconomic" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		INSERT INTO erp_statistics_economic(
+			economic_id,
+			economic_name,
+			output_value,
+			count_rate,
+			<!-- ecnomic_unit, -->
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{economicName},
+			'0',
+			'0',
+			<!-- #{ecnomicUnit}, -->
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 更改经济指标 -->
+	<update id="updateEconomic" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		UPDATE
+			erp_statistics_economic
+		SET
+			<if test="economicName != null and economicName != ''">
+				economic_name = #{economicName},
+			</if>
+			<if test="countRate != null and countRate != ''">
+				count_rate = #{countRate},
+			</if>
+<!-- 			<if test="ecnomicUnit != null and ecnomicUnit != ''">
+				ecnomic_unit = #{ecnomicUnit},
+			</if> -->
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND economic_id = #{economicId}
+			<if test="countRate == 1">
+			AND	output_value = '0'
+			</if>
+	</update>
+	
+	<!-- 经济指标设为产值 -->
+	<update id="setEcoOptValue" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		UPDATE 
+			erp_statistics_economic
+		SET 
+			count_rate = IF (economic_id = #{economicId},'0',count_rate),
+			output_value = IF (economic_id = #{economicId},'1','0'),
+		 	update_time = NOW(),
+		 	update_user_id = #{updateUserId},
+		 	update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+	</update>
+	
+	<!-- 删除经济指标 -->
+	<update id="deleteEconomic" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		UPDATE
+			erp_statistics_economic
+		SET
+			alive_flag = '0',
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			economic_id = #{economicId}
+	</update>
+	
+	<!-- 查询经济指标 -->
+	<select id="queryEconomic" parameterType="com.mdoa.erp.bo.ErpStatisticsForm" resultType="com.mdoa.erp.bo.ErpStatisticsForm">
+		SELECT
+			economic_id AS economicId,
+			economic_name AS economicName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			count_rate AS countRate,
+			output_value AS outputValue,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag
+		FROM
+			erp_statistics_economic
+		WHERE
+			alive_flag = '1'
+			<if test="economicName != null and economicName != ''">
+			AND economic_name LIKE #{economicName}
+			</if>
+			<if test="economicId != null and economicId != ''">
+			AND economic_id = #{economicId}
+			</if>
+			<if test=" countRate != null and countRate != ''">
+			AND count_rate = #{countRate}
+			</if>
+		ORDER BY 
+			create_time DESC
+	</select>
+	<!-- 添加车间 -->
+	<insert id="addWorkshop" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		INSERT INTO erp_statistics_workshop(
+			workshop_id,
+			workshop_name,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag，
+			count_flag
+		)VALUE(
+			UUID(),
+			#{workshopName},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1',
+			'1'
+		)
+	</insert>
+	<!-- 修改车间 -->
+	<update id="updateWorkshop" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		UPDATE
+			erp_statistics_workshop
+		SET
+			<if test="workshopName != null and workshopName != ''">
+				workshop_name = #{workshopName},
+			</if>
+			<if test="deleteFlag != null and deleteFlag == 1">
+				alive_flag = '0',
+			</if>
+			<if test="countFlag != null and countFlag != ''">
+				count_flag = #{countFlag},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND workshop_id = #{workshopId}
+	</update>
+	<!-- 查询车间 -->
+	<select id="queryWorkshop" parameterType="com.mdoa.erp.bo.ErpStatisticsForm" resultType="com.mdoa.erp.bo.ErpStatisticsForm">
+		SELECT
+			workshop_id AS workshopId,
+			workshop_name AS workshopName,
+			DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			create_user_id AS createUserId,
+			create_user_name AS createUserName,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			update_user_id AS updateUserId,
+			update_user_name AS updateUserName,
+			alive_flag AS aliveFlag,
+			count_flag AS countFlag
+		FROM
+			erp_statistics_workshop
+		WHERE
+			alive_flag = '1'
+			<if test="workshopName != null and workshopName != ''">
+				AND workshop_name LIKE #{workshopName}
+			</if>
+			<if test="workshopId != null and workshopId != ''">
+				AND workshop_id = #{workshopId}
+			</if>
+		ORDER BY 
+			create_time DESC
+	</select>
+	<!-- 人员上报管理(查询) -->
+	<select id="queryUserFromWE" parameterType="com.mdoa.erp.bo.ErpStatisticsForm" resultType="com.mdoa.erp.bo.ErpStatisticsForm">
+		SELECT
+			d.economic_name AS economicName,
+			d.economic_id AS economicId,
+			d.workshop_name AS workshopName,
+			d.workshop_id AS workshopId,
+			a.user_id AS userId,
+			a.user_name AS userName
+		FROM
+			(
+				SELECT
+					b.economic_id,
+					b.economic_name,
+					c.workshop_id,
+					c.workshop_name
+				FROM
+					erp_statistics_economic b,
+					erp_statistics_workshop c
+				WHERE
+					b.alive_flag = '1'
+				AND c.alive_flag = '1'
+				ORDER BY c.workshop_name DESC
+			) d
+		LEFT JOIN (
+			SELECT
+				u.economic_id,
+				u.workshop_id,
+				u.user_id,
+				uu.user_name
+			FROM
+				erp_statistics_user u
+			INNER JOIN user_info uu ON u.user_id = uu.user_id
+			WHERE
+				u.alive_flag = '1'
+			AND uu.alive_flag = '1'
+		) a ON (
+			d.economic_id = a.economic_id
+			AND d.workshop_id = a.workshop_id
+		)
+		WHERE
+			1=1
+			<if test="economicId != null and economicId != ''">
+				AND d.economic_id = #{economicId}
+			</if>
+			<if test="workshopId != null and workshopId != ''">
+				AND d.workshop_id = #{workshopId}
+			</if>
+	</select>
+	<!-- 验证该车间的经济指标是否任命过人 -->
+	<select id="queryStatisticsUser" parameterType="com.mdoa.erp.bo.ErpStatisticsForm" resultType="com.mdoa.erp.bo.ErpStatisticsForm">
+		SELECT
+			a.statistics_user_id AS statisticsUserId,
+			a.user_id AS userId,
+			a.economic_id AS economicId,
+			b.economic_name AS economicName,
+			a.workshop_id AS workshopId,
+			c.workshop_name AS workshopName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag
+		FROM
+			erp_statistics_user a 
+			INNER JOIN
+				erp_statistics_economic b ON a.economic_id = b.economic_id	
+			INNER JOIN
+				erp_statistics_workshop c ON a.workshop_id = c.workshop_id
+		WHERE
+			a.alive_flag = '1'
+			<if test="economicId != null and economicId != ''">
+				AND a.economic_id = #{economicId}
+			</if>
+			<if test="workshopId != null and workshopId != ''">
+				AND a.workshop_id = #{workshopId}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+			ORDER BY a.workshop_id,a.economic_id,c.create_time
+	</select>
+	<!-- 添加人员上报 -->
+	<insert id="addStatisticsUser" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		INSERT INTO erp_statistics_user(
+			statistics_user_id,
+			user_id,
+			economic_id,
+			workshop_id,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{userId},
+			#{economicId},
+			#{workshopId},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 修改人员上报 -->
+	<update id="updateStatisticsUser" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		UPDATE
+			erp_statistics_user
+		SET
+			<if test="userId != null and userId != ''">
+				user_id = #{userId},
+			</if>
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			<if test="economicId != null and economicId != ''">
+				AND economic_id = #{economicId}
+			</if>
+			<if test="workshopId != null and workshopId != ''">
+				AND workshop_id = #{workshopId}
+			</if>
+	</update>
+	<!-- 添加数据信息 -->
+	<insert id="addStatisticsMessage" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		INSERT INTO erp_statistics_message(
+			statistics_message_id,
+			user_id,
+			economic_id,
+			workshop_id,
+			count,
+			date_time,
+			submit_time,
+			ensure_flag,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{userId},
+			#{economicId},
+			#{workshopId},
+			#{count},
+			STR_TO_DATE(#{dateTime},'%Y-%m-%d'),
+			NOW(),
+			'0',
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 信息查询 -->
+	<select id="queryStatisticsMessage" parameterType="com.mdoa.erp.bo.ErpStatisticsForm" resultType="com.mdoa.erp.bo.ErpStatisticsForm">
+		SELECT
+			a.statistics_message_id AS statisticsMessageId,
+			a.user_id AS userId,
+			d.user_name AS userName,
+			a.economic_id AS economicId,
+			b.economic_name AS economicName,
+			b.output_value AS outPutValue,
+			b.count_rate AS countRate,
+			a.workshop_id AS workshopId,
+			c.workshop_name AS workshopName,
+			a.count AS count,
+			a.ensure_flag AS ensureFlag,
+			DATE_FORMAT(a.date_time,'%Y-%m-%d') AS dateTime,
+			DATE_FORMAT(a.submit_time,'%Y-%m-%d %H:%i:%s') AS submitTime,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') AS createTime,
+			a.create_user_id AS createUserId,
+			a.create_user_name AS createUserName,
+			DATE_FORMAT(a.update_time,'%Y-%m-%d %H:%i:%s') AS updateTime,
+			a.update_user_id AS updateUserId,
+			a.update_user_name AS updateUserName,
+			a.alive_flag AS aliveFlag
+		FROM
+			erp_statistics_message a
+			INNER JOIN erp_statistics_economic b ON a.economic_id = b.economic_id
+			INNER JOIN erp_statistics_workshop c ON c.workshop_id = a.workshop_id
+			INNER JOIN user_info d ON d.user_id = a.user_id
+		WHERE
+			a.alive_flag = '1'
+			<if test="dateStartTime != null and dateStartTime != ''">
+				AND a.date_time &gt;= #{dateStartTime}
+			</if>
+			<if test="dateEndTime != null and dateEndTime != ''">
+				AND a.date_time &lt;= #{dateEndTime}
+			</if>
+			<if test="submitStartTime != null and submitStartTime != ''">
+				AND a.submit_time &gt;= #{submitStartTime}
+			</if>
+			<if test="submitEndTime != null and submitEndTime != ''">
+				AND a.submit_time &lt;= #{submitEndTime}
+			</if>
+			<if test="workshopName != null and workshopName != ''">
+				AND c.workshop_name = #{workshopName}
+			</if>
+			<if test="economicName != null and economicName != ''">
+				AND b.economic_name = #{economicName}
+			</if>
+			<if test="workshopId != null and workshopId != ''">
+				AND c.workshop_id = #{workshopId}
+			</if>
+			<if test="economicId != null and economicId != ''">
+				AND b.economic_id = #{economicId}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND d.user_id = #{userId}
+			</if>
+		ORDER BY
+			workshopName,
+			economicName,
+			dateTime DESC,
+			submitTime DESC
+	</select>
+	
+	<!-- 确认上报信息 -->
+	<update id="ensureStatisticsMessage" parameterType="com.mdoa.erp.bo.ErpStatisticsForm">
+		UPDATE
+			erp_statistics_message
+		SET
+			ensure_flag = IF(statistics_message_id = #{statisticsMessageId},'1','0'),
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			economic_id = #{economicId}
+		AND workshop_id = #{workshopId}
+		AND DATE_FORMAT(date_time,'%Y-%m-%d') = #{dateTime}
+	</update>
+	
+	<!-- 统计经济指标、车间交叉报表数据 -->
+	<select id="countEconomicReportForms" parameterType="com.mdoa.erp.bo.EconomicReportFormsForm" resultType="java.util.HashMap">
+		SELECT
+			<foreach item="workshopId" index="index" collection="workshopIds" separator=",">               
+			SUM(IF(a.workshop_id = #{workshopId} AND DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND b.count_rate = '1',IFNULL(a.count,0),0)) AS '${workshopId}_day_total',
+			SUM(IF(a.workshop_id = #{workshopId} AND b.count_rate = '1',IFNULL(a.count,0),0)) AS '${workshopId}_month_total',
+			SUM(IF(a.workshop_id = #{workshopId} AND b.output_value = '1',IFNULL(a.count,0),0)) AS '${workshopId}_output_month',
+			SUM(IF(a.workshop_id = #{workshopId} AND DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND b.output_value = '1',IFNULL(a.count,0),0)) AS '${workshopId}_output_day',
+		    	<foreach item="economicId" index="index" collection="economicIds" separator=",">
+		    	SUM(IF(a.workshop_id = #{workshopId} AND a.economic_id = #{economicId} AND DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND b.output_value = '0',IFNULL(a.count,0),0)) AS '${workshopId}_${economicId}_day',
+		    	SUM(IF(a.workshop_id = #{workshopId} AND a.economic_id = #{economicId} AND DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND b.output_value = '1',IFNULL(a.count,0),0)) AS '${workshopId}_${economicId}_output_day',
+		    	SUM(IF(a.workshop_id = #{workshopId} AND a.economic_id = #{economicId},IFNULL(a.count,0),0)) AS '${workshopId}_${economicId}_month',
+		    	SUM(IF(a.workshop_id = #{workshopId} AND a.economic_id = #{economicId} AND b.output_value = '1',IFNULL(a.count,0),0)) AS '${workshopId}_${economicId}_output_month'
+		    	</foreach>
+		    </foreach>
+		    ,
+		    <foreach item="economicId" index="index" collection="economicIds" separator=",">
+			SUM(IF(a.economic_id = #{economicId} AND DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND (c.count_flag != '0' OR b.count_value = '1'),IFNULL(a.count,0),0)) AS '${economicId}_day_total',
+		    SUM(IF(a.economic_id = #{economicId} AND (c.count_flag != '0' OR b.count_value = '1'),IFNULL(a.count,0),0)) AS '${economicId}_month_total'
+		    </foreach>
+		    ,
+			SUM(IF(DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND b.output_value = "1",IFNULL(a.count,0),0)) AS 'output_day_total',
+		    SUM(IF(b.output_value = "1",IFNULL(a.count,0),0)) AS 'output_month_total',
+		    SUM(IF(b.count_rate = '1',IFNULL(a.count,0),0)) AS 'all_month_total',
+			SUM(IF(DATE_FORMAT(a.date_time,'%Y-%m-%d') = #{reportFormsDate} AND b.count_rate = '1',IFNULL(a.count,0),0)) AS 'all_day_total'
+		FROM
+			erp_statistics_message a
+		RIGHT JOIN erp_statistics_economic b ON (
+			a.economic_id = b.economic_id
+		)
+		RIGHT JOIN erp_statistics_workshop c ON (
+			a.workshop_id = c.workshop_id
+		)
+		WHERE a.alive_flag = '1'
+		AND ensure_flag = '1'
+		AND #{reportFormsDate} LIKE CONCAT(DATE_FORMAT(a.date_time,'%Y-%m'),'%')
+		AND DATE_FORMAT(a.date_time,'%Y-%m-%d') &lt;= #{reportFormsDate}
+	</select>
+	
+	<!-- 查询所有经济指标 -->
+	<select id="findAllEconomic" resultType="com.mdoa.erp.bo.EconomicTabData">
+		SELECT
+			economic_id AS economicId,
+			economic_name AS economicName,
+			count_rate AS countRate,
+			output_value AS outputValue
+		FROM
+			erp_statistics_economic
+		WHERE
+			alive_flag = '1'
+	</select>
+	
+	<!-- 查询所有车间 -->
+	<select id="findAllWorkshop" resultType="com.mdoa.erp.bo.WorkshopTabData">
+		SELECT
+			workshop_id AS workshopId,
+			workshop_name AS workshopName
+		FROM
+			erp_statistics_workshop
+		WHERE
+			alive_flag = '1'
+	</select>
+	
+</mapper>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdoa.work.dao.VoteDao">
+
+	<!-- 获取时间 -->
+	<select id="getNowTime" resultType="java.lang.String">
+ 		select DATE_FORMAT(NOW(),"%Y-%m-%d %H:%i:%s") AS nowTime
+	 </select>
+			
+	
+	
+	
+	<!-- 添加投票 -->
+	<insert id="addVote" parameterType="com.mdoa.work.bo.WorkOfficeVoteEntity">
+		INSERT INTO work_office_vote(
+			vote_id,
+			vote_name,
+			start_time,
+			end_time,
+			status,
+			detail,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			#{voteId},
+			#{voteName},
+			NOW(),
+			#{endTimeStr},
+			'1',
+			#{detail},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 添加投票选项 -->
+	<insert id="addVoteItem" parameterType="com.mdoa.work.bo.WorkOfficeVoteEntity">
+		INSERT INTO work_office_vote_item(
+			vote_item_id,
+			vote_id,
+			vote_item_number,
+			vote_item_name,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUES
+			<foreach collection="itemList" item="itemList" separator=",">
+			   (	
+				UUID(),
+				#{voteId},
+				0,
+				#{itemList.voteItemName},
+				NOW(),
+				#{createUserId},
+				#{createUserName},
+				'1'
+				)
+			</foreach>
+	</insert>
+	<!-- 修改投票项 -->
+	<update id="updateVoteItem" parameterType="com.mdoa.work.bo.WorkOfficeVoteForm">
+		UPDATE
+			work_office_vote_item
+		SET
+			vote_item_number = vote_item_number + 1,
+			update_time = NOW(),
+			update_user_id = #{updateUserId},
+			update_user_name = #{updateUserName}
+		WHERE
+			alive_flag = '1'
+			AND vote_item_id = #{voteItemId}
+	</update>
+	<!-- 添加投票记录 -->
+	<insert id="addVoteRecord" parameterType="com.mdoa.work.bo.WorkOfficeVoteForm">
+		INSERT INTO work_office_vote_record(
+			vote_record_id,
+			user_id,
+			vote_id,
+			vote_item_id,
+			create_time,
+			create_user_id,
+			create_user_name,
+			alive_flag
+		)VALUE(
+			UUID(),
+			#{userId},
+			#{voteId},
+			#{voteItemId},
+			NOW(),
+			#{createUserId},
+			#{createUserName},
+			'1'
+		)
+	</insert>
+	<!-- 验证是否二次投票 -->
+	<select id="isFirstVote" parameterType="com.mdoa.work.bo.WorkOfficeVoteForm" resultType="com.mdoa.work.bo.WorkOfficeVoteForm">
+		SELECT
+			vote_item_id AS voteItemId,
+			DATE_FORMAT(end_time,"%Y-%m-%d %H:%i:%s") AS endTimeStr 
+		FROM
+			work_office_vote a 
+			LEFT JOIN(
+				SELECT
+					vote_id,
+					vote_item_id
+				FROM
+					work_office_vote_record b
+				WHERE
+					alive_flag = '1'
+					AND user_id = #{userId}
+			) b ON (a.vote_id = b.vote_id)
+		WHERE
+			alive_flag = '1'
+			AND a.vote_id = #{voteId}
+	</select>
+	<!-- 查询发票 -->
+	<select id="queryVote" parameterType="com.mdoa.work.bo.WorkOfficeVoteForm" resultType="com.mdoa.work.bo.WorkOfficeVoteForm">
+		SELECT
+			a.vote_id AS voteId,
+			a.vote_name AS voteName,
+			a.create_user_id AS createUserId,
+			IFNULL(b.amount,0) AS amount,
+			a.detail AS detail,
+			DATE_FORMAT(a.create_time,"%Y-%m-%d %H:%i:%s") AS createTimeStr,
+			DATE_FORMAT(a.end_time,"%Y-%m-%d %H:%i:%s") AS endTimeStr,
+			a.status AS status,
+			c.vote_record_id AS voteRecordId
+		FROM
+			work_office_vote a LEFT JOIN(
+				SELECT
+					vote_id,
+					IFNULL(COUNT(*),0) AS amount
+				FROM
+					work_office_vote_record
+				WHERE
+					alive_flag = '1'
+				GROUP BY
+					vote_id
+			) b ON (a.vote_id = b.vote_id)
+			LEFT JOIN(
+				SELECT
+					vote_record_id,
+					vote_id
+				FROM
+					work_office_vote_record
+				WHERE
+					alive_flag = '1'
+					AND user_id = #{userId}
+			) c ON (a.vote_id = c.vote_id)
+		WHERE
+			alive_flag = '1'
+			<if test="voteName != null and voteName != ''">
+				AND a.vote_name LIKE #{voteName}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="createStartTimeStr != null and createStartTimeStr != ''">
+				AND a.create_time &gt;= #{createStartTimeStr}
+			</if>
+			<if test="createEndTimeStr != null and createEndTimeStr != ''">
+				AND a.create_time &lt;= #{createEndTimeStr}
+			</if>
+			<if test="finishStartTimeStr != null and finishStartTimeStr != ''">
+				AND a.end_time &gt;= #{finishStartTimeStr}
+			</if>
+			<if test="finishEndTimeStr != null and finishEndTimeStr != ''">
+				AND a.end_time &lt;= #{finishEndTimeStr}
+			</if>
+			<if test="voteId != null and voteId != ''">
+				AND a.vote_id = #{voteId}
+			</if>
+	</select>
+	<!-- 修改发票状态 -->
+	<update id="updateVote" parameterType="com.mdoa.work.bo.WorkOfficeVoteForm">
+		UPDATE
+			work_office_vote
+		SET
+			status = #{status}
+		WHERE
+			alive_flag = '1'
+			AND vote_id = #{voteId}
+			
+	</update>
+	<!-- 查询发票项 -->
+	<select id="queryVoteItem" parameterType="com.mdoa.work.bo.WorkOfficeVoteForm" resultType="com.mdoa.work.bo.WorkOfficeVoteForm">
+		SELECT
+			vote_item_name AS voteItemName,
+			vote_item_number AS voteItemNumber,
+			vote_item_id AS voteItemId
+		FROM
+			work_office_vote_item
+		WHERE
+			alive_flag = '1'
+			AND vote_id = #{voteId}
+	</select>
+	
+	
+</mapper>

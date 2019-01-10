@@ -1,0 +1,134 @@
+@CHARSET "UTF-8";
+
+#invoiceVerification div{
+	box-sizing:content-box;
+}
+/****表报样式*****/
+#invoiceVerification{
+	width:100%;
+	height:100%;
+	font-size: 12px;
+	color: #000;
+	font-family:"Microsoft YaHei";
+}
+#invoiceVerification .outPut{
+	width:100%;
+	height:30px;
+	background-color:#66CCCC;
+	overflow:hidden;
+}
+#invoiceVerification .outPut .box{
+	margin:5px 0 0 10px;
+}
+#invoiceVerification .listBody{
+	width:100%;
+	border:1px solid #95B8E7;
+	overflow-y: auto;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+}
+#invoiceVerification .listBody .filtCondition{
+	background-color:#f4f4f4;
+	border-bottom:1px solid #ddd;
+	overflow: hidden;
+}
+#invoiceVerification .filtCondition ul,
+#invoiceVerification .filtCondition ul li,
+#invoiceVerification .filtCondition dl,
+#invoiceVerification .filtCondition dl dd,
+#invoiceVerification .filtCondition dl dd div,
+#invoiceVerification .filtCondition button{
+	float:left;
+}
+#invoiceVerification .filtCondition ul,
+#invoiceVerification .filtCondition dl{
+	margin:5px 0 5px 10px;
+}
+#invoiceVerification .filtCondition ul li{
+	width:25%;
+}
+#invoiceVerification .filtCondition dl dd{
+	margin:0 5px 0 8px;
+	line-height:25px;
+}
+#invoiceVerification .filtCondition ul li span{
+	float:left;
+	width:60px;
+	line-height:25px;
+	margin:0 5px 0 8px;
+}
+#invoiceVerification .filtCondition dl dd span{
+	float:left;
+	text-align: right;
+	width:85px;	
+}
+#invoiceVerification .filtCondition ul li input[type=text]{
+	float:left;
+	width: 150px;
+	height:19px;
+	padding-left:10px;
+	margin-top:2px;
+	border:1px solid #a9a9a9;
+}
+#invoiceVerification .filtCondition ul li select{
+	width: 150px;
+	float:left;
+	height:20px;
+	margin-top:2px;
+}
+#invoiceVerification .filtCondition input[type=button]{
+	line-height:20px;
+	height:23px;
+	padding:0 5px;
+	cursor:pointer;
+	margin:5px 0 0 10px;
+    border-radius: 4px;
+    behavior:url(css/plug/ie-css3.htc);
+    background:url(../../../img/index/btnbg1.jpg) repeat-x;
+    border:1px solid #ababab;
+    outline:0;
+}
+#invoiceVerification .filtCondition input[type=button]:active{
+	background:url(../../../img/index/btnbg2.jpg) repeat-x;
+}
+
+#invoiceVerification .verification{
+	height:40px;
+}
+#invoiceVerification .verification input{
+	float:right;
+	margin:10px 15px 0 0;
+}
+
+#invoiceVerification .listBody .list{
+	float:left;
+	width:100%;
+	border-top:1px solid #ddd;
+	text-align:center;
+}
+#invoiceVerification .listBody .list th,
+#invoiceVerification .listBody .list td{
+	line-height:28px;
+	height:28px;
+	border-bottom:1px dotted #bbb;
+	border-left:1px dotted #bbb;
+	cursor:default;
+}
+#invoiceVerification .listBody .list th{
+	font-weight:normal;
+	border-bottom:1px solid #ddd;
+	background-color:#f4f4f4;
+}
+#invoiceVerification .listBody .list th:first-child,
+#invoiceVerification .listBody .list td:first-child{
+	border-left:0px;
+}
+#invoiceVerification .listBody .list th:last-child,
+#invoiceVerification .listBody .list td:last-child{
+	border-right:1px dotted #bbb;
+}
+
+#invoiceVerification .listBody .list th:hover,
+#invoiceVerification .listBody .list tbody tr:hover{
+	background-color:#eaf2ff;
+}

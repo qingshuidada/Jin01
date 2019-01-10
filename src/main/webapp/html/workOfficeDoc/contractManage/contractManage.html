@@ -1,0 +1,294 @@
+<div id="contractManage">
+	<div class="maintop">
+		<div style="margin-right:6px;">
+			<!-- <input type="button" value="添加合同" class="button addContract" /> -->
+			<input type="button" value="返回" class="button back" />
+		</div>
+	</div>
+	<div class="list">
+		<div class="invitetop">
+			合同名称： <input type="text" class="contractName"/>
+			跟单人： <input type="text" class="orderExecutorName"/>
+			乙方姓名：<input type="text" class="secondName">
+			部门：<input type="text" name="departmentName" style="width: 100px" disabled="disabled">	
+				<input type="button" class="button departmentChooseObj" value="选择"/>
+			合同类别：<select class="contractSort">
+						<option></option>
+						<option value="0">采购合同</option>
+						<option value="1">销售合同</option>
+						<option value="2">服务合同</option>
+					</select>
+			合同状态：<select class="contractStatus">
+						<option></option>
+						<option value="0">未交单</option>
+						<option value="1">已交单</option>
+					</select>
+			合同签订时间：<input class="jqdate startTime" type="text" style="width: 100px" onblur="testDate(this)" onclick="testShow(this);">
+			~ <input class="jqdate endTime" type="text" style="width: 100px" onblur="testDate(this)" onclick="testShow(this);">
+			<a class="easyui-linkbutton query" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" value="清空"/>
+		</div>
+		<div>
+			<table id="contractManagedg" data-options="nowrap:false"></table>
+		</div>
+	</div>
+	
+	<!--添加证书--> 
+	<div class="addContractWd" style="overflow:auto;">
+		<input type="hidden" id="contractInput"/>		
+		<ul class="editArea">
+			<li>
+				<span>合同名称：</span>
+				<input type="text" class="contractName shortInput"/>
+				<i></i>
+				<span>乙方姓名：</span>
+				<input type="text" class="secondName shortInput"/>
+			</li>
+			<li>
+				<span>合同金额：</span>
+				<input type="text" class="contractAmount shortInput"/>
+				<i></i>
+				<span>金额单位：</span>
+				<input type="text" class="unit shortInput"/>
+			</li>
+			<li>
+				<span>起始日期：</span>
+				<input type="text" class="startTime shortInput" onclick="testShow(this);" readonly/>
+				<i></i>
+				<span>结束日期：</span>
+				<input type="text" class="endTime shortInput" onclick="testShow(this);" readonly/>
+			</li>
+			<li>
+				<span>合同描述：</span>
+				<input type="text" class="describe shortInput"/>
+				<i></i>
+				<span>合同类别：</span>
+				<select class="contractSort">
+						<option></option>
+						<option value="0">采购合同</option>
+						<option value="1">销售合同</option>
+						<option value="2">服务合同</option>
+				</select>
+			</li>
+			<li>
+				<span>合同信息：</span>
+				<script type="text/plain" id="contractEditor"></script>
+			</li>
+			<li>
+				<span style="margin-top:4px;">附件1(必选项)：</span>
+				<input type="text" class="fileName" readonly/>			
+				<input type="button" value="选择附件" class="button selectFile" />
+				<input type="button" value="上传附件" class="button submitFile" />	
+			</li>
+			<li>
+				<span style="margin-top:4px;">附件2(可选项)：</span>
+				<input type="text" class="fileNameTwo" readonly/>			
+				<input type="button" value="选择附件" class="button selectFileTwo" />
+				<input type="button" value="上传附件" class="button submitFileTwo" />	
+			</li>
+			<li>
+				<span>&#12288;跟单人：</span>
+				<input type="text" class="orderExecutorName" disabled/>
+				<input type="button" class="button selectOrderExecutorName" value="选择"/>
+				<i></i>
+				<span>部门：</span>
+				<input type="text" name="departmentName" style="width: 360px" disabled="disabled">	
+				<input type="button" class="button departmentChooseObj" value="选择"/>	
+			</li>
+		</ul>
+		<input type="file" style="display:none;" class="inputFile"/>
+		<input type="file" style="display:none;" class="inputFileTwo"/>
+		<input type="button" value="提交合同" class="button submitContract" />
+	</div>
+	<!-- 跟单 -->
+	<div class="documentary">
+		<ul class="editArea">
+			<li>
+				<span>合同名称：</span>
+				<input type="text" class="contractName shortInput" readonly/>
+				<i></i>
+				<span>乙方姓名：</span>
+				<input type="text" class="secondName shortInput" readonly/>
+			</li>
+			<li>
+				<span>合同金额：</span>
+				<input type="text" class="contractAmount shortInput" readonly/>
+				<i></i>
+				<span>金额单位：</span>
+				<input type="text" class="unit shortInput" readonly/>
+			</li>
+			<li>
+				<span>起始日期：</span>
+				<input type="text" class="startTime shortInput" onclick="testShow(this);" readonly/>
+				<i></i>
+				<span>结束日期：</span>
+				<input type="text" class="endTime shortInput" onclick="testShow(this);" readonly/>
+			</li>
+			<li>
+				<span>合同描述：</span>
+				<input type="text" class="describe shortInput" readonly/>
+				<i></i>
+				<span>合同类别：</span>
+				<input type="text" class="contractSort shortInput" readonly/>
+			</li>
+			<li>
+				<span>合同信息：</span>
+				<script type="text/plain" id="contractEditorFour"></script>
+			</li>
+			<li>
+				<span>附件1文件：</span>
+				<span class="fileName"></span>
+				<a class="load" href="javacsript:;">下载</a>
+				<a class="open" href="javacsript:;" target="_blank">打开</a>
+				<input type="hidden" class="attachmentUrl">
+				<input type="hidden" class="attachmentName">
+			</li>
+			<li>
+				<span>附件2文件：</span>
+				<span class="fileNameTwo"></span>
+				<a class="load" href="javacsript:;">下载</a>
+				<a class="openTwo" href="javacsript:;" target="_blank">打开</a>
+				<input type="hidden" class="fileUrl">
+				<input type="hidden" class="fileNames">
+			</li>
+			<li>
+				<span style="font-weight:800;">支付记录：</span>
+			</li>
+			<ul class="payrecordUl"></ul>
+			<li>
+				<span style="font-weight:800;">开票记录：</span>
+			</li>
+			<ul class="invoiceRecordUl"></ul>
+			<li>
+				<span>跟单人：</span>
+				<span class="orderExecutorName"></span>
+			</li>
+			<li class="addRecord">
+				<span>新增记录：</span>
+				<textarea class="record"></textarea>
+			</li>
+			<li class="addRecordBtn">
+				<input type="button" class="button" value="提交记录"/>
+			</li>
+			
+			<li>
+				<span style="font-weight:800;">跟单记录：</span>
+			</li>
+			<ul class="recordUl">
+			</ul>
+			<li class="pageLi">
+				<span class="frist" onclick="page(this)">首页</span>
+				<span class="prev" onclick="page(this)">上一页</span>
+				<sapn class="pageArea"></sapn>
+				<span class="next" onclick="page(this)">下一页</span>
+				<span class="last" onclick="page(this)">末页</span>
+			</li>	
+		</ul>
+	</div>
+	
+	<!-- 修改 -->
+	<div class="editContractWd" style="overflow:auto; height: 772px;" >
+		<ul class="editArea" style="height: 650;display:block;">
+			<li>
+				<span>合同名称：</span>
+				<input type="text" class="contractName shortInput"/>
+				<input type="hidden" class="contractId shortInput"/>
+				<i></i>
+				<span>乙方姓名：</span>
+				<input type="text" class="secondName shortInput"/>
+			</li>
+			<li>
+				<span>合同金额：</span>
+				<input type="text" readonly="readonly" class="contractAmount shortInput"/>
+				<i></i>
+				<span>金额单位：</span>
+				<input type="text" readonly="readonly" class="unit shortInput"/>
+			</li>
+			<li>
+				<span>起始日期：</span>
+				<input type="text" class="startTime shortInput" onclick="testShowTime(this);" readonly/>
+				<i></i>
+				<span>结束日期：</span>
+				<input type="text" class="endTime shortInput" onclick="testShowTime(this);" readonly/>
+			</li>
+			<li>
+				<span>合同描述：</span>
+				<input type="text" class="describe shortInput"/>
+				<i></i>
+				<span>合同类别：</span>
+				<select class="contractSort">
+						<option></option>
+						<option value="0">采购合同</option>
+						<option value="1">销售合同</option>
+						<option value="2">服务合同</option>
+				</select>
+			</li>
+			<li>
+				<span>合同信息：</span>
+				<script type="text/plain" id="contractEditorSecond"></script>
+			</li>
+			<li>
+				<span style="margin-top:4px;">&#12288;跟单人：</span>
+				<input type="text" class="orderExecutorName" disabled/>
+				<input type="button" class="button selectOrderExecutorName" value="选择"/>
+				<i></i>
+				<span>部门：</span>
+				<input type="text" name="departmentName" style="width: 360px" disabled="disabled">	
+				<input type="button" class="button departmentChooseObj" value="选择"/>				
+			</li>
+		</ul>
+		<input type="file" style="display:none;" class="inputFile"/>
+		<input type="button" value="提交合同" class="button submitContract" />
+	</div>
+	<!-- 支付的窗口 -->
+	<div class="popups" style="text-align: left;">
+		<div class="popup contractPayment" style="height: 250px;width: 400px;">
+			<h3>合同支付</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 17px 36px;">
+				<table style="text-align: right;width: 300px;height: 150px">
+					<tr>
+						<td>支付方式:</td>
+						<td><select class="payManner"></select></td>
+					</tr>
+					<tr>
+						<td>支付金额:</td>
+						<td><input type="text" class="payAmount"></td>
+						<td><input type="hidden" class="contractId"></td>
+						<td><input type="hidden" class="unpaidAmount"></td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td><input type="text" class="remark"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="保存"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+		<div class="popup contractInvoicing" style="height: 250px;width: 400px;">
+			<h3>合同开票</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="padding: 17px 36px;">
+				<table style="text-align: right;width: 300px;height: 150px">
+					<tr>
+						<td>开票金额:</td>
+						<td><input type="text" class="payAmount"></td>
+						<td><input type="hidden" class="contractId"></td>
+						<td><input type="hidden" class="noInvoiceAmount"></td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td><input type="text" class="remark"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button confirm" value="保存"/>
+				<input type="button" class="button cannel" value="取消" style="margin-left: 20px;"/>
+			</div>
+		</div>
+	</div>
+</div>

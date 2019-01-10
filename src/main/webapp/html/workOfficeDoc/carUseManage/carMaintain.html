@@ -1,0 +1,88 @@
+<div id="carMaintain">
+	<div class="maintop">
+		<div class="operate">
+			<input type="button" value="添加维修单" class="button addRepair" />			
+		</div>
+	</div>
+	<div class="invitetop">
+		查询条件：		
+		车牌号码：
+			<input type="text" style="width:120px;" class="carNo" />
+		维修类型：
+			<select class="repairType" style="width:120px;height:20px;line-height:20px;font-size:12px;">
+				<option value=""></option>
+				<option value="维修">维修</option>
+				<option value="保养">保养</option>
+			</select> 
+		<input class="select" type="button" value="查询" /> 
+		<input type="button" class="clean-query" value="清空" /> 
+	</div>
+	<div>
+		<table id="carMaintaindg"></table>
+	</div>
+	
+	<div class="popups" style="text-align:left;">	
+		<!-- 添加 维修单 -->
+		<div class="popup addRepair" style="height:260px;width:465px;">
+			<h3>添加修改维修单</h3>
+			<span class="turnoff"></span>
+			<div class="popuparea" style="width:425px;height:195px;margin:0 auto;">
+				<table style="height: 150px;padding: 8px;text-align:right;">
+					<tr>
+						<td>车牌号码:</td>
+						<td>
+							<input name="carNo" style="width:60%;float:left" type="text" readonly="readonly"/>
+							<input type="text" name="selectCar" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>
+					<tr>
+						<td>维修日期:</td>
+						<td>
+							<input name="repairDate" style="width:100%" type="text" onclick="testShow(this)" readonly="readonly"/>
+						</td>
+					</tr>
+					<tr>
+						<td>经办人:</td>
+						<td>
+							<input type="text" name="executant" style="width:60%;float:left" readonly="readonly"/>
+							<input type="text" name="selectExecutant" class="button" value="选择" style="width:36%;float:right;text-align:center"/>
+						</td>
+					</tr>					
+					<tr>
+						<td>维修类型:</td>
+						<td>
+							<select name="repairType" style="width:100%">
+								<option value=""></option>
+								<option value="维修">维修</option>
+								<option value="保养">保养</option>
+							</select> 
+						</td>
+					</tr>
+					<tr>
+						<td>费用:</td>
+						<td>
+							<input name="fee" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>维护原因:</td>
+						<td>
+							<input name="reason" style="width:100%" type="text"/>
+						</td>
+					</tr>
+					<tr>
+						<td>备注:</td>
+						<td>
+							<input type="text" name="notes" style="width:100%" />
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="btnarea" style="text-align: center">
+				<input type="button" class="button comfirm" value="确定">
+				<input type="button" class="button cannel" value="取消">
+			</div>
+		</div>
+	</div>
+	
+</div>

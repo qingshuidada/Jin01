@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mdoa.personnel.dao.OutBusinessRecordDao">
+	<!-- 插入公出记录 -->
+	<insert id="insertOutBusinessRecord" parameterType="com.mdoa.personnel.bo.OutBusinessRecordForm">
+		INSERT INTO personnel_out_business_record
+		(
+			out_business_record_id,
+			user_id,
+			user_name,
+			process_record_id,
+			reason,
+			start_time,
+			end_time,
+			create_time
+		)
+		VALUE
+		(
+			UUID(),
+			#{userId},
+			#{userName},
+			#{processRecordId},
+			#{reason},
+			#{startTime},
+			#{endTime},
+			NOW()
+		)
+	</insert>
+	<!-- 查询公出记录 -->
+	<select id="selectOutBusinessRecord" parameterType="com.mdoa.personnel.bo.OutBusinessRecordForm" resultType="com.mdoa.personnel.model.OutBusinessRecord">
+		SELECT
+			a.out_business_record_id AS outBusinessRecordId,
+			a.process_record_id AS processRecordId,
+			a.user_id AS userId,
+			a.user_name AS userName,
+			a.reason  AS reason,
+			a.start_time AS startTime,
+			a.end_time AS endTime,
+			a.create_time AS createTime,
+			a.location_time AS locationTime,
+			a.out_address AS outAddress,
+			a.out_location AS outLocation,
+			b.title AS title
+		FROM
+			personnel_out_business_record a INNER JOIN
+			process_record b ON(a.process_record_id = b.process_record_id)
+		<where>
+			<if test="outBusinessRecordId != null and outBusinessRecordId != ''">
+				AND a.out_business_record_id = #{outBusinessRecordId}
+			</if>
+			<if test="userId != null and userId != ''">
+				AND a.user_id = #{userId}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name LIKE ${userName}
+			</if>
+			<if test="outAddress != null and outAddress != ''">
+				AND a.out_address = #{outAddress}
+			</if>
+			<if test="timeFlag != null and timeFlag != ''">
+				AND a.start_time &lt;= NOW()
+				AND a.end_time &gt;= NOW()
+			</if>
+		</where>
+	</select>
+	<!-- 修改公出记录 -->
+	<update id="updateOutBusinessRecord" parameterType="com.mdoa.personnel.bo.OutBusinessRecordForm">
+		UPDATE
+			personnel_out_business_record
+		SET
+			location_time = NOW(),
+			out_address = #{outAddress},
+			out_location = #{outLocation}
+		WHERE
+			out_business_record_id = #{outBusinessRecordId}
+			
+	</update>
+</mapper>

@@ -1,0 +1,78 @@
+<div id="groupManage">
+	<div class="groupList">
+		<div class="maintop">
+			<input class="addGroupButton" type="button" value="添加用户组"/>
+		</div>
+		<div class="invitetop">
+			请输入查询条件：
+			用户组名称：
+				<input type="text" name="groupName" style="width: 100px">
+			所存在用户：
+				<input type="text" readonly="readonly" style="width: 100px" name="userName">
+				<input style="display: none" type="text" name="userId">
+				<input type="button" class="selectUser" value="选择">
+			<a class="easyui-linkbutton select" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" class="clean-query" value="清空">
+		</div>
+		<div>
+			<table class="groupdg"></table>
+		</div>
+		<div class="popups">
+			<div class="popup updateGroup">
+				<h3>修改用户组名称</h3>
+				<span class="turnoff">
+				</span>
+				<div class="popuparea" style="width:270px;height:50px;padding: 12px 10px">
+					新名称：<input name="groupName" type="text" style="width: 195px"/>	
+					<input name="groupId" type="text" style="display: none"/>	
+				</div>
+				<div class="btnarea" style="text-align: center;">
+					<input type="button" class="button confirm" value="确定"/>
+					<input type="button" class="button cannel" value="关闭" style="margin-left:8px;"/>
+				</div>
+			</div>
+			
+			<div class="popup addGroup">
+				<h3>添加用户组</h3>
+				<span class="turnoff">
+				</span>
+				<div class="popuparea" style="width:270px;height:50px;padding: 12px 10px">
+					用户组名称：<input name="groupName" type="text" style="width: 170px"/>	
+				</div>
+				<div class="btnarea" style="text-align: center;">
+					<input type="button" class="button confirm" value="确定"/>
+					<input type="button" class="button cannel" value="关闭" style="margin-left:8px;"/>
+				</div>
+			</div>
+			
+			<div class="popup updateGroupTask">
+				<h3>修改用户组任务</h3>
+				<span class="turnoff">
+				</span>
+				<div class="popuparea" style="overflow-y: auto">
+					<div  style="margin: 15px;">
+						请选择流程类型：
+						<select name="processType">
+						</select>
+						<input style="display: none" name="groupId" type="text"/>
+					</div>
+					<div class="taskMessage" style="width:400px; height: 170px;" >
+					</div>
+				</div>
+				<div class="btnarea" style="text-align: center;">
+					<input type="button" class="button cannel" value="关闭" style="margin-left:8px;"/>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<div class="selectGroupUser" style="overflow-y: auto">
+		<div style="margin: 0px 20% 0px 10%;">
+			<div class="selectUser">
+			</div>
+			<div style="text-align: center; margin: 30px 0px 150px 0px;">
+				<input type="button" class="submit-button backUp" value="返回"/>
+			</div>
+		</div>
+	</div>
+</div>

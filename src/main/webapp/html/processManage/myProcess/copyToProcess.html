@@ -1,0 +1,41 @@
+<div id="copyToProcess">
+	<div class="processList">
+		<div class="maintop">
+			<input name="userId" type="hidden" >
+		</div>
+		<div class="invitetop">
+			请输入查询条件：
+			发起人：
+				<input type="text" name="createUserName" style="width: 100px">
+			发起时间：
+				<input  class="jqdate" type="text" name="createTimeStart" onblur="testDate(this)" onclick="testShow(this);">
+			~ 
+				<input  class="jqdate" type="text" name="createTimeEnd" onblur="testDate(this)" onclick="testShow(this);">
+			流程类别：
+				<select name="processType">
+				</select>
+			<a class="easyui-linkbutton select" iconCls="icon-search" style="line-height:16px;">查询</a>
+			<input type="button" class="clean-query" value="清空">
+		</div>
+		<div>
+			<table class="processdg"></table>
+		</div>
+	</div>
+	<div class="processStart" style="display:none;overflow-y: true">
+		<div style="margin: 0px 20% 0px 10%;">
+			<div class="include-form">
+			</div>
+			
+			<div style="border: 1px gray solid;" class="processMessage">
+				<div class="box"></div>
+			</div>
+			
+			<div class="taskMessage">
+			</div>
+			
+			<div style="text-align: center; margin: 30px 0px 150px 0px;">
+				<input type="button" class="submit-button backUp" value="返回"/>
+			</div>
+		</div>
+	</div>
+</div>
